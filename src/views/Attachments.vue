@@ -3,7 +3,7 @@
   <v-container fluid>
     <v-row><v-col><v-card>
 	  <v-card-title>Optional attachments</v-card-title>
-	  <v-card-subtitle>It is possible that the preceding components of the Ross Application fail to capture all the wonderful achievements you have made.  To remedy this, you may optionally upload a <em>curriculum vitae</em>, a résumé, or any other documents which would help the Admissions Committee understand your accomplishments.</v-card-subtitle>
+	  <v-card-subtitle>You may optionally upload a <em>curriculum vitae</em>, a résumé, or any other documents which would help the Admissions Committee understand your accomplishments.  Your Short Essays may also be uploaded here.</v-card-subtitle>
 	  <v-list-item two-line v-for="attachment in optionalAttachments"
 		       :href="attachment.url"
 		       :key="attachment.id">

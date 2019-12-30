@@ -125,6 +125,11 @@ icon: 'supervisor_account',
 to: '/apply/parent',
 },
 {
+ title: 'Personal Statement',
+icon: 'face',
+to: '/apply/statement',
+},
+{
  title: 'Short Essays',
 icon: 'message',
 to: '/apply/essays',
@@ -138,11 +143,6 @@ to: '/apply/recommendation',
  title: 'Solutions',
 icon: 'assignment',
 to: '/apply/solutions',
-},
-{
- title: 'Personal Statement',
-icon: 'face',
-to: '/apply/statement',
 },
 {
  title: 'Attachments',

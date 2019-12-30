@@ -107,7 +107,7 @@
 
     <v-row><v-col><v-card>
 	  <v-card-title>Programs</v-card-title>
-	  <v-card-subtitle>Which Program are you applying to?</v-card-subtitle>
+	  <v-card-subtitle>Which Program are you applying to?  You may apply to one or both programs.</v-card-subtitle>
 	  <v-card-text>
 	    <v-layout wrap>
 	      <v-flex xs12 md6>
@@ -227,7 +227,7 @@
 		  label="School address"
 		  v-model="schoolAddress"
 		  prepend-icon="directions"
-		  hint="The location of the school you are presently attending"
+		  hint="The location of the school you are presently attending.  Be sure to include the city."
 		  ></v-textarea>
 	    </v-flex></v-layout>
 	  </v-card-text>
@@ -270,7 +270,7 @@
 	      <v-list-item two-line>
 		<v-list-item-content>
 		  <v-list-item-title>
-		    <v-file-input v-model="file" label="Upload a TOEFL score report"/>
+		    <v-file-input v-model="file" label="Upload a score report" hint="Upload a score report for a standardized test for English fluency (TOEFL, iBT, IELTS, or iTEP)." persistent-hint/>
 		  </v-list-item-title>
 		  <v-list-item-subtitle></v-list-item-subtitle>
 		</v-list-item-content>
@@ -283,18 +283,19 @@
 	      </v-list-item>
 	    </v-layout>
 
+	    <v-divider class="my-3"/>
 	      <v-layout wrap v-if="!(updatedApplication.nativeEnglish || nativeEnglish)">
 	      	      <v-flex
 		xs12
 		md12
-		>
-
+			>
+			<p>The English language test score report may be waived for applicants who have other ways to establish their fluency in English.</p>
 	      <v-textarea
 		outlined
-		label="English fluency"
+		label="To request such a waiver, please explain here."
 		v-model="toeflNarrative"
 		prepend-icon="mdi-web"
-		hint="Besides a score report, do you have another way to establish English fluency?  Score reports for the TOEFL iBT, IELTS, or iTEP might be waived for applicants who have other ways to establish their fluency in English."/>
+		/>
 </v-flex></v-layout>
 	  </v-card-text>
       </v-card></v-col></v-row>

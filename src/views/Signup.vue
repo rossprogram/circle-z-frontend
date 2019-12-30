@@ -24,7 +24,7 @@
 	  </div>
 	  </v-form>
 	  <p class="my-4" v-if="emailSent">
-	    An email has been sent.  In a few minutes, please check your email, then <router-link to="/login">log in</router-link> using the provided credentials.
+	    An email has been sent.  In a few minutes, please check your email, then <router-link to="/login">log in</router-link> using the provided credentials.  It is possible that the email was filtered as spam, so be sure to check your junk mail folder.
 	  </p>
 	  <p class="my-4" v-if="errorMessage" v-text="errorMessage"></p>
 	  <p class="my-4" v-if="errorMessage">Please contact <a href="mailto:ross@rossprogram.org">ross@rossprogram.org</a> for assistance.</p>

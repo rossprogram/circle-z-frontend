@@ -7,7 +7,7 @@
 		     :to="item.to">
 	  <v-list-item-icon>
             <v-icon v-if="item.severity == 'warning'">mdi-alert</v-icon>
-            <v-icon v-else>mdi-alert-octagon</v-icon>
+            <v-icon color="red" v-else>mdi-alert-octagon</v-icon>
 	  </v-list-item-icon>
 	  <v-list-item-content>
             <v-list-item-title>{{ item.error }}</v-list-item-title>
@@ -33,7 +33,7 @@
 
   <v-row v-if="application.submitted"><v-col><v-card>
 	<v-card-title>Withdraw your application</v-card-title>
-	<v-card-subtitle>If you wish to change your application, you must first withdraw it from consideration.  Once you have made any desired changes, you may submit your application again.</v-card-subtitle>
+	<v-card-subtitle>If you wish to change your application, you must first withdraw it from consideration.  <strong>This will not erase your application.</strong> Once you have made any desired changes, you may submit your application again.</v-card-subtitle>
 	<v-card-text>
 	  <v-btn color="error" @click="withdrawApplication">Withdraw your application</v-btn>
 	</v-card-text>
@@ -73,7 +73,7 @@ export default {
 	() => !!this.application.phone || { error: 'You are missing a phone number.', severity: 'warning', to: '/apply/background' },
 	() => !!this.application.schoolName || { error: 'You are missing the name of your current school.', severity: 'warning', to: '/apply/background' },
 	() => (this.application.birthday && (ageInYears(this.application.birthday) >= 10)) || { error: 'You are too young.', to: '/apply/background' },
-	() => (this.application.applyingToUSA || this.application.applyingToAsia) || { error: 'You must apply to either program.', to: '/apply/background' },
+	() => (this.application.applyingToUSA || this.application.applyingToAsia) || { error: 'You must apply to one or both of the Ross sites.', to: '/apply/background' },
 	() => !!this.application.address || { error: 'You have not included a home address.', to: '/apply/background', severity: 'warning' },
 
 	() => (!this.application.applyingToUSA || this.application.arriveAtStartUSA) || { error: 'If accepted to Ross/USA, you must arrive at the beginning of the Program.', to: '/apply/background' },
@@ -84,8 +84,8 @@ export default {
 
 	() => !!this.application.parentName || { error: 'The name of a parent or guardian is required.', to: '/apply/parent' },
 	() => !!this.application.parentPhone || { error: 'A phone number for a parent or guardian is required.', to: '/apply/parent' },
-	() => !!this.application.parentEmail || { error: 'An email for a parent or guardian is required.', to: '/apply/parent' },
-	() => !!this.application.parentAddress || { error: 'You have not included an addres for a parent or guardian.', to: '/apply/parent', severity: 'warning' },
+	() => !!this.application.parentEmail || { error: 'An email address for a parent or guardian is required.', to: '/apply/parent' },
+	() => !!this.application.parentAddress || { error: 'You have not included a residential address for a parent or guardian.', to: '/apply/parent', severity: 'warning' },
 
 	() => !!this.application.personalStatement || { error: 'You have not included a personal statement.', to: '/apply/statement' },
 

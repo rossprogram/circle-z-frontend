@@ -1,6 +1,9 @@
 <template>
 <v-form :key="key">
   <v-container fluid>
+
+    <p>If you wish to use mathematical formatting not available here in your responses below, you may include your response as an attachment by choosing Attachments in the menu on the left.</p>
+
     <v-row><v-col><v-card>
     <v-card-title>Problems</v-card-title>
     <v-card-subtitle><strong>What is an interesting mathematical problem you have worked on?</strong> Recall a problem that you spent some time thinking about. Carefully state the problem. Describe the work you have done on it.</v-card-subtitle>
@@ -72,7 +75,7 @@
 
   <v-row><v-col><v-card>
     <v-card-title>Other programs</v-card-title>
-    <v-card-subtitle><strong>Have you participated in academic programs outside of school?</strong> This might include a local Math Club or a Math Circle at some nearby college.  What sorts of activities were involved? Did you enjoy those experiences?</v-card-subtitle>
+    <v-card-subtitle><strong>Have you participated in academic programs outside of school?</strong> This might include another summer math camp, a local Math Club, or a Math Circle at some nearby college.  What sorts of activities were involved? Did you enjoy those experiences?</v-card-subtitle>
     <v-card-text class="py-0">
       <v-textarea
 	outlined
