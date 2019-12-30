@@ -433,7 +433,7 @@ export default {
     },
     previousApplicationYears: {
       get() { return this.application.previousApplicationYears; },
-      set(v) { this.$set(this.updatedApplication, 'previousApplicationYears', v); },
+      set(v) { this.$set(this.updatedApplication, 'previousApplicationYears', v.sort()); },
     },
     citizenship: {
       get() { return this.application.citizenship; },
