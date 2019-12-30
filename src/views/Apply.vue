@@ -2,7 +2,10 @@
 <v-form :key="key">
 <p>We invite you to submit your application to be a student at the
 Ross Mathematics Program.  There are two locations for the Ross
-Programs, and this single application is for both.</p>
+Programs, and this single application is used for both.</p>
+
+<p>To enter or upload your application information, click on the menu items to the left.</p>
+
 <p class="my-4">The Admission Committee will start reading applications on March 1, {{ (new Date()).getFullYear() }}
 and will make admission decisions on a rolling basis. The deadline for
 applications is April 1, but spaces will fill as applications arrive.
