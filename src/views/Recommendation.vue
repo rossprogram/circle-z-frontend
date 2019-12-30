@@ -3,10 +3,7 @@
   <v-container fluid>
     <v-row><v-col><v-card>
     <v-card-title>Recommendation Letter</v-card-title>
-    <v-card-subtitle>Arrange for a mathematics teacher who knows you well to provide a
-recommendation letter.  After you share your teacher's email with us,
-instructions will be sent to your teacher to submit the letter
-      directly to us.</v-card-subtitle>
+    <v-card-subtitle>Arrange for <strong>one mathematics teacher</strong> who knows you well to provide a recommendation letter.  After you share your teacher's email with us, instructions will be sent to your teacher to submit the letter directly to us.</v-card-subtitle>
 
     <v-list-item two-line v-for="recommendation in recommendations"
 		 :key="recommendation.email">
