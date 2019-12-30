@@ -55,6 +55,8 @@
 		    v-model="gender"
 		    :items="['Male','Female']"
 		    label="How do you describe your gender?"
+		    hint="Besides the provided choices, you may type freely into this field"
+		    persistent-hint
 		    prepend-icon="gender"
 		    ></v-combobox>
 		</v-flex>
