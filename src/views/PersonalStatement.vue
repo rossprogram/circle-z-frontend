@@ -7,7 +7,7 @@
 	  <v-card-text class="py-0">
 	    <ul>
 	      <li>What aspect of mathematics draws your interest and attention?
-		Are you interested in math for its own sake? For the thrill of solving puzzling problems.  Or because math has important applications to other fields?</li>
+		Are you interested in math for its own sake? For the thrill of solving puzzling problems?  Or because math has important applications to other fields?</li>
 	      <li>Do you have some strong academic interests in addition to math?  For instance, are you intensively studying physics? Or economics?  Are you serious about Chinese literature, paleontology, or modern dance?</li>
 	      <li>What do you hope to gain by attending this challenging summer program?</li>
 	      <li>How do you like to spend your time?</li>

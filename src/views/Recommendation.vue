@@ -2,8 +2,8 @@
 <v-form :key="key" @submit="inviteRecommender(email)">
   <v-container fluid>
     <v-row><v-col><v-card>
-    <v-card-title>Recommendation Letter</v-card-title>
-    <v-card-subtitle>Arrange for <strong>one mathematics teacher</strong> who knows you well to provide a recommendation letter.  After you share your teacher's email with us, instructions will be sent to your teacher to submit the letter directly to us.  You may return to this page later to check the status of your letter.</v-card-subtitle>
+	  <v-card-title>Recommendation Letter</v-card-title>
+	  <v-card-subtitle>Arrange for a mathematics teacher who knows you well to provide a recommendation letter. After you share your teacher's email with us, instructions will be sent to that address, asking your teacher to submit the letter directly to us. You may return to this page later to check the status of your letter. Applicants are allowed to submit more than one letter of recommendation, if different information will be provided in those additional letters. Click the Plus Sign below to add another email address.</v-card-subtitle>
 
     <v-list-item two-line v-for="recommendation in recommendations"
 		 :key="recommendation.email">
@@ -71,10 +71,15 @@ export default {
     ...mapActions([
       'getRecommendations',
       'addRecommendation',
+      'alertError',
     ]),
 
     inviteRecommender(address) {
-      return this.addRecommendation(address);
+      if (address === '') {
+	this.alertError('You must provide an email address.');
+	return false;
+      }
+	return this.addRecommendation(address);
     },
 
   },

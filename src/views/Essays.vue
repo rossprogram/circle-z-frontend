@@ -2,7 +2,7 @@
 <v-form :key="key">
   <v-container fluid>
 
-    <p>If you wish to use mathematical formatting not available here in your responses below, you may include your response as an attachment by choosing Attachments in the menu on the left.</p>
+    <p>For your resposes below, if you wish to use mathematical formatting not available here, you may include your response as a PDF file and upload it using the Attachments option in the menu on the left. If you do this, please type &ldquo;See Attachments&rdquo; in the text boxes below.</p>
 
     <v-row><v-col><v-card>
     <v-card-title>Problems</v-card-title>

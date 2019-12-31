@@ -88,7 +88,7 @@ const store = new Vuex.Store({
 
   actions: {
     alertError({ dispatch, commit }, error) { // eslint-disable-line no-unused-vars
-      if (error.response.data) commit('setSnack', error.response.data);
+      if (error.response && error.response.data) commit('setSnack', error.response.data);
       else commit('setSnack', error);
     },
 

@@ -120,7 +120,7 @@
 		<v-checkbox
 		  v-if="updatedApplication.applyingToUSA || applyingToUSA"
 		  v-model="arriveAtStartUSA"
-		  label="I will be able to arrive to Ross/USA on June 21, 2020"
+		  label="I will be able to arrive at Ross/USA on June 21, 2020"
 		  ></v-checkbox>
 	      </v-flex>
 	    </v-layout>
@@ -135,7 +135,7 @@
 		<v-checkbox
 		  v-if="updatedApplication.applyingToAsia || applyingToAsia"
 		  v-model="arriveAtStartAsia"
-		  label="I will be able to arrive to Ross/Asia on July 5, 2020"
+		  label="I will be able to arrive at Ross/Asia on July 5, 2020"
 		  ></v-checkbox>
 	      </v-flex>
 	    </v-layout>

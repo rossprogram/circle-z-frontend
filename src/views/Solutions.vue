@@ -3,10 +3,7 @@
   <v-container fluid>
     <v-row><v-col><v-card>
 	  <v-card-title>Solutions</v-card-title>
-	  <v-card-subtitle>Upload your carefully written solutions to the Application Problems. Solutions to each problem must be uploaded as a separate PDF.
-The Admissions Committee is not looking for quick answers written in
-minimal space, but rather a readable mathematical exposition that
-includes evidence of your explorations, conjectures, and proofs.</v-card-subtitle>
+	  <v-card-subtitle>Upload your carefully written solutions to the Application Problems. Solutions to each problem must be uploaded as a separate PDF.  The Admissions Committee is not looking for quick answers written in minimal space,  but rather for readable mathematical expositions that includes evidence of your explorations, conjectures, and proofs.</v-card-subtitle>
 
 	  <v-list-item two-line v-for="attachment in solutionAttachments"
 		       :href="attachment.url"
