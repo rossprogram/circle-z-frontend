@@ -11,6 +11,7 @@ import PersonalStatement from '../views/PersonalStatement.vue';
 import Recommendation from '../views/Recommendation.vue';
 import Attachments from '../views/Attachments.vue';
 import Solutions from '../views/Solutions.vue';
+import Transcript from '../views/Transcript.vue';
 import SubmitApplication from '../views/SubmitApplication.vue';
 
 Vue.use(VueRouter);
@@ -60,6 +61,11 @@ const routes = [
     path: '/apply/solutions',
     name: 'solutions',
     component: Solutions,
+  },
+  {
+    path: '/apply/transcript',
+    name: 'transcript',
+    component: Transcript,
   },
   {
     path: '/apply/attachments',

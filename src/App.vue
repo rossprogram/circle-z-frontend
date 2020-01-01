@@ -135,14 +135,19 @@ icon: 'message',
 to: '/apply/essays',
 },
 {
- title: 'Recommendation',
-icon: 'mail',
-to: '/apply/recommendation',
-},
-{
  title: 'Solutions',
 icon: 'assignment',
 to: '/apply/solutions',
+},
+{
+ title: 'Transcript',
+icon: 'school',
+to: '/apply/transcript',
+},
+{
+ title: 'Recommendation',
+icon: 'mail',
+to: '/apply/recommendation',
 },
 {
  title: 'Attachments',

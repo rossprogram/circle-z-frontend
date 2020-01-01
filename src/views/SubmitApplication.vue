@@ -105,6 +105,8 @@ export default {
 
 	() => (this.recommendations && (Object.values(this.recommendations).some(r => (r.submittedAt)))) || { error: 'A recommendation letter has not yet been received.', severity: 'warning', to: '/apply/recommendation' },
 
+	() => (Object.values(this.attachments).filter(x => x.label === 'transcript').length > 0) || { error: 'You did not submit a high school transcript.', to: '/apply/transcript' },
+
 	() => (Object.values(this.attachments).filter(x => x.label === 'solution1').length > 0) || { error: 'You did not submit a solution to Problem 1.', severity: 'warning', to: '/apply/solutions' },
 	() => (Object.values(this.attachments).filter(x => x.label === 'solution2').length > 0) || { error: 'You did not submit a solution to Problem 2.', severity: 'warning', to: '/apply/solutions' },
 	() => (Object.values(this.attachments).filter(x => x.label === 'solution3').length > 0) || { error: 'You did not submit a solution to Problem 3.', severity: 'warning', to: '/apply/solutions' },
