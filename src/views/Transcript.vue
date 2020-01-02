@@ -25,7 +25,7 @@
 	  <v-list-item two-line>
 	    <v-list-item-content>
               <v-list-item-title>
-		<v-file-input v-model="file" hint=" Please submit only PDF files since our computer system might not be compatible with other formats." persistent-hint label="Transcript"/>
+		<v-file-input v-model="file" hint="Please submit PDF files; we may not be able to read other formats." persistent-hint label="Transcript"/>
 	      </v-list-item-title>
 	      <v-list-item-subtitle></v-list-item-subtitle>
 	    </v-list-item-content>
