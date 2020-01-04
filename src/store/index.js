@@ -92,6 +92,10 @@ const store = new Vuex.Store({
       else commit('setSnack', error);
     },
 
+    alertSuccess({ dispatch, commit }, success) { // eslint-disable-line no-unused-vars
+      commit('setSnack', success);
+    },
+
     login({ dispatch, commit }, { email, password }) {
       userService.login(email, password)
         .then(
@@ -197,6 +201,7 @@ const store = new Vuex.Store({
         (response) => {
           if (response.status === 200) {
             commit('setApplication', response.data);
+            dispatch('alertSuccess', 'Application updated!');
           }
         },
         (error) => {
