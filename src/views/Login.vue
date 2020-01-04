@@ -26,7 +26,6 @@
     <v-btn @click="submit" color="primary" :disabled="!valid"
 	   >
       Login</v-btn>
-    <router-link to="/signup">Forgot Password or Create Account</router-link>
                        </v-layout>
                       </v-form>
                   </div>

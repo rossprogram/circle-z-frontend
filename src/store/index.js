@@ -10,9 +10,7 @@ const store = new Vuex.Store({
   state: {
     version,
     profile: null,
-    application: {},
-    recommendations: {},
-    attachments: {},
+    applications: {},
     snackbar: { snack: '' },
   },
 
@@ -36,40 +34,12 @@ const store = new Vuex.Store({
       state.profile = user;
     },
 
-    setApplication(state, data) {
-      state.application = data;
-    },
-
-    setRecommendations(state, data) {
-      state.recommendations = {};
+    setApplications(state, data) {
+      state.applications = {};
 
       for (let i = 0; i < data.length; i += 1) {
-        Vue.set(state.recommendations, data[i].email, data[i]);
+        Vue.set(state.applications, data[i].id, data[i]);
       }
-    },
-
-    addRecommendation(state, data) {
-      Vue.set(state.recommendations, data.email, data);
-    },
-
-    removeRecommendation(state, email) {
-      Vue.delete(state.recommendations, email);
-    },
-
-    setAttachments(state, data) {
-      state.attachments = {};
-
-      for (let i = 0; i < data.length; i += 1) {
-        Vue.set(state.attachments, data[i].id, data[i]);
-      }
-    },
-
-    addAttachment(state, data) {
-      Vue.set(state.attachments, data.id, data);
-    },
-
-    removeAttachment(state, id) {
-      Vue.delete(state.attachments, id);
     },
 
     logout(state) {
@@ -83,7 +53,6 @@ const store = new Vuex.Store({
     setSnack(state, snack) {
       state.snackbar.snack = snack;
     },
-
   },
 
   actions: {
@@ -115,11 +84,11 @@ const store = new Vuex.Store({
         );
     },
 
-    getApplication({ dispatch, commit }) {
-      userService.getApplication('me').then(
+    getApplication({ dispatch, commit }, id) {
+      userService.getApplication(id).then(
         (response) => {
           if (response.status === 200) {
-            commit('setApplication', response.data);
+            commit('setApplications', [response.data]);
           }
         },
         (error) => {
@@ -128,27 +97,11 @@ const store = new Vuex.Store({
       );
     },
 
-    addRecommendation({ dispatch, commit }, email) {
-      commit('addRecommendation', { email, loading: true });
-
-      userService.addRecommendation('me', email).then(
+    getApplications({ dispatch, commit }) {
+      userService.getApplications().then(
         (response) => {
           if (response.status === 200) {
-            commit('addRecommendation', response.data);
-          }
-        },
-        (error) => {
-          commit('removeRecommendation', email);
-          dispatch('alertError', error, { root: true });
-        },
-      );
-    },
-
-    getRecommendations({ dispatch, commit }) {
-      userService.getRecommendations('me').then(
-        (response) => {
-          if (response.status === 200) {
-            commit('setRecommendations', response.data);
+            commit('setApplications', response.data);
           }
         },
         (error) => {
@@ -156,65 +109,10 @@ const store = new Vuex.Store({
         },
       );
     },
-
-    addAttachment({ dispatch, commit }, { file, label }) {
-      userService.postAttachment('me', file, label).then(
-        (response) => {
-          if (response.status === 200) {
-            commit('addAttachment', response.data);
-          }
-        },
-        (error) => {
-          dispatch('alertError', error, { root: true });
-        },
-      );
-    },
-
-    removeAttachment({ dispatch, commit }, id) {
-      userService.deleteAttachment('me', id).then(
-        (response) => {
-          if (response.status === 200) {
-            commit('removeAttachment', id);
-          }
-        },
-        (error) => {
-          dispatch('alertError', error, { root: true });
-        },
-      );
-    },
-
-    getAttachments({ dispatch, commit }) {
-      userService.getAttachments('me').then(
-        (response) => {
-          if (response.status === 200) {
-            commit('setAttachments', response.data);
-          }
-        },
-        (error) => {
-          dispatch('alertError', error, { root: true });
-        },
-      );
-    },
-
-    updateApplication({ dispatch, commit }, data) {
-      userService.putApplication('me', data).then(
-        (response) => {
-          if (response.status === 200) {
-            commit('setApplication', response.data);
-            dispatch('alertSuccess', 'Application updated!');
-          }
-        },
-        (error) => {
-          dispatch('alertError', error, { root: true });
-        },
-      );
-    },
-
 
     logout({ commit }) {
       commit('logout');
     },
-
 
   },
   modules: {

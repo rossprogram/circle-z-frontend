@@ -8,7 +8,7 @@ module.exports = {
       registry: undefined,
       awsProfile: 'default',
       region: 'us-east-2',
-      bucket: 'apply.rossprogram.org',
+      bucket: 'evaluate.rossprogram.org',
       createBucket: false,
       staticHosting: true,
       staticIndexPage: 'index.html',
