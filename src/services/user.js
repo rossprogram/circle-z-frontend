@@ -21,4 +21,21 @@ export default {
     return axios.get(`/applications/${new Date().getFullYear()}/${id}`);
   },
 
+  async getAttachments(id) {
+    return axios.get(`/applications/${new Date().getFullYear()}/${id}/attachments`);
+  },
+
+  async getEvaluations(id) {
+    return axios.get(`/applications/${new Date().getFullYear()}/${id}/evaluations`);
+  },
+
+  async putEvaluation(userId, data) {
+    return axios.put(`/users/${userId}/application/${new Date().getFullYear()}/evaluations`, data);
+  },
+
+  async deleteEvaluation(id) {
+    return axios.delete(`/evaluations/${id}`);
+  },
+
+
 };

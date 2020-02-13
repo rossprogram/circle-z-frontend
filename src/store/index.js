@@ -11,6 +11,8 @@ const store = new Vuex.Store({
     version,
     profile: null,
     applications: {},
+    attachments: {},
+    evaluations: {},
     snackbar: { snack: '' },
   },
 
@@ -35,11 +37,41 @@ const store = new Vuex.Store({
     },
 
     setApplications(state, data) {
-      state.applications = {};
-
       for (let i = 0; i < data.length; i += 1) {
         Vue.set(state.applications, data[i].id, data[i]);
       }
+    },
+
+    setAttachments(state, { id, data }) {
+      Vue.set(state.attachments, id, data);
+    },
+
+    setEvaluations(state, { id, data }) {
+      Vue.set(state.evaluations, id, data);
+    },
+
+    removeEvaluation(state, data) {
+      const applicationId = data.application;
+      const evaluations = state.evaluations[applicationId];
+      for (let i = 0; i < evaluations.length; i += 1) {
+        if (evaluations[i].evaluator.id === data.evaluator.id) {
+          Vue.delete(state.evaluations[applicationId], i);
+          return;
+        }
+      }
+    },
+
+    setEvaluation(state, data) {
+      const applicationId = data.application;
+      const evaluations = state.evaluations[applicationId];
+      for (let i = 0; i < evaluations.length; i += 1) {
+        if (evaluations[i].evaluator.id === data.evaluator.id) {
+          Vue.set(state.evaluations[applicationId], i, data);
+          return;
+        }
+      }
+
+      Vue.set(state.evaluations, applicationId, [data]);
     },
 
     logout(state) {
@@ -82,6 +114,60 @@ const store = new Vuex.Store({
             dispatch('alertError', error, { root: true });
           },
         );
+    },
+
+    getAttachments({ dispatch, commit }, id) {
+      userService.getAttachments(id).then(
+        (response) => {
+          if (response.status === 200) {
+            commit('setAttachments', { id, data: response.data });
+          }
+        },
+        (error) => {
+          dispatch('alertError', error, { root: true });
+        },
+      );
+    },
+
+    getEvaluations({ dispatch, commit }, id) {
+      userService.getEvaluations(id).then(
+        (response) => {
+          if (response.status === 200) {
+            commit('setEvaluations', { id, data: response.data });
+          }
+        },
+        (error) => {
+          dispatch('alertError', error, { root: true });
+        },
+      );
+    },
+
+    deleteEvaluation({ dispatch, commit }, id) {
+      userService.deleteEvaluation(id).then(
+        (response) => {
+          if (response.status === 200) {
+            commit('removeEvaluation', response.data);
+            dispatch('alertSuccess', 'Evaluation deleted!');
+          }
+        },
+        (error) => {
+          dispatch('alertError', error, { root: true });
+        },
+      );
+    },
+
+    updateEvaluation({ dispatch, commit }, { id, data }) {
+      userService.putEvaluation(id, data).then(
+        (response) => {
+          if (response.status === 200) {
+            commit('setEvaluation', response.data);
+            dispatch('alertSuccess', 'Evaluation submitted!');
+          }
+        },
+        (error) => {
+          dispatch('alertError', error, { root: true });
+        },
+      );
     },
 
     getApplication({ dispatch, commit }, id) {
