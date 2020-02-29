@@ -239,6 +239,20 @@
 
     </v-card></v-col></v-row>
 
+    <v-row v-if="this.profile.isSuperuser"><v-col><v-card>
+	  <v-card-title>Recommendations</v-card-title>
+	  <v-list-item two-line v-for="recommendation in applicationRecommendations"
+		       :href="recommendation.url"
+		       :key="recommendation.id">
+	    <v-list-item-icon>
+              <v-icon>mdi-mail</v-icon>
+	    </v-list-item-icon>
+	    <v-list-item-content>
+	    <v-list-item-title>{{ recommendation.email }}</v-list-item-title>
+	    <v-list-item-subtitle v-if="recommendation.createdAt">Uploaded {{ recommendation.createdAt | moment("from", "now") }}</v-list-item-subtitle>
+	    </v-list-item-content>
+	  </v-list-item>
+    </v-card></v-col></v-row>
 
     <v-row><v-col><v-card>
 	  <v-card-title>Evaluations</v-card-title>
@@ -267,7 +281,7 @@ import { mapActions, mapState } from 'vuex';
 
 export default {
   computed: {
-    ...mapState(['applications', 'attachments', 'evaluations', 'profile']),
+    ...mapState(['applications', 'attachments', 'evaluations', 'profile', 'recommendations']),
 
     application: {
       get() {
@@ -287,6 +301,11 @@ export default {
     applicationAttachments: {
       get() {
 	return this.attachments[this.$route.params.id];
+      },
+     },
+    applicationRecommendations: {
+      get() {
+	return this.recommendations[this.$route.params.id];
       },
      },
     problems: {
@@ -346,6 +365,7 @@ export default {
     ...mapActions([
       'getApplication',
       'getAttachments',
+      'getRecommendations',
       'getEvaluations',
       'updateEvaluation',
       'deleteEvaluation',
@@ -393,6 +413,7 @@ export default {
 
   mounted() {
     this.getAttachments(this.$route.params.id);
+    this.getRecommendations(this.$route.params.id);
     this.getEvaluations(this.$route.params.id);
     return this.getApplication(this.$route.params.id);
   },

@@ -25,6 +25,10 @@ export default {
     return axios.get(`/applications/${new Date().getFullYear()}/${id}/attachments`);
   },
 
+  async getRecommendations(id) {
+    return axios.get(`/applications/${new Date().getFullYear()}/${id}/recommendations`);
+  },
+
   async getEvaluations(id) {
     return axios.get(`/applications/${new Date().getFullYear()}/${id}/evaluations`);
   },

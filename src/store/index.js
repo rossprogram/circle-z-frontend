@@ -12,6 +12,7 @@ const store = new Vuex.Store({
     profile: null,
     applications: {},
     attachments: {},
+    recommendations: {},
     evaluations: {},
     snackbar: { snack: '' },
   },
@@ -31,6 +32,9 @@ const store = new Vuex.Store({
         }
       }
     },
+    setAttachments(state, { id, data }) {
+      Vue.set(state.attachments, id, data);
+    },
 
     setProfile(state, user) {
       state.profile = user;
@@ -42,8 +46,8 @@ const store = new Vuex.Store({
       }
     },
 
-    setAttachments(state, { id, data }) {
-      Vue.set(state.attachments, id, data);
+    setRecommendations(state, { id, data }) {
+      Vue.set(state.recommendations, id, data);
     },
 
     setEvaluations(state, { id, data }) {
@@ -121,6 +125,19 @@ const store = new Vuex.Store({
         (response) => {
           if (response.status === 200) {
             commit('setAttachments', { id, data: response.data });
+          }
+        },
+        (error) => {
+          dispatch('alertError', error, { root: true });
+        },
+      );
+    },
+
+    getRecommendations({ dispatch, commit }, id) {
+      userService.getRecommendations(id).then(
+        (response) => {
+          if (response.status === 200) {
+            commit('setRecommendations', { id, data: response.data });
           }
         },
         (error) => {
