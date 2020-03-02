@@ -3,11 +3,13 @@
   <v-card  style="position: sticky; top: 1in; width: 2in; float: left;">
     <v-card-title>Evaluation</v-card-title>
 
-    <v-icon v-if="application.gender === 'Male'">mdi-gender-male</v-icon>
-    <v-icon v-else-if="application.gender === 'Female'">mdi-gender-female</v-icon>
-    <v-icon v-else>mdi-gender-transgender</v-icon>
+    <span v-if="profile.isSuperuser">
+      <v-icon v-if="application.gender === 'Male'">mdi-gender-male</v-icon>
+      <v-icon v-else-if="application.gender === 'Female'">mdi-gender-female</v-icon>
+      <v-icon v-else>mdi-gender-transgender</v-icon>
     <vue-country-flag v-for="country in application.citizenship" :key="country" :country="country" size='small'/>
     <span v-if="age">{{ age }} years old</span>
+    </span>
 
     <v-card-text class="py-0">
       <vue-stars name="demo" v-model="overallScore"/>
