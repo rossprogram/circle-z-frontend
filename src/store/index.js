@@ -14,6 +14,7 @@ const store = new Vuex.Store({
     attachments: {},
     recommendations: {},
     evaluations: {},
+    myEvaluations: [],
     snackbar: { snack: '' },
   },
 
@@ -34,6 +35,9 @@ const store = new Vuex.Store({
     },
     setAttachments(state, { id, data }) {
       Vue.set(state.attachments, id, data);
+    },
+    setMyEvaluations(state, data) {
+      state.myEvaluations = data;
     },
 
     setProfile(state, user) {
@@ -151,6 +155,19 @@ const store = new Vuex.Store({
         (response) => {
           if (response.status === 200) {
             commit('setEvaluations', { id, data: response.data });
+          }
+        },
+        (error) => {
+          dispatch('alertError', error, { root: true });
+        },
+      );
+    },
+
+    getMyEvaluations({ dispatch, commit }) {
+      userService.getMyEvaluations().then(
+        (response) => {
+          if (response.status === 200) {
+            commit('setMyEvaluations', response.data);
           }
         },
         (error) => {

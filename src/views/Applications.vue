@@ -23,6 +23,10 @@
       label="Unevaluated"
       ></v-checkbox>
     <v-checkbox
+      v-model="onlyEvaluatedByMe"
+      label="Evaluated by me"
+      ></v-checkbox>
+    <v-checkbox
       v-if="profile.isSuperuser"
       v-model="onlyMale"
       label="Male"
@@ -80,7 +84,11 @@
 		  <vue-country-flag style="vertical-align: top;" v-for="country in application.citizenship" :key="country" :country="country" size='medium'/>
 	      </span>
 	    </v-list-item-title>
-	    <v-list-item-subtitle v-if="application.updatedAt">Last updated {{ application.updatedAt | moment("from", "now") }}.  Evaluated by {{ application.evaluationCount }} evalutor{{application.evaluationCount.length == 1 ? '' : 's' }}.</v-list-item-subtitle>
+	    <v-list-item-subtitle v-if="application.updatedAt">Last updated {{ application.updatedAt | moment("from", "now") }}.  Evaluated by {{ application.evaluationCount }} evalutor{{application.evaluationCount.length == 1 ? '' : 's' }}.
+	      <span v-if="myEvaluations.filter( (x) => x.application == application.id ).length > 0">
+		Evaluated by me.
+	      </span>
+	    </v-list-item-subtitle>
 	  </v-list-item-content>
 	</v-list-item>
   </v-card></v-col></v-row>
@@ -92,7 +100,7 @@ import { mapActions, mapState } from 'vuex';
 
 export default {
   computed: {
-    ...mapState(['applications', 'profile']),
+    ...mapState(['applications', 'profile', 'myEvaluations']),
 
 filteredApplications: {
 get() {
@@ -111,6 +119,7 @@ return true;
       && ifthen(this.onlyNonUSA, application.citizenship.indexOf('US') === -1)
       && ifthen(this.onlyFemale, application.gender === 'Female')
       && ifthen(this.onlyUnevaluated, application.evaluationCount === 0)
+      && ifthen(this.onlyEvaluatedByMe, this.myEvaluations.filter(x => x.application === application.id).length > 0)
   )).sort((a, b) => this.compareApplications(a, b));
 },
 },
@@ -124,6 +133,7 @@ return true;
       onlyJuniorCounselors: false,
       onlyNonempty: true,
       onlyFirstyears: true,
+      onlyEvaluatedByMe: false,
       onlySubmitted: true,
       onlyMale: false,
       onlyFemale: false,
@@ -136,6 +146,7 @@ return true;
   methods: {
     ...mapActions([
       'getApplications',
+      'getMyEvaluations',
     ]),
 
     birthdayToAge(born) {
@@ -170,6 +181,7 @@ return true;
   },
 
   mounted() {
+    this.getMyEvaluations();
     return this.getApplications();
   },
 };
