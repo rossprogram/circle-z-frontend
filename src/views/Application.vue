@@ -47,6 +47,23 @@
     </v-card-actions></v-card>
 
   <v-container fluid style="padding-left: 2.2in;">
+    <v-row><v-col><v-card>
+	  <v-card-title>Evaluations</v-card-title>
+	  	  <v-list-item three-line v-for="evaluation in applicationEvaluations"
+		       :key="evaluation.id">
+      <v-list-item-icon>
+        <v-icon v-if="evaluation.decision === 'accept'" style="color: green;">mdi-account-check</v-icon>
+	<v-icon v-else-if="evaluation.decision === 'reject'" style="color: red;">mdi-account-cancel</v-icon>
+	<v-icon v-else-if="evaluation.decision === 'waitlist'" style="color: orange;">mdi-account-clock</v-icon>
+	<v-icon v-else style="color: gray;">mdi-account-question</v-icon>
+      </v-list-item-icon>
+      <v-list-item-content>
+        <v-list-item-title>{{ evaluation.evaluator.email }} <vue-stars style="float: right;" v-if="evaluation.overallScore" readonly :value="evaluation.overallScore"></vue-stars><span style="float: right; margin-right: 1em;">{{ evaluation.problemScores.map( (score) => (score === 'A' || score === 'B' || score === 'C') ? score : '?' ).join(' ') }}</span> </v-list-item-title>
+	<v-list-item-subtitle>{{ evaluation.comments }} <span style="float: right;">{{ evaluation.updatedAt | moment("from", "now") }}</span></v-list-item-subtitle>
+      </v-list-item-content>
+    </v-list-item>
+    </v-card></v-col></v-row>
+
   <v-row><v-col><v-card>
 	<v-card-title>Demographic Information</v-card-title>
 	<v-card-text>
@@ -246,32 +263,20 @@
 	  <v-list-item two-line v-for="recommendation in applicationRecommendations"
 		       :href="recommendation.url"
 		       :key="recommendation.id">
-	    <v-list-item-icon>
-              <v-icon>mdi-mail</v-icon>
-	    </v-list-item-icon>
+      <v-list-item-icon>
+        <v-icon v-if="recommendation.submittedAt">mdi-email-check</v-icon>
+        <v-icon v-else-if="recommendation.loading">mdi-email-open</v-icon>
+	<v-icon v-else>mdi-email</v-icon>
+      </v-list-item-icon>
 	    <v-list-item-content>
 	    <v-list-item-title>{{ recommendation.email }}</v-list-item-title>
-	    <v-list-item-subtitle v-if="recommendation.createdAt">Uploaded {{ recommendation.createdAt | moment("from", "now") }}</v-list-item-subtitle>
+	<v-list-item-subtitle v-if="recommendation.submittedAt">Received {{ recommendation.createdAt | moment("from", "now") }}</v-list-item-subtitle>
+	<v-list-item-subtitle v-if="recommendation.createdAt">Requested {{ recommendation.createdAt | moment("from", "now") }}</v-list-item-subtitle>
+	<v-list-item-subtitle v-else>Requesting&hellip;</v-list-item-subtitle>
 	    </v-list-item-content>
 	  </v-list-item>
     </v-card></v-col></v-row>
 
-    <v-row><v-col><v-card>
-	  <v-card-title>Evaluations</v-card-title>
-	  	  <v-list-item three-line v-for="evaluation in applicationEvaluations"
-		       :key="evaluation.id">
-      <v-list-item-icon>
-        <v-icon v-if="evaluation.decision === 'accept'" style="color: green;">mdi-account-check</v-icon>
-	<v-icon v-else-if="evaluation.decision === 'reject'" style="color: red;">mdi-account-cancel</v-icon>
-	<v-icon v-else-if="evaluation.decision === 'waitlist'" style="color: orange;">mdi-account-clock</v-icon>
-	<v-icon v-else style="color: gray;">mdi-account-question</v-icon>
-      </v-list-item-icon>
-      <v-list-item-content>
-        <v-list-item-title>{{ evaluation.evaluator.email }} <vue-stars style="float: right;" v-if="evaluation.overallScore" readonly :value="evaluation.overallScore"></vue-stars><span style="float: right; margin-right: 1em;">{{ evaluation.problemScores.map( (score) => (score === 'A' || score === 'B' || score === 'C') ? score : '?' ).join(' ') }}</span> </v-list-item-title>
-	<v-list-item-subtitle>{{ evaluation.comments }} <span style="float: right;">{{ evaluation.updatedAt | moment("from", "now") }}</span></v-list-item-subtitle>
-      </v-list-item-content>
-    </v-list-item>
-    </v-card></v-col></v-row>
 </v-container>
 </v-container>
 </template>

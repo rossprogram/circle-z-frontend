@@ -23,6 +23,10 @@
       label="Unevaluated"
       ></v-checkbox>
     <v-checkbox
+      v-model="onlyEvaluated"
+      label="Evaluated"
+      ></v-checkbox>
+    <v-checkbox
       v-model="onlyEvaluatedByMe"
       label="Evaluated by me"
       ></v-checkbox>
@@ -84,7 +88,7 @@
 		  <vue-country-flag style="vertical-align: top;" v-for="country in application.citizenship" :key="country" :country="country" size='medium'/>
 	      </span>
 	    </v-list-item-title>
-	    <v-list-item-subtitle v-if="application.updatedAt">Last updated {{ application.updatedAt | moment("from", "now") }}.  Evaluated by {{ application.evaluationCount }} evalutor{{application.evaluationCount.length == 1 ? '' : 's' }}.
+	    <v-list-item-subtitle v-if="application.updatedAt">Last updated {{ application.updatedAt | moment("from", "now") }}.  Evaluated by {{ application.evaluationCount }} evaluator{{application.evaluationCount.length == 1 ? '' : 's' }}.
 	      <span v-if="myEvaluations.filter( (x) => x.application == application.id ).length > 0">
 		Evaluated by me.
 	      </span>
@@ -119,6 +123,7 @@ return true;
       && ifthen(this.onlyNonUSA, application.citizenship.indexOf('US') === -1)
       && ifthen(this.onlyFemale, application.gender === 'Female')
       && ifthen(this.onlyUnevaluated, application.evaluationCount === 0)
+      && ifthen(this.onlyEvaluated, application.evaluationCount > 0)
       && ifthen(this.onlyEvaluatedByMe, this.myEvaluations.filter(x => x.application === application.id).length > 0)
   )).sort((a, b) => this.compareApplications(a, b));
 },
@@ -140,6 +145,7 @@ return true;
       onlyUSA: false,
       onlyNonUSA: false,
       onlyUnevaluated: true,
+      onlyEvaluated: false,
       reverseSort: false,
     };
   },
