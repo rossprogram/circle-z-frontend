@@ -74,11 +74,7 @@ const store = new Vuex.Store({
     },
 
     removeOffer(state, id) {
-      console.log(state.offers);
-      console.log('id=', id);
-
       Object.keys(state.offers).forEach((key) => {
-        console.log(state.offers[key]);
         if (key && state.offers && state.offers[key] && (state.offers[key].id === id)) {
           Vue.set(state.offers, key, {});
         }
