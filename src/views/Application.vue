@@ -58,7 +58,7 @@
 	<v-icon v-else style="color: gray;">mdi-account-question</v-icon>
       </v-list-item-icon>
       <v-list-item-content>
-        <v-list-item-title>{{ evaluation.evaluator.email }} <vue-stars style="float: right;" v-if="evaluation.overallScore" readonly :value="evaluation.overallScore"></vue-stars><span style="float: right; margin-right: 1em;">{{ evaluation.problemScores.map( (score) => (score === 'A' || score === 'B' || score === 'C') ? score : '?' ).join(' ') }}</span> </v-list-item-title>
+        <v-list-item-title>{{ evaluation.evaluator.email }} <vue-stars :name="evaluation.id" style="float: right;" v-if="evaluation.overallScore" readonly :value="evaluation.overallScore"></vue-stars><span style="float: right; margin-right: 1em;">{{ evaluation.problemScores.map( (score) => (score === 'A' || score === 'B' || score === 'C') ? score : '?' ).join(' ') }}</span> </v-list-item-title>
 	<v-list-item-subtitle>{{ evaluation.comments }} <span style="float: right;">{{ evaluation.updatedAt | moment("from", "now") }}</span></v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>
