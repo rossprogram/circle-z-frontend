@@ -41,6 +41,18 @@ export default {
     return axios.put(`/users/${userId}/application/${new Date().getFullYear()}/evaluations`, data);
   },
 
+  async getOffer(id) {
+    return axios.get(`/applications/${new Date().getFullYear()}/${id}/offer`);
+  },
+
+  async putOffer(userId, data) {
+    return axios.put(`/users/${userId}/application/${new Date().getFullYear()}/offer`, data);
+  },
+
+  async deleteOffer(id) {
+    return axios.delete(`/offers/${id}`);
+  },
+
   async deleteEvaluation(id) {
     return axios.delete(`/evaluations/${id}`);
   },

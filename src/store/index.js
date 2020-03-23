@@ -12,6 +12,7 @@ const store = new Vuex.Store({
     profile: null,
     applications: {},
     attachments: {},
+    offers: {},
     recommendations: {},
     evaluations: {},
     myEvaluations: [],
@@ -35,6 +36,9 @@ const store = new Vuex.Store({
     },
     setAttachments(state, { id, data }) {
       Vue.set(state.attachments, id, data);
+    },
+    setOffer(state, { id, data }) {
+      Vue.set(state.offers, id, data);
     },
     setMyEvaluations(state, data) {
       state.myEvaluations = data;
@@ -67,6 +71,18 @@ const store = new Vuex.Store({
           return;
         }
       }
+    },
+
+    removeOffer(state, id) {
+      console.log(state.offers);
+      console.log('id=', id);
+
+      Object.keys(state.offers).forEach((key) => {
+        console.log(state.offers[key]);
+        if (key && state.offers && state.offers[key] && (state.offers[key].id === id)) {
+          Vue.set(state.offers, key, {});
+        }
+      });
     },
 
     setEvaluation(state, data) {
@@ -150,6 +166,19 @@ const store = new Vuex.Store({
       );
     },
 
+    getOffer({ dispatch, commit }, id) {
+      userService.getOffer(id).then(
+        (response) => {
+          if (response.status === 200) {
+            commit('setOffer', { id, data: response.data });
+          }
+        },
+        (error) => {
+          dispatch('alertError', error, { root: true });
+        },
+      );
+    },
+
     getEvaluations({ dispatch, commit }, id) {
       userService.getEvaluations(id).then(
         (response) => {
@@ -190,12 +219,40 @@ const store = new Vuex.Store({
       );
     },
 
+    deleteOffer({ dispatch, commit }, id) {
+      userService.deleteOffer(id).then(
+        (response) => {
+          if (response.status === 200) {
+            commit('removeOffer', id);
+            dispatch('alertSuccess', 'Offer rescinded!');
+          }
+        },
+        (error) => {
+          dispatch('alertError', error, { root: true });
+        },
+      );
+    },
+
     updateEvaluation({ dispatch, commit }, { id, data }) {
       userService.putEvaluation(id, data).then(
         (response) => {
           if (response.status === 200) {
             commit('setEvaluation', response.data);
             dispatch('alertSuccess', 'Evaluation submitted!');
+          }
+        },
+        (error) => {
+          dispatch('alertError', error, { root: true });
+        },
+      );
+    },
+
+    updateOffer({ dispatch, commit }, { id, data }) {
+      userService.putOffer(id, data).then(
+        (response) => {
+          if (response.status === 200) {
+            commit('setOffer', { id: response.data.application, data: response.data });
+            dispatch('alertSuccess', 'Offer provided!');
           }
         },
         (error) => {

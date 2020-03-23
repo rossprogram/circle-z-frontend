@@ -47,6 +47,37 @@
     </v-card-actions></v-card>
 
   <v-container fluid style="padding-left: 2.2in;">
+    <v-row v-if="profile.isSuperuser && applicationEvaluations.length > 0"><v-col><v-card>
+	  <v-card-title>Offer</v-card-title>
+	  <v-card-text>
+	    <v-select
+              v-model="offer"
+              :items="['','accept','reject','waitlist']"
+              label="Final decision"
+	      ></v-select>
+	    <span v-if="applicationOffer && applicationOffer.evaluator">Made by {{ applicationOffer.evaluator.email }} {{ applicationOffer.updatedAt | moment("from", "now") }}</span>
+	  </v-card-text>
+
+        <v-card-actions>
+      <v-btn
+	text
+	@click="saveOffer"
+	color="primary"
+        :disabled="Object.keys(this.updatedOffer).length == 0"
+	>
+	Save
+      </v-btn>
+      <v-btn
+	text
+	@click="removeOffer"
+	color="danger"
+	:disabled="! applicationOffer.id"
+	>
+	Delete
+      </v-btn>
+    </v-card-actions>
+    </v-card></v-col></v-row>
+
     <v-row><v-col><v-card>
 	  <v-card-title>Evaluations</v-card-title>
 	  	  <v-list-item three-line v-for="evaluation in applicationEvaluations"
@@ -288,7 +319,7 @@ import { mapActions, mapState } from 'vuex';
 
 export default {
   computed: {
-    ...mapState(['applications', 'attachments', 'evaluations', 'profile', 'recommendations']),
+    ...mapState(['applications', 'attachments', 'evaluations', 'profile', 'recommendations', 'offers']),
 
     application: {
       get() {
@@ -308,6 +339,11 @@ export default {
     applicationAttachments: {
       get() {
 	return this.attachments[this.$route.params.id];
+      },
+     },
+    applicationOffer: {
+      get() {
+	return this.offers[this.$route.params.id];
       },
      },
     applicationRecommendations: {
@@ -358,6 +394,10 @@ export default {
       get() { return this.myEvaluation.overallScore; },
       set(v) { this.$set(this.updatedEvaluation, 'overallScore', v); },
     },
+    offer: {
+      get() { if (this.applicationOffer && this.applicationOffer.offer) return this.applicationOffer.offer; return ''; },
+      set(v) { this.$set(this.updatedOffer, 'offer', v); },
+    },
 
   },
 
@@ -365,6 +405,7 @@ export default {
     return {
       saved: false,
       updatedEvaluation: {},
+      updatedOffer: {},
       key: 1,
     };
   },
@@ -374,6 +415,9 @@ export default {
       'getAttachments',
       'getRecommendations',
       'getEvaluations',
+      'getOffer',
+      'updateOffer',
+      'deleteOffer',
       'updateEvaluation',
       'deleteEvaluation',
     ]),
@@ -383,8 +427,17 @@ export default {
       return this.updateEvaluation({ id: this.application.user.id, data: this.updatedEvaluation });
     },
 
+    saveOffer() {
+      this.saved = true;
+      return this.updateOffer({ id: this.application.user.id, data: this.updatedOffer });
+    },
+
     removeEvaluation() {
       if (this.myEvaluation.id) this.deleteEvaluation(this.myEvaluation.id);
+    },
+
+    removeOffer() {
+      if (this.applicationOffer.id) this.deleteOffer(this.applicationOffer.id);
     },
 
     getMyScore(n) {
@@ -422,6 +475,7 @@ export default {
     this.getAttachments(this.$route.params.id);
     this.getRecommendations(this.$route.params.id);
     this.getEvaluations(this.$route.params.id);
+    this.getOffer(this.$route.params.id);
     return this.getApplication(this.$route.params.id);
   },
 };
