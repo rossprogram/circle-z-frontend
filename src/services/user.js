@@ -20,6 +20,9 @@ export default {
   async getApplication(id) {
     return axios.get(`/applications/${new Date().getFullYear()}/${id}`);
   },
+  async getEvaluation(id) {
+    return axios.get(`/evaluations/${id}`);
+  },
 
   async getAttachments(id) {
     return axios.get(`/applications/${new Date().getFullYear()}/${id}/attachments`);
@@ -28,6 +31,9 @@ export default {
   async getMyEvaluations() {
     return axios.get('/evaluators/me/evaluations');
   },
+  async getEvaluatorEvaluations(id) {
+    return axios.get(`/evaluators/${id}/evaluations`);
+  },
 
   async getRecommendations(id) {
     return axios.get(`/applications/${new Date().getFullYear()}/${id}/recommendations`);
@@ -35,6 +41,10 @@ export default {
 
   async getEvaluations(id) {
     return axios.get(`/applications/${new Date().getFullYear()}/${id}/evaluations`);
+  },
+
+  async getEvaluators() {
+    return axios.get('/evaluators');
   },
 
   async putEvaluation(userId, data) {

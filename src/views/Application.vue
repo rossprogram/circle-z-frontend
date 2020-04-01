@@ -80,7 +80,8 @@
 
     <v-row><v-col><v-card>
 	  <v-card-title>Evaluations</v-card-title>
-	  	  <v-list-item three-line v-for="evaluation in applicationEvaluations"
+	  <v-list-item three-line v-for="evaluation in applicationEvaluations"
+		       :href="`/evaluation/${evaluation.id}`"
 		       :key="evaluation.id">
       <v-list-item-icon>
         <v-icon v-if="evaluation.decision === 'accept'" style="color: green;">mdi-account-check</v-icon>
@@ -366,7 +367,7 @@ export default {
     myEvaluation: {
       get() {
 	if (this.evaluations[this.$route.params.id]) {
-	  const matches = this.evaluations[this.$route.params.id].filter(evaluation => evaluation.evaluator.id === this.profile.id);
+	  const matches = this.evaluations[this.$route.params.id].filter(evaluation => evaluation.evaluator && (evaluation.evaluator.id === this.profile.id));
 	  if (matches.length > 0) {
 	    return matches[0];
 	  }

@@ -15,7 +15,10 @@ const store = new Vuex.Store({
     offers: {},
     recommendations: {},
     evaluations: {},
+    evaluators: {},
+    evaluationsByEvaluator: {},
     myEvaluations: [],
+    evaluationsById: {},
     snackbar: { snack: '' },
   },
 
@@ -42,6 +45,12 @@ const store = new Vuex.Store({
     },
     setMyEvaluations(state, data) {
       state.myEvaluations = data;
+    },
+    setEvaluators(state, data) {
+      state.evaluators = data;
+    },
+    setEvaluationsForEvaluator(state, { id, data }) {
+      Vue.set(state.evaluationsByEvaluator, id, data);
     },
 
     setProfile(state, user) {
@@ -81,12 +90,18 @@ const store = new Vuex.Store({
       });
     },
 
+    setEvaluationById(state, { id, data }) {
+      Vue.set(state.evaluationsById, id, data);
+    },
+
     setEvaluation(state, data) {
       const applicationId = data.application;
       const evaluations = state.evaluations[applicationId];
+
       for (let i = 0; i < evaluations.length; i += 1) {
         if (evaluations[i].evaluator.id === data.evaluator.id) {
           Vue.set(state.evaluations[applicationId], i, data);
+
           return;
         }
       }
@@ -149,6 +164,19 @@ const store = new Vuex.Store({
       );
     },
 
+    getEvaluatorEvaluations({ dispatch, commit }, id) {
+      userService.getEvaluatorEvaluations(id).then(
+        (response) => {
+          if (response.status === 200) {
+            commit('setEvaluationsForEvaluator', { id, data: response.data });
+          }
+        },
+        (error) => {
+          dispatch('alertError', error, { root: true });
+        },
+      );
+    },
+
     getRecommendations({ dispatch, commit }, id) {
       userService.getRecommendations(id).then(
         (response) => {
@@ -180,6 +208,19 @@ const store = new Vuex.Store({
         (response) => {
           if (response.status === 200) {
             commit('setEvaluations', { id, data: response.data });
+          }
+        },
+        (error) => {
+          dispatch('alertError', error, { root: true });
+        },
+      );
+    },
+
+    getEvaluation({ dispatch, commit }, id) {
+      userService.getEvaluation(id).then(
+        (response) => {
+          if (response.status === 200) {
+            commit('setEvaluationById', { id, data: response.data });
           }
         },
         (error) => {
@@ -262,6 +303,19 @@ const store = new Vuex.Store({
         (response) => {
           if (response.status === 200) {
             commit('setApplications', [response.data]);
+          }
+        },
+        (error) => {
+          dispatch('alertError', error, { root: true });
+        },
+      );
+    },
+
+    getEvaluators({ dispatch, commit }) {
+      userService.getEvaluators().then(
+        (response) => {
+          if (response.status === 200) {
+            commit('setEvaluators', response.data);
           }
         },
         (error) => {

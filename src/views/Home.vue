@@ -9,7 +9,9 @@
 	    <v-btn v-if="!profile" to="/login" color="primary">Login</v-btn>
 
 <p v-if="profile">After you have created an account, you can begin to <router-link to="/applications">view applications</router-link>.</p>
-	    <v-btn v-if="profile" to="/applications" color="primary">View applications</v-btn>
+<v-btn v-if="profile" to="/applications" color="primary">View applications</v-btn>
+
+	    &nbsp;<v-btn v-if="profile && profile.isSuperuser" to="/evaluators" color="primary">View evaluators</v-btn>
 
 </v-flex>
 </v-container>
