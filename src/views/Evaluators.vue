@@ -10,7 +10,7 @@
             <v-list-item-title>
 	      {{ evaluator.email }}
 	    </v-list-item-title>
-	    <v-list-item-subtitle>Performed ??? evaluations.
+	    <v-list-item-subtitle>Performed {{ evaluator.evaluationCount }} evaluations.
 	    </v-list-item-subtitle>
 	  </v-list-item-content>
 	</v-list-item>

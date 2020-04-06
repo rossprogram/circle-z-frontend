@@ -1,7 +1,8 @@
 <template>
 <v-container fluid>
   <v-card  style="position: sticky; top: 1in; width: 2in; float: left;">
-    <v-card-title>Evaluation</v-card-title>
+    <v-card-title>{{ application.firstName }} {{ application.lastName }}</v-card-title>
+    <v-card-subtitle>Evaluation</v-card-subtitle>
 
     <span v-if="profile.isSuperuser">
       <v-icon v-if="application.gender === 'Male'">mdi-gender-male</v-icon>

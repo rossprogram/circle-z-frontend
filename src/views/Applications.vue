@@ -50,6 +50,14 @@
       v-model="onlyNonUSA"
       label="Non-USA"
       ></v-checkbox>
+    <v-checkbox
+      v-model="onlyOffered"
+      label="Made offer"
+      ></v-checkbox>
+    <v-checkbox
+      v-model="onlyNoOffer"
+      label="Made no offer"
+      ></v-checkbox>
   </v-row>
 
   <v-row justify="space-around">
@@ -68,7 +76,7 @@
 
   <v-row><v-col><v-card>
 	<v-card-title>Applications</v-card-title>
-	<v-card-subtitle>{{filteredApplications.length}} application{{filteredApplications.length == 1 ? '' : 's'}}</v-card-subtitle>
+	<v-card-subtitle>{{filteredApplications.length}} application{{filteredApplications.length == 1 ? '' : 's'}}.  Accept {{filteredOffers.filter( (offer) => offer.offer == 'accept' ).length }}. Waitlist {{filteredOffers.filter( (offer) => offer.offer == 'waitlist' ).length }}.  Reject {{filteredOffers.filter( (offer) => offer.offer == 'reject' ).length }}.</v-card-subtitle>
 	<v-list-item two-line v-for="application in filteredApplications"
 		     :href="`/applications/${application.id}`"
 		     :key="application.id">
@@ -87,6 +95,7 @@
 		  <v-icon v-else>mdi-gender-transgender</v-icon>
 		  <vue-country-flag style="vertical-align: top;" v-for="country in application.citizenship" :key="country" :country="country" size='medium'/>
 	      </span>
+	      <span style="font-weight: bold;" v-if="application.offer">(Decision: {{ application.offer.offer }})</span>
 	    </v-list-item-title>
 	    <v-list-item-subtitle v-if="application.updatedAt">Last updated {{ application.updatedAt | moment("from", "now") }}.  Evaluated by {{ application.evaluationCount }} evaluator{{application.evaluationCount.length == 1 ? '' : 's' }}.
 	      <span v-if="myEvaluations.filter( (x) => x.application == application.id ).length > 0">
@@ -106,6 +115,12 @@ export default {
   computed: {
     ...mapState(['applications', 'profile', 'myEvaluations']),
 
+    filteredOffers: {
+      get() {
+	return this.filteredApplications.filter(a => a.offer).map(a => a.offer);
+      },
+    },
+
 filteredApplications: {
 get() {
 function ifthen(a, b) {
@@ -123,6 +138,8 @@ return true;
       && ifthen(this.onlyNonUSA, application.citizenship.indexOf('US') === -1)
       && ifthen(this.onlyFemale, application.gender === 'Female')
       && ifthen(this.onlyUnevaluated, application.evaluationCount === 0)
+      && ifthen(this.onlyOffered, application.offer)
+      && ifthen(this.onlyNoOffer, !application.offer)
       && ifthen(this.onlyEvaluated, application.evaluationCount > 0)
       && ifthen(this.onlyEvaluatedByMe, this.myEvaluations.filter(x => x.application === application.id).length > 0)
   )).sort((a, b) => this.compareApplications(a, b));
@@ -146,6 +163,8 @@ return true;
       onlyNonUSA: false,
       onlyUnevaluated: true,
       onlyEvaluated: false,
+      onlyOffered: false,
+      onlyNoOffer: true,
       reverseSort: false,
     };
   },

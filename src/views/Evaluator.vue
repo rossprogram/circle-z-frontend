@@ -9,12 +9,20 @@
       v-model="onlyFirstyears"
       label="First-years"
       ></v-checkbox>
+    <v-checkbox
+      v-model="onlyOffered"
+      label="Made offer"
+      ></v-checkbox>
+    <v-checkbox
+      v-model="onlyNoOffer"
+      label="Made no offer"
+      ></v-checkbox>
 
 
   </v-row>
 
     <v-row><v-col><v-card>
-	  <v-card-title>Evaluations</v-card-title>
+	  <v-card-title>Evaluations by {{ thisEvaluator.email }}</v-card-title>
 	  <v-list-item three-line v-for="evaluation in filteredEvaluations"
 		       :href="`/evaluation/${evaluation.id}`"
 		       :key="evaluation.id">
@@ -25,7 +33,7 @@
 	<v-icon v-else style="color: gray;">mdi-account-question</v-icon>
       </v-list-item-icon>
       <v-list-item-content>
-        <v-list-item-title>{{ applications[evaluation.application].firstName }} {{ applications[evaluation.application].firstName }}
+        <v-list-item-title>{{ applications[evaluation.application].firstName }} {{ applications[evaluation.application].lastName }} <span style="font-weight: bold;" v-if="applications[evaluation.application].offer">(Decision: {{ applications[evaluation.application].offer.offer }})</span>
 	      <span v-if="applications[evaluation.application].juniorCounselor">(JC)</span>
 	      <span style="float: right;" >
 		  <span v-if="applications[evaluation.application].birthday">{{ birthdayToAge(applications[evaluation.application].birthday) }}</span>
@@ -51,11 +59,17 @@ import { mapActions, mapState } from 'vuex';
 
 export default {
   computed: {
-    ...mapState(['applications', 'evaluationsByEvaluator']),
+    ...mapState(['applications', 'evaluators', 'evaluationsByEvaluator']),
 
     evaluatorEvaluations: {
       get() {
 	return this.evaluationsByEvaluator[this.$route.params.id];
+      },
+    },
+
+    thisEvaluator: {
+      get() {
+	return this.evaluators.filter(e => e.id === this.$route.params.id)[0];
       },
     },
 
@@ -70,7 +84,9 @@ export default {
 	  const application = this.applications[evaluation.application];
 
 	  return ifthen(this.onlyJuniorCounselors, application.juniorCounselor)
-	    && ifthen(this.onlyFirstyears, !application.juniorCounselor);
+	    && ifthen(this.onlyFirstyears, !application.juniorCounselor)
+	    && ifthen(this.onlyOffered, application.offer)
+	    && ifthen(this.onlyNoOffer, !application.offer);
 	    // && ifthen(this.onlyNonempty, application.firstName || application.lastName)
 	    // && ifthen(this.onlyMale, application.gender === 'Male')
 	    // && ifthen(this.onlyUSA, application.citizenship.indexOf('US') >= 0)
@@ -90,6 +106,8 @@ export default {
     return {
       onlyJuniorCounselors: false,
       onlyFirstyears: true,
+      onlyOffered: false,
+      onlyNoOffer: true,
     };
   },
   methods: {
