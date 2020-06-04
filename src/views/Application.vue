@@ -57,6 +57,8 @@
               label="Final decision"
 	      ></v-select>
 	    <span v-if="applicationOffer && applicationOffer.evaluator">Made by {{ applicationOffer.evaluator.email }} {{ applicationOffer.updatedAt | moment("from", "now") }}</span>
+
+	    <span v-if="applicationOffer.decision">Applicant decision is &ldquo;{{ applicationOffer.decision }}&rdquo;</span>
 	  </v-card-text>
 
         <v-card-actions>
