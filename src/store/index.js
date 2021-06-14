@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { version } from '../../package.json';
-import userService from '../services/user';
 import router from '@/router';
+import userService from '../services/user';
+import { version } from '../../package.json';
 
 Vue.use(Vuex);
 
@@ -10,6 +10,18 @@ const store = new Vuex.Store({
   state: {
     version,
     profile: null,
+    snackbar: { snack: '' },
+    calendar: '',
+    files: {},
+    fileUrls: {},
+    users: {},
+    userImages: {},
+    reports: {},
+    assignments: {},
+    homeworks: {},
+    rooms: {},
+    roomTopics: {},
+
     applications: {},
     attachments: {},
     offers: {},
@@ -19,7 +31,6 @@ const store = new Vuex.Store({
     evaluationsByEvaluator: {},
     myEvaluations: [],
     evaluationsById: {},
-    snackbar: { snack: '' },
   },
 
   mutations: {
@@ -37,9 +48,47 @@ const store = new Vuex.Store({
         }
       }
     },
-    setAttachments(state, { id, data }) {
-      Vue.set(state.attachments, id, data);
+    setCalendar(state, { data }) {
+      state.calendar = data;
     },
+    setFiles(state, { data }) {
+      state.files = data;
+    },
+    setFile(state, { filename, data }) {
+      Vue.set(state.fileUrls, filename, data);
+    },
+    setUsers(state, { data }) {
+      for (let i = 0; i < data.length; i += 1) {
+        Vue.set(state.users, data[i].id, data[i]);
+        if (data[i].id === state.profile.id) state.profile = data[i];
+        if (data[i].image) Vue.set(state.userImages, data[i].id, data[i].image);
+      }
+    },
+
+    setRooms(state, { data }) {
+      for (let i = 0; i < data.length; i += 1) {
+        Vue.set(state.rooms, data[i].meetingId, data[i]);
+        Vue.set(state.roomTopics, data[i].topic, data[i]);
+      }
+    },
+
+    setReports(state, { data }) {
+      for (let i = 0; i < data.length; i += 1) {
+        Vue.set(state.reports, data[i].id, data[i]);
+      }
+    },
+
+    setAssignments(state, { data }) {
+      for (let i = 0; i < data.length; i += 1) {
+        Vue.set(state.assignments, data[i].id, data[i]);
+      }
+    },
+    setHomeworks(state, { data }) {
+      for (let i = 0; i < data.length; i += 1) {
+        Vue.set(state.homeworks, data[i].id, data[i]);
+      }
+    },
+
     setOffer(state, { id, data }) {
       Vue.set(state.offers, id, data);
     },
@@ -150,6 +199,190 @@ const store = new Vuex.Store({
           },
         );
     },
+
+    getCalendar({ dispatch, commit }) {
+      userService.getCalendar().then(
+        (response) => {
+          if (response.status === 200) {
+            commit('setCalendar', { data: response.data });
+          }
+        },
+        (error) => {
+          dispatch('alertError', error, { root: true });
+        },
+      );
+    },
+
+    getFiles({ dispatch, commit }) {
+      userService.getFiles().then(
+        (response) => {
+          if (response.status === 200) {
+            commit('setFiles', { data: response.data });
+          }
+        },
+        (error) => {
+          dispatch('alertError', error, { root: true });
+        },
+      );
+    },
+
+    getFile({ dispatch, commit }, filename) {
+      userService.getFile(filename).then(
+        (response) => {
+          if (response.status === 200) {
+            commit('setFile', { filename, data: response.data });
+          }
+        },
+        (error) => {
+          dispatch('alertError', error, { root: true });
+        },
+      );
+    },
+
+    getUser({ dispatch, commit }, id) {
+      userService.getUser(id).then(
+        (response) => {
+          if (response.status === 200) {
+            commit('setUsers', { data: [response.data] });
+          }
+        },
+        (error) => {
+          dispatch('alertError', error, { root: true });
+        },
+      );
+    },
+
+    getUsers({ dispatch, commit }) {
+      userService.getUsers().then(
+        (response) => {
+          if (response.status === 200) {
+            commit('setUsers', { data: response.data });
+          }
+        },
+        (error) => {
+          dispatch('alertError', error, { root: true });
+        },
+      );
+    },
+
+    updateUser({ dispatch, commit }, { id, data }) {
+      userService.putUser(id, data).then(
+        (response) => {
+          if (response.status === 200) {
+            commit('setUsers', { data: [response.data] });
+            dispatch('alertSuccess', 'User updated');
+          }
+        },
+        (error) => {
+          dispatch('alertError', error, { root: true });
+        },
+      );
+    },
+
+    getRooms({ dispatch, commit }) {
+      userService.getRooms().then(
+        (response) => {
+          if (response.status === 200) {
+            commit('setRooms', { data: response.data });
+          }
+        },
+        (error) => {
+          dispatch('alertError', error, { root: true });
+        },
+      );
+    },
+
+    getReports({ dispatch, commit }) {
+      userService.getReports().then(
+        (response) => {
+          if (response.status === 200) {
+            commit('setReports', { data: response.data });
+          }
+        },
+        (error) => {
+          dispatch('alertError', error, { root: true });
+        },
+      );
+    },
+
+    submitReport({ dispatch, commit }, data) {
+      userService.postReport(data).then(
+        (response) => {
+          if (response.status === 200) {
+            commit('setReports', { data: [response.data] });
+          }
+        },
+        (error) => {
+          dispatch('alertError', error, { root: true });
+        },
+      );
+    },
+
+    getAssignments({ dispatch, commit }) {
+      userService.getAssignments().then(
+        (response) => {
+          if (response.status === 200) {
+            commit('setAssignments', { data: response.data });
+          }
+        },
+        (error) => {
+          dispatch('alertError', error, { root: true });
+        },
+      );
+    },
+
+    submitAssignment({ dispatch, commit }, data) {
+      userService.postAssignment(data).then(
+        (response) => {
+          if (response.status === 200) {
+            commit('setAssignments', { data: [response.data] });
+          }
+        },
+        (error) => {
+          dispatch('alertError', error, { root: true });
+        },
+      );
+    },
+
+    updateAssignment({ dispatch, commit }, { id, data }) {
+      userService.putAssignment(id, data).then(
+        (response) => {
+          if (response.status === 200) {
+            commit('setAssignments', { data: [response.data] });
+          }
+        },
+        (error) => {
+          dispatch('alertError', error, { root: true });
+        },
+      );
+    },
+
+    submitHomework({ dispatch, commit }, { user, assignment, pdf }) {
+      userService.postHomework({ user, assignment, pdf }).then(
+        (response) => {
+          if (response.status === 200) {
+            commit('setHomeworks', { data: [response.data] });
+          }
+        },
+        (error) => {
+          dispatch('alertError', error, { root: true });
+        },
+      );
+    },
+
+    getHomeworks({ dispatch, commit }) {
+      userService.getHomeworks().then(
+        (response) => {
+          if (response.status === 200) {
+            commit('setHomeworks', { data: response.data });
+          }
+        },
+        (error) => {
+          dispatch('alertError', error, { root: true });
+        },
+      );
+    },
+
 
     getAttachments({ dispatch, commit }, id) {
       userService.getAttachments(id).then(

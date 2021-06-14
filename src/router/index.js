@@ -2,11 +2,15 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
 import Login from '../views/Login.vue';
-import Applications from '../views/Applications.vue';
-import Application from '../views/Application.vue';
-import Evaluators from '../views/Evaluators.vue';
-import Evaluator from '../views/Evaluator.vue';
-import Evaluation from '../views/Evaluation.vue';
+import People from '../views/People.vue';
+import Calendar from '../views/Calendar.vue';
+import Files from '../views/Files.vue';
+import File from '../views/File.vue';
+import Reports from '../views/Reports.vue';
+import Assignments from '../views/Assignments.vue';
+import SubmitReport from '../views/SubmitReport.vue';
+import Queue from '../views/Queue.vue';
+import Rooms from '../views/Rooms.vue';
 
 Vue.use(VueRouter);
 
@@ -22,29 +26,64 @@ const routes = [
     component: Login,
   },
   {
-    path: '/evaluators',
-    name: 'evaluators',
-    component: Evaluators,
+    path: '/users/:id',
+    name: 'people-id',
+    component: People,
   },
   {
-    path: '/evaluators/:id',
-    name: 'evaluator',
-    component: Evaluator,
+    path: '/users/',
+    name: 'people',
+    component: People,
   },
   {
-    path: '/evaluation/:id',
-    name: 'evaluation',
-    component: Evaluation,
+    path: '/rooms/',
+    name: 'rooms',
+    component: Rooms,
   },
   {
-    path: '/applications',
-    name: 'applications',
-    component: Applications,
+    path: '/reports/',
+    name: 'reports',
+    component: Reports,
   },
   {
-    path: '/applications/:id',
-    name: 'application',
-    component: Application,
+    path: '/reports/:user',
+    name: 'submit-report',
+    component: SubmitReport,
+  },
+  {
+    path: '/calendar/:event',
+    name: 'calendar-event',
+    component: Calendar,
+  },
+  {
+    path: '/calendar/',
+    name: 'calendar',
+    component: Calendar,
+  },
+  {
+    path: '/assignments/:id',
+    name: 'assignments-detail',
+    component: Assignments,
+  },
+  {
+    path: '/assignments/',
+    name: 'assignments',
+    component: Assignments,
+  },
+  {
+    path: '/files/:path(.*.pdf)',
+    name: 'file',
+    component: File,
+  },
+  {
+    path: '/queue',
+    name: 'queue',
+    component: Queue,
+  },
+  {
+    path: '/files/:path(.*)',
+    name: 'files',
+    component: Files,
   },
 ];
 

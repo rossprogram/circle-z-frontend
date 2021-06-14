@@ -298,6 +298,16 @@
 		/>
 </v-flex></v-layout>
 	  </v-card-text>
+	  <v-card-actions>
+	    <v-btn
+	      text
+	      @click="savePerson"
+	      color="primary"
+              :disabled="Object.keys(this.updatedPerson).length == 0"
+	      >
+	      Save
+	    </v-btn>
+	  </v-card-actions>
       </v-card></v-col></v-row>
 </v-container>
 
