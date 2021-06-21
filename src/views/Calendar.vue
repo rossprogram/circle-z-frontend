@@ -107,7 +107,6 @@ export default {
 	    }
 	  }
 	} else if (event.startDate.compare(ICAL.Time.now()) >= 0) {
-	  console.log(event.startDate.toJSDate());
 	  const correctedDate =	moment(event.startDate.toJSDate());
 	  events.push({ id: event.uid, date: correctedDate, event });
 	}
