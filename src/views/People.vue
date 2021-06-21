@@ -361,7 +361,7 @@ export default {
 
     sortFamilies(families) {
       const result = families;
-      result.sort();
+      result.sort(a => parseInt(a, 10));
 
       if (this.profile.family) {
 	const index = result.indexOf(this.profile.family.toString());
