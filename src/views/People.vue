@@ -50,7 +50,10 @@
 
 		<v-list-item-content>
 		  <v-list-item-title>
-		    {{ users[id].meetingJoinTime | moment("from", "now") }} entered {{ users[id].meetingId }}
+		    {{ users[id].meetingJoinTime | moment("from", "now") }} entered
+		    <a :href="`https://rossprogram-org.zoom.us/j/${users[id].meetingId}`">
+		      {{ rooms[users[id].meetingId].topic }}
+		    </a>
 		  </v-list-item-title>
 		</v-list-item-content>
 	      </v-list-item>
@@ -246,7 +249,7 @@ import { mapActions, mapState } from 'vuex';
 
 export default {
   computed: {
-    ...mapState(['users', 'profile']),
+    ...mapState(['users', 'profile', 'rooms']),
 
     matchingIds() {
       if (this.search) return Object.keys(this.users).filter(id => JSON.stringify(this.users[id]).toLowerCase().match(this.search.toLowerCase()));
@@ -352,6 +355,7 @@ export default {
     ...mapActions([
       'getUsers',
       'getUser',
+      'getRooms',
       'updateUser',
     ]),
 
@@ -405,6 +409,7 @@ export default {
     }
     this.updatedPerson = {};
 
+    this.getRooms();
     return this.getUsers();
   },
 

@@ -84,7 +84,7 @@ export default {
       const subcomps = comp.getAllSubcomponents('vevent');
 
       const nextWeek = ICAL.Time.now();
-      nextWeek.addDuration(new ICAL.Duration({ weeks: 4 }));
+      nextWeek.addDuration(new ICAL.Duration({ weeks: 2 }));
 
       const events = [];
       window.events = [];
@@ -102,12 +102,13 @@ export default {
 	    }
 	    if (date.compare(ICAL.Time.now()) >= 0) {
 	      const id = `${event.uid }-${ date.toString()}`;
-	      const correctedDate = moment(date.toJSDate()).utc().utcOffset('-04:00');
+	      const correctedDate = moment(date.toJSDate());
 	      events.push({ id, date: correctedDate, event });
 	    }
 	  }
 	} else if (event.startDate.compare(ICAL.Time.now()) >= 0) {
-	  const correctedDate =		moment(event.startDate.toJSDate()).utc().utcOffset('-04:00');
+	  console.log(event.startDate.toJSDate());
+	  const correctedDate =	moment(event.startDate.toJSDate());
 	  events.push({ id: event.uid, date: correctedDate, event });
 	}
       }
