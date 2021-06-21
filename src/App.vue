@@ -11,7 +11,48 @@
 	     class="mr-2"
         to="/login"
              text
-      >Log In</v-btn>
+	     >Log In</v-btn>
+
+      <v-menu v-if="profile"
+        offset-y transition="slide-y-transition"
+      >
+        <template v-slot:activator="{ on }">
+          <v-btn
+	    text
+            v-on="on"
+	    v-text="'Zoom'"
+            >
+            <v-icon>account</v-icon>
+          </v-btn>
+        </template>
+
+        <v-list>
+          <v-list-item :href="saml">
+	      <v-list-item-icon><v-icon>mdi-video</v-icon></v-list-item-icon>
+            <v-list-item-title>Log into Zoom</v-list-item-title>
+          </v-list-item>
+          <v-divider></v-divider>
+          <v-list-item href="https://rossprogram-org.zoom.us/j/97492237273">
+	      <v-list-item-icon><v-icon>mdi-bank</v-icon></v-list-item-icon>
+            <v-list-item-title>Auditorium</v-list-item-title>
+          </v-list-item>
+	  <v-list-item >
+            <v-list-item-title>Room
+	    <v-btn v-for="(id, index) in roomIds"
+		   :key="index"
+		   :href="`https://rossprogram-org.zoom.us/j/${id}`"
+		   icon>
+	      <v-icon>mdi-numeric-{{ index + 1}}-box</v-icon>
+	    </v-btn>
+	    </v-list-item-title>
+	  </v-list-item>
+          <v-list-item :to="`/rooms/`">
+	      <v-list-item-icon><v-icon>mdi-home-city</v-icon></v-list-item-icon>
+            <v-list-item-title>All Rooms</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+
       <v-menu v-if="profile"
         offset-y transition="slide-y-transition"
       >
@@ -46,19 +87,11 @@
 	      <v-list-item-icon><v-icon>mdi-account-check</v-icon></v-list-item-icon>
             <v-list-item-title>Reports</v-list-item-title>
           </v-list-item>
-          <v-list-item :to="`/rooms/`">
-	      <v-list-item-icon><v-icon>mdi-home-city</v-icon></v-list-item-icon>
-            <v-list-item-title>Rooms</v-list-item-title>
-          </v-list-item>
           <v-list-item :to="`/users/${profile.id}`">
 	      <v-list-item-icon><v-icon>mdi-account-group</v-icon></v-list-item-icon>
             <v-list-item-title>People</v-list-item-title>
           </v-list-item>
           <v-divider></v-divider>
-          <v-list-item :href="saml">
-	      <v-list-item-icon><v-icon>mdi-video</v-icon></v-list-item-icon>
-            <v-list-item-title>Log into Zoom</v-list-item-title>
-          </v-list-item>
           <v-list-item @click="logout">
 	      <v-list-item-icon><v-icon>mdi-logout</v-icon></v-list-item-icon>
             <v-list-item-title>Logout</v-list-item-title>
@@ -67,13 +100,13 @@
       </v-menu>
     </v-app-bar>
 
-    <v-content>
+    <v-main>
       <v-container fluid class="pa-6">
         <v-fade-transition mode="out-in">
 	  <router-view />
         </v-fade-transition>
       </v-container>
-    </v-content>
+    </v-main>
     <Snackbar/>
   </v-app>
 </template>
@@ -96,7 +129,19 @@ name: 'App',
     Snackbar,
   },
   data() {
-return {
+    return {
+      roomIds:
+      [
+	'94283884786',
+	'96986251680',
+	'97595923102',
+	'95661678187',
+	'95145772227',
+	'95005886358',
+	'97941081315',
+	'95854089568',
+	'91955193362',
+      ],
       publicPath: process.env.BASE_URL,
     };
   },

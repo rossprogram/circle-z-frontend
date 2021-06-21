@@ -1,6 +1,5 @@
 <template>
 <v-container fluid fill-height>
-  {{ rooms }}
   <v-row><v-col cols="12">
       <v-text-field
         label="Search"
@@ -12,15 +11,34 @@
   <v-row>
     <v-col cols="12" sm="12" md="4" v-for="meetingId in sortMeetingIds(matchingMeetingIds)" :key="meetingId">
       <v-card :outlined="!rooms[meetingId].isActive">
-  <v-card-title>{{rooms[meetingId].topic}}
-  <v-badge class="float-right"
-          color="green"
-          content="6"
-        >
-          Item Two
-        </v-badge></v-card-title>
-	<v-card-subtitle v-if="!rooms[meetingId].isActive">Meeting ended {{ rooms[meetingId].endTime | moment('from', 'now') }}</v-card-subtitle>
-	<v-card-subtitle v-if="rooms[meetingId].isActive">Meeting started {{ rooms[meetingId].startTime | moment('from', 'now') }}</v-card-subtitle>
+	<v-card-title>
+	  {{rooms[meetingId].topic}}
+	</v-card-title>
+	<v-card-subtitle v-if="!rooms[meetingId].isActive">Meeting ended {{ rooms[meetingId].endTime | moment('from', 'now') }}.</v-card-subtitle>
+	<v-card-subtitle v-if="rooms[meetingId].isActive">Meeting started {{ rooms[meetingId].startTime | moment('from', 'now') }}.</v-card-subtitle>
+	<v-card-text v-if="roomUsers[meetingId] && (roomUsers[meetingId].length == 1)">{{ roomUsers[meetingId].length }} person in the room.</v-card-text>
+	<v-card-text v-else-if="roomUsers[meetingId] && (roomUsers[meetingId].length >= 0)">{{ roomUsers[meetingId].length }} people in the room.</v-card-text>
+	<v-card-text v-else>Room is empty.</v-card-text>
+	<v-list-item two-line v-for="id in (roomUsers[meetingId] ? (showMore[meetingId] ? roomUsers[meetingId] : roomUsers[meetingId].slice(0,10)) : [])"
+		     :to="'/users/' + id"
+		     :key="id">
+	  <v-list-item-content>
+	    <v-list-item-title>
+	      <person :userId="id"/>
+	      {{ users[id].firstName }}
+	      {{ users[id].lastName }}
+	    </v-list-item-title>
+	  </v-list-item-content>
+	</v-list-item>
+	<v-list-item two-line
+		     v-if="(!showMore[meetingId]) && roomUsers[meetingId] && roomUsers[meetingId].length > 10"
+		     @click="$set(showMore,meetingId, true)">
+	  <v-list-item-content>
+	    <v-list-item-title>
+	      Show more&hellip;
+	    </v-list-item-title>
+	  </v-list-item-content>
+	</v-list-item>
       <v-card-actions>
 	<v-btn
 	  text
@@ -45,24 +63,40 @@ export default {
 
     matchingMeetingIds() {
       if (this.search) {
-	return Object.keys(this.rooms)
-	  .filter(id => JSON.stringify(this.rooms[id]).toLowerCase().match(this.search.toLowerCase()));
+	const matchingRooms = Object.keys(this.rooms)
+	  .filter((id) => {
+	    const content = JSON.stringify(this.rooms[id]);
+	    return content.toLowerCase().match(this.search.toLowerCase());
+	  });
+
+	const matchingPeople = Object.keys(this.users)
+	    .filter(id => JSON.stringify(this.users[id]).toLowerCase().match(this.search.toLowerCase()))
+	    .map(id => this.users[id].meetingId)
+	    .filter(id => (id !== undefined) && (id !== 'undefined'));
+
+
+	const result = [...new Set(matchingRooms.concat(matchingPeople))];
+	return result;
       }
       return Object.keys(this.rooms);
     },
 
-    person() {
-      if ((this.id) && (this.id in this.users)) return this.users[this.id];
+    roomUsers() {
+      const result = {};
 
-      return {};
+      Object.values(this.users).forEach((u) => {
+	if (u.meetingId) (result[u.meetingId] || (result[u.meetingId] = [])).push(u.id);
+      });
+
+      return result;
     },
-
   },
 
   data() {
     return {
       id: undefined,
       search: '',
+      showMore: {},
       key: 1,
     };
   },
