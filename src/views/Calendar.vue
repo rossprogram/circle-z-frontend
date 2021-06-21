@@ -11,8 +11,8 @@
 	      {{ item.event.summary }}
 	    </v-list-item-title>
 	    <v-list-item-subtitle>
-	      {{ item.date.toJSDate() | moment('MMMM Do YYYY, h:mma') }}
-	      {{ item.date.toJSDate() | moment("from", "now") }}
+	      {{ item.date | moment('MMMM Do YYYY, h:mma') }}
+	      {{ item.date | moment("from", "now") }}
 	    </v-list-item-subtitle>
 	  </v-list-item-content>
 	</v-list-item>
@@ -20,7 +20,7 @@
 
     <v-col cols="6" v-if="selectedEvent"><v-card>
 	<v-card-title>{{selectedEvent.event.summary}}</v-card-title>
-	<v-card-subtitle>{{ selectedEvent.date.toJSDate() | moment("from", "now") }}</v-card-subtitle>
+	<v-card-subtitle>{{ selectedEvent.date | moment("from", "now") }}</v-card-subtitle>
 	<v-card-text>
 	  {{ selectedEvent.event.description }}
 	</v-card-text>
@@ -33,7 +33,7 @@
             </v-list-item-icon>
 
             <v-list-item-content>
-              <v-list-item-title>{{ selectedEvent.date.toJSDate() | moment('MMMM Do YYYY, h:mma') }}</v-list-item-title>
+              <v-list-item-title>{{ selectedEvent.date | moment('MMMM Do YYYY, h:mma') }}</v-list-item-title>
             </v-list-item-content>
 	  </v-list-item>
 
@@ -70,6 +70,7 @@
 <script>
 import { mapActions, mapState } from 'vuex';
 import ICAL from 'ical.js';
+import moment from 'moment';
 
 export default {
   computed: {
@@ -101,15 +102,17 @@ export default {
 	    }
 	    if (date.compare(ICAL.Time.now()) >= 0) {
 	      const id = `${event.uid }-${ date.toString()}`;
-	      events.push({ id, date, event });
+	      const correctedDate = moment(date.toJSDate()).utc().utcOffset('-04:00');
+	      events.push({ id, date: correctedDate, event });
 	    }
 	  }
 	} else if (event.startDate.compare(ICAL.Time.now()) >= 0) {
-	    events.push({ id: event.uid, date: event.startDate, event });
-	  }
+	  const correctedDate =		moment(event.startDate.toJSDate()).utc().utcOffset('-04:00');
+	  events.push({ id: event.uid, date: correctedDate, event });
+	}
       }
 
-      events.sort((a, b) => a.date.compare(b.date));
+      events.sort((a, b) => a.date.diff(b.date));
 
       return events;
     },
