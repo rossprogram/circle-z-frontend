@@ -42,6 +42,7 @@
       <v-card-actions>
 	<v-btn
 	  text
+	  target="_blank"
 	  :href="`https://rossprogram-org.zoom.us/j/${meetingId}`"
 	  >
 	  Join

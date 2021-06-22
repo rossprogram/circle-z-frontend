@@ -1,6 +1,10 @@
 <template>
 <v-lazy style="display: inline;" v-model="lazily">
-          <v-btn
+  <v-tooltip left>
+    <template v-slot:activator="{ on, attrs }">
+  <v-btn
+    v-bind="attrs"
+          v-on="on"
             icon
 	    :to="`/users/${user.id}`"
 	    x-large
@@ -57,7 +61,10 @@
 		<span v-else class="white--text text-h7">{{ initials }}</span>
 	      </v-avatar>
 	    </v-badge>
-          </v-btn>
+  </v-btn>
+</template>
+<span>{{ name }}</span>
+</v-tooltip>
 </v-lazy>
 </template>
 
@@ -78,6 +85,11 @@ export default {
 
     initials() {
       return (this.user.firstName.slice(0, 1) + this.user.lastName.slice(0, 1)).toUpperCase();
+    },
+
+    name() {
+      if (this.user) return (`${this.user.firstName } ${ this.user.lastName}`);
+      return 'Unknown User';
     },
   },
 

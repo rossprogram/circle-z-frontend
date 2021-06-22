@@ -1,10 +1,14 @@
 <template>
 <v-container fluid fill-height>
-  <video-player
+  <video-player v-if="id"
     :src="`https://d2vkw31bv9q4du.cloudfront.net/${id}.m3u8`"
     type="application/x-mpegURL" :options="videoOptions"
     ref="video"
-    />
+		/>
+  <v-row v-else>
+    <v-progress-circular indeterminate loading></v-progress-circular>
+    <h1 class="mx-6">Waiting for convener to choose a video&hellip;</h1>
+    </v-row>
 </v-container>
 </template>
 

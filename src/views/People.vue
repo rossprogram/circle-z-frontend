@@ -231,6 +231,7 @@ v-if="profile.isStaff"
 	    <v-btn
 	      v-if="users[id].meetingId"
 	      text
+	      target="_blank"
 	      :href="`https://rossprogram-org.zoom.us/j/${users[id].meetingId}`"
 	      >
 	      Join in Zoom
