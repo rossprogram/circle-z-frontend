@@ -21,6 +21,7 @@ const store = new Vuex.Store({
     homeworks: {},
     rooms: {},
     roomTopics: {},
+    videos: {},
 
     applications: {},
     attachments: {},
@@ -50,6 +51,9 @@ const store = new Vuex.Store({
     },
     setCalendar(state, { data }) {
       state.calendar = data;
+    },
+    setVideos(state, { data }) {
+      state.videos = data;
     },
     setFiles(state, { data }) {
       state.files = data;
@@ -213,6 +217,20 @@ const store = new Vuex.Store({
         },
       );
     },
+
+    getVideos({ dispatch, commit }) {
+      userService.getVideos().then(
+        (response) => {
+          if (response.status === 200) {
+            commit('setVideos', { data: response.data });
+          }
+        },
+        (error) => {
+          dispatch('alertError', error, { root: true });
+        },
+      );
+    },
+
 
     getFiles({ dispatch, commit }) {
       userService.getFiles().then(

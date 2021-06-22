@@ -33,6 +33,10 @@ export default {
     return axios.put(`/users/${id}`, data);
   },
 
+  async getVideos() {
+    return axios.get('/videos');
+  },
+
   async getFiles() {
     return axios.get('/files');
   },

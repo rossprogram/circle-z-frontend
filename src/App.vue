@@ -91,6 +91,10 @@
 	      <v-list-item-icon><v-icon>mdi-account-group</v-icon></v-list-item-icon>
             <v-list-item-title>People</v-list-item-title>
           </v-list-item>
+          <v-list-item :to="`/videos/`">
+	      <v-list-item-icon><v-icon>mdi-filmstrip</v-icon></v-list-item-icon>
+            <v-list-item-title>Movie Library</v-list-item-title>
+          </v-list-item>
           <v-divider></v-divider>
           <v-list-item @click="logout">
 	      <v-list-item-icon><v-icon>mdi-logout</v-icon></v-list-item-icon>
@@ -101,7 +105,7 @@
     </v-app-bar>
 
     <v-main>
-      <v-container fluid class="pa-6">
+      <v-container fluid class="pa-6" fill-height>
         <v-fade-transition mode="out-in">
 	  <router-view />
         </v-fade-transition>

@@ -11,6 +11,8 @@ import Assignments from '../views/Assignments.vue';
 import SubmitReport from '../views/SubmitReport.vue';
 import Queue from '../views/Queue.vue';
 import Rooms from '../views/Rooms.vue';
+import Videos from '../views/Videos.vue';
+import PlayVideo from '../views/PlayVideo.vue';
 import PathNotFound from '../views/PathNotFound.vue';
 
 Vue.use(VueRouter);
@@ -25,6 +27,16 @@ const routes = [
     path: '/login',
     name: 'login',
     component: Login,
+  },
+  {
+    path: '/videos/',
+    name: 'videos',
+    component: Videos,
+  },
+  {
+    path: '/videos/:id',
+    name: 'play-video',
+    component: PlayVideo,
   },
   {
     path: '/users/:id',
