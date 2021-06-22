@@ -12,7 +12,7 @@
     <v-col cols="12" sm="12" md="4" v-for="meetingId in sortMeetingIds(matchingMeetingIds)" :key="meetingId">
       <v-card :outlined="!rooms[meetingId].isActive">
 	<v-card-title>
-	  {{rooms[meetingId].topic}}
+	  {{rooms[meetingId].topic.replace('ˢᵗᵃᶠᶠ ','').replace('⁺ ','').replace("'s Personal Meeting Room","'s room")}}
 	</v-card-title>
 	<v-card-subtitle v-if="!rooms[meetingId].isActive">Meeting ended {{ rooms[meetingId].endTime | moment('from', 'now') }}.</v-card-subtitle>
 	<v-card-subtitle v-if="rooms[meetingId].isActive">Meeting started {{ rooms[meetingId].startTime | moment('from', 'now') }}.</v-card-subtitle>

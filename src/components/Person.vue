@@ -97,7 +97,7 @@ export default {
     lazily() {
       if (!this.loaded) {
 	this.loaded = true;
-	this.getUser(this.userId);
+	if (this.userId) this.getUser(this.userId);
       }
     },
   },

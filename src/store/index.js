@@ -15,6 +15,7 @@ const store = new Vuex.Store({
     files: {},
     fileUrls: {},
     users: {},
+    emails: {},
     userImages: {},
     reports: {},
     assignments: {},
@@ -64,6 +65,7 @@ const store = new Vuex.Store({
     setUsers(state, { data }) {
       for (let i = 0; i < data.length; i += 1) {
         Vue.set(state.users, data[i].id, data[i]);
+        Vue.set(state.emails, data[i].email, data[i].id);
         if (data[i].id === state.profile.id) state.profile = data[i];
         if (data[i].image) Vue.set(state.userImages, data[i].id, data[i].image);
       }

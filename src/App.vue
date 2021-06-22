@@ -3,7 +3,7 @@
     <v-app-bar
       app
       >
-	<v-toolbar-title>ℤ</v-toolbar-title>
+	<v-toolbar-title><a href="/">ℤ</a></v-toolbar-title>
 
       <v-spacer></v-spacer>
 
@@ -195,5 +195,11 @@ name: 'App',
   width: 1.87rem;
   height: 1.87rem;
   text-align: center;
+
+  }
+
+  .v-application .v-toolbar__title a {
+      color: black;
+      text-decoration: none;
   }
 </style>

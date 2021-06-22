@@ -93,7 +93,6 @@ export default {
     },
 
     submit() {
-      console.log('why is this not working?', this.text);
       axios.put('/chat', { text: this.text });
       this.text = '';
       return false;

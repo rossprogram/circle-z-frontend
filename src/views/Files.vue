@@ -52,7 +52,7 @@ export default {
 
     matchedDirectories() {
       if (this.files) {
- return this.files
+	return this.files
 	.filter(f => f !== this.path)
 	.filter(f => f.startsWith(this.path))
 	.filter(f => f.endsWith('/'));

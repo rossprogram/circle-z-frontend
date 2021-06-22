@@ -22,8 +22,11 @@
 	      aspect-ratio="1"
 	  :src="`https://d4zgr4aptyy2e.cloudfront.net/${video.video}.0000001.jpg`"
 	  ></v-img>
-	<v-card-title>{{ video.title }}</v-card-title>
-	<v-card-text></v-card-text>
+	    <v-card-title>{{ video.title }}</v-card-title>
+	    <v-card-subtitle v-if="video.date">{{ video.date | moment('MMMM Do YYYY') }}, {{video.date | moment("from", "now") }}</v-card-subtitle>
+	<v-card-text>
+	  <person v-for="email in video.authors" :key="email" :userId="emails[email]"/>
+	</v-card-text>
       </v-card>
     </v-col>
       </v-row>
@@ -39,7 +42,7 @@ import { mapActions, mapState } from 'vuex';
 
 export default {
   computed: {
-    ...mapState(['videos']),
+    ...mapState(['videos', 'emails']),
   },
 
   data() {
