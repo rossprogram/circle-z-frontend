@@ -3,7 +3,7 @@
   <video-player
     :src="`https://d2vkw31bv9q4du.cloudfront.net/${id}.m3u8`"
     type="application/x-mpegURL" :options="videoOptions"
-    @playing="playing" ref="video"
+    @playing="playing" @pause="pause" ref="video"
     />
 </v-container>
 </template>
@@ -52,7 +52,11 @@ export default {
     ]),
 
     playing(time) {
-      axios.put('/watch-party', { video: this.id, time });
+      axios.put('/watch-party', { video: this.id, time, playing: true });
+    },
+
+    pause(time) {
+      axios.put('/watch-party', { video: this.id, time, pause: true });
     },
   },
 

@@ -72,6 +72,7 @@ export default {
     });
     // , this.player.currentTime())
     this.player.on('playing', () => this.$emit('playing', this.player.currentTime()));
+    this.player.on('pause', () => this.$emit('pause', this.player.currentTime()));
   },
   beforeDestroy() {
     if (this.player) {
