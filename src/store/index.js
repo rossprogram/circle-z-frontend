@@ -160,6 +160,7 @@ const store = new Vuex.Store({
 
     logout(state) {
       state.profile = null;
+      state.users = {};
     },
 
     loginFailure(state, error) { // eslint-disable-line no-unused-vars
