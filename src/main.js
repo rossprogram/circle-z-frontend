@@ -6,6 +6,7 @@ import { VueStars } from 'vue-stars';
 import VueMarkdown from 'vue-markdown';
 import CountryFlag from 'vue-country-flag';
 import VImageInput from 'vuetify-image-input/a-la-carte';
+import VueSSE from 'vue-sse';
 import App from './App.vue';
 import router from './router';
 import store from './store';
@@ -14,6 +15,7 @@ import Person from './components/Person.vue';
 
 Vue.use(VueTelInput);
 Vue.use(moment);
+Vue.use(VueSSE);
 
 Vue.config.productionTip = false;
 

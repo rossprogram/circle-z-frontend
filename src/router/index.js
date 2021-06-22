@@ -13,6 +13,8 @@ import Queue from '../views/Queue.vue';
 import Rooms from '../views/Rooms.vue';
 import Videos from '../views/Videos.vue';
 import PlayVideo from '../views/PlayVideo.vue';
+import WatchParty from '../views/WatchParty.vue';
+import WatchPartyConvener from '../views/WatchPartyConvener.vue';
 import PathNotFound from '../views/PathNotFound.vue';
 
 Vue.use(VueRouter);
@@ -27,6 +29,16 @@ const routes = [
     path: '/login',
     name: 'login',
     component: Login,
+  },
+  {
+    path: '/watch-party/',
+    name: 'watch-party',
+    component: WatchParty,
+  },
+  {
+    path: '/convene/:id',
+    name: 'watch-party-convener',
+    component: WatchPartyConvener,
   },
   {
     path: '/videos/',

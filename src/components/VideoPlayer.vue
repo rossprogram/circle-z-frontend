@@ -13,7 +13,6 @@ require('videojs-contrib-quality-levels');
 // to a variable.
 require('videojs-http-source-selector');
 
-
 export default {
   name: 'VideoPlayer',
   props: {
@@ -37,6 +36,16 @@ export default {
     },
   },
 
+  methods: {
+    currentTime(newTime) {
+      return this.player.currentTime(newTime);
+    },
+
+    play() {
+      return this.player.play();
+    },
+  },
+
   data() {
     return {
       player: null,
@@ -54,12 +63,15 @@ export default {
       ],
     };
     this.options.playbackRates = [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2];
+
     this.player = videojs(this.$refs.videoPlayer, this.options, () => {
 	this.player.httpSourceSelector();
       if (this.src) {
 	  this.player.src({ type: this.type, src: this.src });
       }
     });
+    // , this.player.currentTime())
+    this.player.on('playing', () => this.$emit('playing', this.player.currentTime()));
   },
   beforeDestroy() {
     if (this.player) {
