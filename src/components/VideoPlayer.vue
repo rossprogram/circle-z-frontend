@@ -55,9 +55,6 @@ export default {
     };
     this.options.playbackRates = [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2];
     this.player = videojs(this.$refs.videoPlayer, this.options, () => {
-      console.log('onPlayerReady', this);
-      console.log(this.src);
-      console.log(this.type);
 	this.player.httpSourceSelector();
       if (this.src) {
 	  this.player.src({ type: this.type, src: this.src });
