@@ -11,6 +11,7 @@ import Assignments from '../views/Assignments.vue';
 import SubmitReport from '../views/SubmitReport.vue';
 import Queue from '../views/Queue.vue';
 import Rooms from '../views/Rooms.vue';
+import PathNotFound from '../views/PathNotFound.vue';
 
 Vue.use(VueRouter);
 
@@ -85,6 +86,7 @@ const routes = [
     name: 'files',
     component: Files,
   },
+  { path: '/:pathMatch(.*)*', component: PathNotFound },
 ];
 
 const router = new VueRouter({
