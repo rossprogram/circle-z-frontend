@@ -19,10 +19,10 @@
 		     :to="'/assignments/' + assignment.id"
 		     :key="assignment.id">
 	  <v-list-item-icon>
-            <v-icon v-if="alreadyComplete(assignment.id)">mdi-check</v-icon>
-              <v-icon v-if="alreadyGraded(assignment.id)">mdi-sync</v-icon>
-              <v-icon v-if="alreadySubmitted(assignment.id)">mdi-help-circle-outline</v-icon>
-              <v-icon v-else>mdi-circle-outline</v-icon>
+            <v-icon v-if="alreadyComplete(assignment.id)">mdi-file-check</v-icon>
+              <v-icon v-if="alreadyGraded(assignment.id)">mdi-file-sync</v-icon>
+              <v-icon v-if="alreadySubmitted(assignment.id)">mdi-file-question</v-icon>
+              <v-icon v-else>mdi-file-outline</v-icon>
 	    </v-list-item-icon>
 	    <v-list-item-content>
             <v-list-item-title>
@@ -183,11 +183,27 @@
 	    </v-btn>
 	  </v-card-actions>
   </v-card>
-  <v-card class="my-3">
-  <v-card-title>Homework log</v-card-title>
-  {{ homeworks }}
+  <v-card class="my-3" v-if="matchingHomeworks.length > 0">
+    <v-card-title>Homework log</v-card-title>
+    <v-card-subtitle v-if="matchingHomeworks.length !== 1">{{ matchingHomeworks.length }} events</v-card-subtitle>
+    <v-card-subtitle v-else>1 event</v-card-subtitle>
+  <v-list-item two-line v-for="i in matchingHomeworks" :key="i">
+  <v-list-item-avatar>
+  	      <person :userId="homeworks[i].creator"/>
+  </v-list-item-avatar>
+  <v-list-item-content>
+  <v-list-item-title>
+  <span v-if="homeworks[i].creator == homeworks[i].user">Homework submitted</span>
+</v-list-item-title>
+  <v-list-item-subtitle>
+  {{ homeworks[i].createdAt | moment("from", "now") }}, {{ homeworks[i].createdAt | moment('MMMM Do YYYY, h:mma') }}
+  </v-list-item-subtitle>
+  </v-list-item-content>
+  <v-list-item-action>
+  <v-btn icon :href="pdfLink(i)"><v-icon>mdi-download</v-icon></v-btn>
+  </v-list-item-action>
+  </v-list-item>
   </v-card>
-
 </v-col>
 
 
@@ -200,12 +216,16 @@ import { mapActions, mapState } from 'vuex';
 
 export default {
   computed: {
-    ...mapState(['assignments', 'profile', 'homeworks']),
+    ...mapState(['assignments', 'profile', 'homeworks', 'users']),
 
     sortedAssignments() {
       const result = Object.values(this.assignments);
       result.sort((a, b) => a.sortOrder - b.sortOrder);
       return result;
+    },
+
+    matchingHomeworks() {
+      return Object.keys(this.homeworks).filter(i => this.homeworks[i].assignment === this.id);
     },
 
     assignment() {
@@ -268,8 +288,13 @@ export default {
       'updateAssignment',
       'submitAssignment',
       'submitHomework',
+      'getUsers',
       'getHomeworks',
     ]),
+
+    pdfLink(id) {
+      return `${process.env.VUE_APP_API_URL }/homeworks/${ this.homeworks[id].id }/pdf`;
+    },
 
     alreadySubmitted(id) {
       if (this.homeworks) {
@@ -339,6 +364,7 @@ export default {
       this.id = undefined;
     }
 
+    this.getUsers();
     this.getHomeworks();
     return this.getAssignments();
   },

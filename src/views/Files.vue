@@ -28,7 +28,7 @@
 
 	<v-list-item two-line v-for="filename in matchedFiles"
 		     :key="filename"
-		     :to="`/files/${filename}`">
+		     :href="download(filename)">
 	  <v-list-item-icon><v-icon>mdi-file</v-icon></v-list-item-icon>
 	  <v-list-item-content>
             <v-list-item-title>
@@ -87,6 +87,10 @@ export default {
     ...mapActions([
       'getFiles',
     ]),
+
+    download(p) {
+      return `${process.env.VUE_APP_API_URL }/files/${p}`;
+    },
 
     basename(p) {
       return path.basename(p);

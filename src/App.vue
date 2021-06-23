@@ -13,6 +13,40 @@
              text
 	     >Log In</v-btn>
 
+      <v-btn text to="/calendar/"  v-if="profile">
+	Calendar
+      </v-btn>
+
+      <v-menu v-if="profile"
+        offset-y transition="slide-y-transition"
+      >
+        <template v-slot:activator="{ on }">
+          <v-btn
+	    text
+            v-on="on"
+	    v-text="'Homework'"
+            >
+            <v-icon>mdi-account</v-icon>
+          </v-btn>
+        </template>
+
+	<v-list>
+        <v-list-item to="/assignments/">
+	  <v-list-item-icon><v-icon>mdi-format-list-numbered</v-icon></v-list-item-icon>
+          <v-list-item-title>Assignments</v-list-item-title>
+        </v-list-item>
+        <v-list-item to="/queue/" v-if="profile.isStaff || profile.isSuperuser">
+	  <v-list-item-icon><v-icon>mdi-playlist-check</v-icon></v-list-item-icon>
+          <v-list-item-title>Queue</v-list-item-title>
+        </v-list-item>
+        <v-list-item to="/files/">
+	  <v-list-item-icon><v-icon>mdi-file-multiple</v-icon></v-list-item-icon>
+          <v-list-item-title>Files</v-list-item-title>
+        </v-list-item>
+	</v-list>
+      </v-menu>
+
+
       <v-menu v-if="profile"
         offset-y transition="slide-y-transition"
       >
@@ -96,29 +130,17 @@
         </template>
 
         <v-list>
-          <v-list-item to="/calendar/">
-	      <v-list-item-icon><v-icon>mdi-calendar</v-icon></v-list-item-icon>
-            <v-list-item-title>Calendar</v-list-item-title>
-          </v-list-item>
-          <v-list-item to="/assignments/">
-	      <v-list-item-icon><v-icon>mdi-format-list-numbered</v-icon></v-list-item-icon>
-            <v-list-item-title>Homework</v-list-item-title>
-          </v-list-item>
-          <v-list-item to="/queue/">
-	      <v-list-item-icon><v-icon>mdi-playlist-check</v-icon></v-list-item-icon>
-            <v-list-item-title>Queue</v-list-item-title>
-          </v-list-item>
-          <v-list-item to="/files/">
-	      <v-list-item-icon><v-icon>mdi-file-multiple</v-icon></v-list-item-icon>
-            <v-list-item-title>Files</v-list-item-title>
+          <v-list-item :to="`/users/${profile.id}`">
+	      <v-list-item-icon><v-icon>mdi-account-group</v-icon></v-list-item-icon>
+            <v-list-item-title>People</v-list-item-title>
           </v-list-item>
           <v-list-item to="/reports/" v-if="profile.isStaff || profile.isSuperuser">
 	      <v-list-item-icon><v-icon>mdi-account-check</v-icon></v-list-item-icon>
             <v-list-item-title>Reports</v-list-item-title>
           </v-list-item>
-          <v-list-item :to="`/users/${profile.id}`">
-	      <v-list-item-icon><v-icon>mdi-account-group</v-icon></v-list-item-icon>
-            <v-list-item-title>People</v-list-item-title>
+          <v-list-item href="https://store.rossprogram.org/collections/all">
+	      <v-list-item-icon><v-icon>mdi-tshirt-crew</v-icon></v-list-item-icon>
+            <v-list-item-title>Merchandise</v-list-item-title>
           </v-list-item>
           <v-divider></v-divider>
           <v-list-item @click="logout">

@@ -5,7 +5,6 @@ import Login from '../views/Login.vue';
 import People from '../views/People.vue';
 import Calendar from '../views/Calendar.vue';
 import Files from '../views/Files.vue';
-import File from '../views/File.vue';
 import Reports from '../views/Reports.vue';
 import Assignments from '../views/Assignments.vue';
 import SubmitReport from '../views/SubmitReport.vue';
@@ -94,11 +93,6 @@ const routes = [
     path: '/assignments/',
     name: 'assignments',
     component: Assignments,
-  },
-  {
-    path: '/files/:path(.*\\..*)',
-    name: 'file',
-    component: File,
   },
   {
     path: '/queue',

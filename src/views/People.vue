@@ -18,9 +18,11 @@
 	<v-list-item two-line v-for="id in matchingFamilies[family]"
 		     :to="'/users/' + id"
 		     :key="id">
+	  <v-list-item-avatar>
+	    <person :userId="id"/>
+	  </v-list-item-avatar>
 	  <v-list-item-content>
 	    <v-list-item-title>
-	      <person :userId="id"/>
 	      <span v-if="users[id].nickname">{{ users[id].nickname }}</span>
 	      <span v-else>{{ users[id].firstName }}</span>
 	      {{ users[id].lastName }}
@@ -267,7 +269,7 @@ v-if="profile.isStaff"
 		    <span v-if="users[event.object.user].nickname">{{ users[event.object.user].nickname }}</span>
 		    <span v-else>{{ users[event.object.user].firstName }}</span>
 		    {{ users[event.object.user].lastName }}</span>
-		  <span v-else-if="event.object.path">file <a :href="`/files/${event.object.path}`">{{ event.object.path }}</a></span>
+		  <span v-else-if="event.object.url">file <a :href="`/files/${event.object.url}`">{{ event.object.url }}</a></span>
 		  <span v-else-if="event.object.meetingId">zoom room <a :href="`https://rossprogram-org.zoom.us/j/${event.object.meetingId}`">{{ rooms[event.object.meetingId].topic }}</a></span>
 		  <span v-else-if="event.object.text">&ldquo;{{ event.object.text }}&rdquo;</span>
 		  <span v-else>{{ event.object }}</span>

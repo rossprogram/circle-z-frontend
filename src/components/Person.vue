@@ -12,8 +12,8 @@
 	    <v-badge
 	      v-if="user.isStaff"
               color="info"
-	      offset-x="9"
-	      offset-y="9"
+	      offset-x="13"
+	      offset-y="13"
 	      dot
 	      tile
 	      bottom
@@ -30,8 +30,8 @@
 	    <v-badge
 	      v-else-if="user.isFirstYear"
               color="warning"
-	      offset-x="9"
-	      offset-y="9"
+	      offset-x="12"
+	      offset-y="12"
 	      dot
 	      bottom
 	      bordered
@@ -47,8 +47,8 @@
 	    <v-badge
 	      v-else
               color="error"
-	      offset-x="9"
-	      offset-y="9"
+	      offset-x="12"
+	      offset-y="12"
 	      dot
 	      top
 	      bordered
