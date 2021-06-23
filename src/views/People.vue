@@ -431,7 +431,7 @@ export default {
       if (to.params.id) {
 	vm.id = to.params.id;
 	vm.getUser(vm.id);
-	vm.getUserActivity(vm.id);
+	if (vm.profile.isStaff) vm.getUserActivity(vm.id);
       } else vm.id = undefined;
       vm.updatedPerson = {};
     });
@@ -441,7 +441,7 @@ export default {
     if (to.params.id) {
       this.id = to.params.id;
       this.getUser(this.id);
-      this.getUserActivity(this.id);
+      if (this.profile.isStaff) { this.getUserActivity(this.id); }
     } else this.id = undefined;
     this.updatedPerson = {};
     next();
@@ -451,7 +451,7 @@ export default {
     if (this.$route.params.id) {
       this.id = this.$route.params.id;
       this.getUser(this.id);
-      this.getUserActivity(this.id);
+      if (this.profile.isStaff) { this.getUserActivity(this.id); }
     } else {
       this.id = undefined;
     }

@@ -1,8 +1,20 @@
 <template>
 <v-container fluid fill-height>
-  <v-row><v-col :cols="id ? 6 : 12"><v-card>
-	<v-card-title>Assignments</v-card-title>
-	<v-card-subtitle></v-card-subtitle>
+
+  <v-navigation-drawer app permanent>
+	<v-list-item v-if="profile.isStaff" two-line :to="'/assignments/new'">
+	  <v-list-item-icon>
+            <v-icon>mdi-plus-circle-outline</v-icon>
+	  </v-list-item-icon>
+	  <v-list-item-content>
+            <v-list-item-title>
+	      New assignment
+	    </v-list-item-title>
+	    <v-list-item-subtitle>
+	    </v-list-item-subtitle>
+	  </v-list-item-content>
+	</v-list-item>
+
 	<v-list-item two-line v-for="assignment in sortedAssignments"
 		     :to="'/assignments/' + assignment.id"
 		     :key="assignment.id">
@@ -21,11 +33,11 @@
 	      {{  assignment.releasedAt | moment("from", "now") }}.
 	      <span v-if="profile.isStaff">Sort key: {{ assignment.sortOrder }}</span>
 	    </v-list-item-subtitle>
-
 	  </v-list-item-content>
 	</v-list-item>
-      </v-card>
+	</v-navigation-drawer>
 
+  <v-row><v-col v-if="id == 'new'" cols="12">
       <v-card class="my-3" v-if="profile.isStaff">
 	<v-card-title>New assignment</v-card-title>
 	<v-card-subtitle></v-card-subtitle>
@@ -35,6 +47,14 @@
 	      <v-text-field
 		label="Name"
 		v-model="title"
+		/>
+            </v-flex>
+	  </v-layout>
+	  <v-layout wrap>
+	    <v-flex xs12>
+	      <v-text-field
+		label="URL"
+		v-model="url"
 		/>
             </v-flex>
 	  </v-layout>
@@ -66,7 +86,7 @@
       </v-card>
     </v-col>
 
-    <v-col cols="6" v-if="id" :key="id"><v-card>
+    <v-col cols="12" v-if="assignments[id]" :key="id"><v-card>
         <v-card-title>
 	  {{ assignments[id].title }}
 	</v-card-title>
@@ -92,6 +112,14 @@
 		:readonly="!profile.isStaff"
 		:disabled="!profile.isStaff"
 		></v-checkbox>
+            </v-flex>
+          </v-layout>
+	  <v-layout wrap v-if="profile.isStaff">
+	    <v-flex xs12>
+	      <v-text-field
+		label="URL"
+		v-model="assignmentURL"
+		/>
             </v-flex>
 	  </v-layout>
 	  <v-layout wrap v-if="profile.isStaff">
@@ -139,14 +167,29 @@
 </v-btn>
 	    <v-btn
 	      text
+	      :href="assignmentURL"
+              color="secondary"
+              v-if="assignmentURL"
+	      >
+	      Download problem set
+            </v-btn>
+	    <v-btn
+	      text
 	      @click="submit"
 	      color="primary"
               :disabled="!pdf"
 	      >
-	      Submit homework
+	      Submit your homework
 	    </v-btn>
 	  </v-card-actions>
-    </v-card></v-col>
+  </v-card>
+  <v-card class="my-3">
+  <v-card-title>Homework log</v-card-title>
+  {{ homeworks }}
+  </v-card>
+
+</v-col>
+
 
   </v-row>
 </v-container>
@@ -172,6 +215,10 @@ export default {
     assignmentTitle: {
       get() { return this.assignment.title; },
       set(v) { this.$set(this.updatedAssignment, 'title', v); },
+    },
+    assignmentURL: {
+      get() { return this.assignment.url; },
+      set(v) { this.$set(this.updatedAssignment, 'url', v); },
     },
     assignmentSortOrder: {
       get() { return this.assignment.sortOrder; },
@@ -200,6 +247,7 @@ export default {
       extraCredit: false,
       dateMenu: null,
       title: '',
+      url: '',
       sortOrder: 0,
       pdf: null,
       updatedAssignment: {},
@@ -246,6 +294,7 @@ export default {
 
     submit() {
       this.submitHomework({ user: this.profile.id, assignment: this.id, pdf: this.pdf });
+      this.pdf = null;
     },
 
     saveAssignment() {
@@ -259,9 +308,11 @@ export default {
 	  title: this.title,
 	  sortOrder: this.sortOrder,
 	  extraCredit: this.extraCredit,
+	  url: this.url,
 	},
       );
       this.title = '';
+      this.url = '';
       this.sortOrder = 0;
       this.extraCredit = false;
     },
@@ -282,7 +333,7 @@ export default {
   },
 
   mounted() {
-    if (this.$route.params.event) {
+    if (this.$route.params.id) {
       this.id = this.$route.params.id;
     } else {
       this.id = undefined;

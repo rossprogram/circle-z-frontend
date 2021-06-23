@@ -18,7 +18,7 @@
     </v-navigation-drawer>
     <v-row>
 
-    <v-col cols="6" v-if="selectedEvent"><v-card>
+    <v-col cols="12" v-if="selectedEvent"><v-card>
 	<v-card-title>{{selectedEvent.event.summary}}</v-card-title>
 	<v-card-subtitle>{{ selectedEvent.date | moment("from", "now") }}</v-card-subtitle>
 	<v-card-text>
