@@ -22,9 +22,28 @@
 	<v-card-title>{{selectedEvent.event.summary}}</v-card-title>
 	<v-card-subtitle>{{ selectedEvent.date | moment("from", "now") }}</v-card-subtitle>
 	<v-card-text>
-	  {{ selectedEvent.event.description }}
+
+
 	</v-card-text>
 	<v-list one-line>
+	  <v-list-item v-if="selectedEvent.event.attendees.length > 0">
+            <v-list-item-icon>
+              <v-icon v-if="selectedEvent.event.attendees.length > 1">
+		mdi-account-multiple
+              </v-icon>
+              <v-icon v-else>
+		mdi-account
+              </v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>
+		<span v-for="attendee in selectedEvent.event.attendees" :key="attendee.cn">
+		  <person :userId="emails[attendee.cn]"/>
+		</span>
+              </v-list-item-title>
+            </v-list-item-content>
+	  </v-list-item>
+
 	  <v-list-item>
             <v-list-item-icon>
               <v-icon>
@@ -74,7 +93,7 @@ import moment from 'moment';
 
 export default {
   computed: {
-    ...mapState(['calendar', 'roomTopics']),
+    ...mapState(['calendar', 'roomTopics', 'emails', 'users']),
 
     jCalData() {
       if (this.calendar.length === 0) return [];
@@ -84,7 +103,7 @@ export default {
       const subcomps = comp.getAllSubcomponents('vevent');
 
       const nextWeek = ICAL.Time.now();
-      nextWeek.addDuration(new ICAL.Duration({ weeks: 2 }));
+      nextWeek.addDuration(new ICAL.Duration({ weeks: 3 }));
 
       const aBitAgo = ICAL.Time.now();
       nextWeek.addDuration(new ICAL.Duration({ hours: -1 }));
