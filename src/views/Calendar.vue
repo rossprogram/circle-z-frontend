@@ -1,8 +1,7 @@
 <template>
 <v-container fluid fill-height>
-  <v-row><v-col :cols="selectedEvent ? 6 : 12"><v-card>
-	<v-card-title>Upcoming events</v-card-title>
-	<v-card-subtitle></v-card-subtitle>
+
+    <v-navigation-drawer app permanent>
 	<v-list-item two-line v-for="item in jCalData"
 		     :to="'/calendar/' + item.id"
 		     :key="item.id">
@@ -16,7 +15,8 @@
 	    </v-list-item-subtitle>
 	  </v-list-item-content>
 	</v-list-item>
-    </v-card></v-col>
+    </v-navigation-drawer>
+    <v-row>
 
     <v-col cols="6" v-if="selectedEvent"><v-card>
 	<v-card-title>{{selectedEvent.event.summary}}</v-card-title>

@@ -1,18 +1,20 @@
 <template>
 <v-container fluid fill-height>
-  <v-row><v-col :cols="id ? 6 : 12">
+  <v-row>
+
+    <v-navigation-drawer app permanent>
       <v-text-field
         label="Search"
 	v-model="search"
         prepend-inner-icon="mdi-magnify"
 	clearable
         ></v-text-field>
-      <v-row v-for="family in sortFamilies(Object.keys(matchingFamilies))" :key="family"><v-col>
-      <v-card>
-	<v-card-title v-if="family === 'undefined'">People</v-card-title>
-	<v-card-title v-else>Family {{family}}</v-card-title>
-	<v-card-subtitle v-if="profile.family === family">This is your family.</v-card-subtitle>
-	<v-card-subtitle v-else></v-card-subtitle>
+
+      <div v-for="family in sortFamilies(Object.keys(matchingFamilies))" :key="family">
+	<v-subheader v-if="family === 'undefined'">Other People</v-subheader>
+	<v-subheader v-else-if="profile.family === family">Your family, Family {{family}}</v-subheader>
+	<v-subheader v-else>Family {{family}}</v-subheader>
+
 	<v-list-item two-line v-for="id in matchingFamilies[family]"
 		     :to="'/users/' + id"
 		     :key="id">
@@ -24,13 +26,10 @@
 	    </v-list-item-title>
 	  </v-list-item-content>
 	</v-list-item>
-      </v-card>
-	</v-col>
-      </v-row>
+      </div>
+    </v-navigation-drawer>
 
-	</v-col>
-
-    <v-col cols="6" v-if="id"><v-card  :key="id">
+    <v-col cols="12" v-if="id"><v-card  :key="id">
 	<v-card-title><person :userId="id"/>{{ users[id].firstName }}
 	      {{ users[id].lastName }}
 	  &lt;{{ users[id].email }}&gt;</v-card-title>
