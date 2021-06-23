@@ -97,7 +97,7 @@ export default {
     lazily() {
       if (!this.loaded) {
 	this.loaded = true;
-	if (this.userId) this.getUser(this.userId);
+	if (this.userId) this.getUserFromCache(this.userId);
       }
     },
   },
@@ -113,7 +113,7 @@ export default {
 
   methods: {
     ...mapActions([
-      'getUser',
+      'getUserFromCache',
     ]),
   },
 

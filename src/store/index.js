@@ -17,6 +17,7 @@ const store = new Vuex.Store({
     users: {},
     emails: {},
     userImages: {},
+    userImageTimestamps: {},
     reports: {},
     assignments: {},
     homeworks: {},
@@ -67,7 +68,10 @@ const store = new Vuex.Store({
         Vue.set(state.users, data[i].id, data[i]);
         Vue.set(state.emails, data[i].email, data[i].id);
         if (data[i].id === state.profile.id) state.profile = data[i];
-        if (data[i].image) Vue.set(state.userImages, data[i].id, data[i].image);
+        if (data[i].image || data[i].noImage) {
+          if (data[i].image) Vue.set(state.userImages, data[i].id, data[i].image);
+          Vue.set(state.userImageTimestamps, data[i].id, Date.now());
+        }
       }
     },
 
@@ -264,7 +268,32 @@ const store = new Vuex.Store({
       userService.getUser(id).then(
         (response) => {
           if (response.status === 200) {
-            commit('setUsers', { data: [response.data] });
+            const { data } = response;
+            commit('setUsers', { data: [data] });
+          }
+        },
+        (error) => {
+          dispatch('alertError', error, { root: true });
+        },
+      );
+    },
+
+    getUserFromCache({ dispatch, commit, state }, id) {
+      if (state.userImageTimestamps[id]) {
+        // Wait five minutes before bothering to get new images
+        if (Date.now() - state.userImageTimestamps[id] < 5 * 60 * 1000) {
+          return;
+        }
+      }
+
+      userService.getUser(id).then(
+        (response) => {
+          if (response.status === 200) {
+            const { data } = response;
+
+            if (response.data.image === undefined) data.noImage = true;
+
+            commit('setUsers', { data: [data] });
           }
         },
         (error) => {
