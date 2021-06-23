@@ -103,7 +103,6 @@ export default {
 	    if (date.compare(ICAL.Time.now()) >= 0) {
 	      const id = `${event.uid }-${ date.toString()}`;
 	      const correctedDate = moment(date.toJSDate());
-	      console.log(correctedDate);
 	      events.push({ id, date: correctedDate, event });
 	    }
 	  }
