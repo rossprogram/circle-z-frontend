@@ -88,7 +88,10 @@ export default {
     },
 
     name() {
-      if (this.user) return (`${this.user.firstName } ${ this.user.lastName}`);
+      if (this.user) {
+	if (this.user.nickname) return (`${this.user.nickname } ${ this.user.lastName}`);
+	return (`${this.user.firstName } ${ this.user.lastName}`);
+      }
       return 'Unknown User';
     },
   },

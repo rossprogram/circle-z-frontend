@@ -21,7 +21,8 @@
 	  <v-list-item-content>
 	    <v-list-item-title>
 	      <person :userId="id"/>
-	      {{ users[id].firstName }}
+	      <span v-if="users[id].nickname">{{ users[id].nickname }}</span>
+	      <span v-else>{{ users[id].firstName }}</span>
 	      {{ users[id].lastName }}
 	    </v-list-item-title>
 	  </v-list-item-content>
@@ -246,7 +247,38 @@ v-if="profile.isStaff"
 	  </v-card-actions>
     </v-card></v-col>
 
-
+    <v-col v-if="id && profile.isStaff" cols="12">
+      <v-card>
+	<v-card-title>Event log</v-card-title>
+	<v-list two-line>
+	  <v-list-item v-for="event in userActivity[id]" :key="event.id">
+	    <v-list-item-icon>
+	      <v-icon v-if="event.verb == 'login'">mdi-login</v-icon>
+	      <v-icon v-else-if="event.verb == 'report'">mdi-account-check</v-icon>
+	      <v-icon v-else-if="event.verb == 'download'">mdi-download</v-icon>
+	      <v-icon v-else-if="event.verb == 'watch-party'">mdi-party-popper</v-icon>
+	      <v-icon v-else>mdi-walk</v-icon>
+	    </v-list-item-icon>
+	    <v-list-item-content>
+              <v-list-item-title>{{ event.verb.replace('-',' ') }}
+		<span v-if="event.object">
+		  <span v-if="event.object.ipAddress">from address {{ event.object.ipAddress }}</span>
+		  <span v-else-if="event.object.user">of <person :userId="event.object.user"/>
+		    <span v-if="users[event.object.user].nickname">{{ users[event.object.user].nickname }}</span>
+		    <span v-else>{{ users[event.object.user].firstName }}</span>
+		    {{ users[event.object.user].lastName }}</span>
+		  <span v-else-if="event.object.path">file <a :href="`/files/${event.object.path}`">{{ event.object.path }}</a></span>
+		  <span v-else-if="event.object.meetingId">zoom room <a :href="`https://rossprogram-org.zoom.us/j/${event.object.meetingId}`">{{ rooms[event.object.meetingId].topic }}</a></span>
+		  <span v-else-if="event.object.text">&ldquo;{{ event.object.text }}&rdquo;</span>
+		  <span v-else>{{ event.object }}</span>
+		</span>
+	      </v-list-item-title>
+              <v-list-item-subtitle>{{ event.createdAt | moment("from","now") }} at {{ event.createdAt | moment('MMMM Do YYYY, h:mma') }}</v-list-item-subtitle>
+	    </v-list-item-content>
+	  </v-list-item>
+	</v-list>
+      </v-card>
+    </v-col>
   </v-row>
 </v-container>
 </template>
@@ -257,7 +289,7 @@ import { mapActions, mapState } from 'vuex';
 
 export default {
   computed: {
-    ...mapState(['users', 'profile', 'rooms']),
+    ...mapState(['users', 'profile', 'rooms', 'userActivity']),
 
     matchingIds() {
       if (this.search) return Object.keys(this.users).filter(id => JSON.stringify(this.users[id]).toLowerCase().match(this.search.toLowerCase()));
@@ -367,6 +399,7 @@ export default {
     ...mapActions([
       'getUsers',
       'getUser',
+      'getUserActivity',
       'getRooms',
       'updateUser',
     ]),
@@ -398,6 +431,7 @@ export default {
       if (to.params.id) {
 	vm.id = to.params.id;
 	vm.getUser(vm.id);
+	vm.getUserActivity(vm.id);
       } else vm.id = undefined;
       vm.updatedPerson = {};
     });
@@ -407,6 +441,7 @@ export default {
     if (to.params.id) {
       this.id = to.params.id;
       this.getUser(this.id);
+      this.getUserActivity(this.id);
     } else this.id = undefined;
     this.updatedPerson = {};
     next();
@@ -416,6 +451,7 @@ export default {
     if (this.$route.params.id) {
       this.id = this.$route.params.id;
       this.getUser(this.id);
+      this.getUserActivity(this.id);
     } else {
       this.id = undefined;
     }

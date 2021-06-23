@@ -29,6 +29,10 @@ export default {
     return axios.get(`/users/${id}`);
   },
 
+  async getUserActivity(id) {
+    return axios.get(`/users/${id}/activity`);
+  },
+
   async putUser(id, data) {
     return axios.put(`/users/${id}`, data);
   },

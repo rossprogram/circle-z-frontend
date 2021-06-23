@@ -18,6 +18,7 @@ const store = new Vuex.Store({
     emails: {},
     userImages: {},
     userImageTimestamps: {},
+    userActivity: {},
     reports: {},
     assignments: {},
     homeworks: {},
@@ -74,6 +75,10 @@ const store = new Vuex.Store({
         }
       }
     },
+    setUserActivity(state, { id, data }) {
+      Vue.set(state.userActivity, id, data);
+    },
+
 
     setRooms(state, { data }) {
       for (let i = 0; i < data.length; i += 1) {
@@ -270,6 +275,20 @@ const store = new Vuex.Store({
           if (response.status === 200) {
             const { data } = response;
             commit('setUsers', { data: [data] });
+          }
+        },
+        (error) => {
+          dispatch('alertError', error, { root: true });
+        },
+      );
+    },
+
+    getUserActivity({ dispatch, commit }, id) {
+      userService.getUserActivity(id).then(
+        (response) => {
+          if (response.status === 200) {
+            const { data } = response;
+            commit('setUserActivity', { id, data });
           }
         },
         (error) => {
