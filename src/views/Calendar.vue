@@ -86,6 +86,9 @@ export default {
       const nextWeek = ICAL.Time.now();
       nextWeek.addDuration(new ICAL.Duration({ weeks: 2 }));
 
+      const aBitAgo = ICAL.Time.now();
+      nextWeek.addDuration(new ICAL.Duration({ hours: -1 }));
+
       const events = [];
       window.events = [];
 
@@ -100,13 +103,13 @@ export default {
 	    if ((date === undefined) || (date.compare(nextWeek) > 0)) {
 	      break;
 	    }
-	    if (date.compare(ICAL.Time.now()) >= 0) {
+	    if (date.compare(aBitAgo) >= 0) {
 	      const id = `${event.uid }-${ date.toString()}`;
 	      const correctedDate = moment(date.toJSDate());
 	      events.push({ id, date: correctedDate, event });
 	    }
 	  }
-	} else if (event.startDate.compare(ICAL.Time.now()) >= 0) {
+	} else if (event.startDate.compare(aBitAgo) >= 0) {
 	  const correctedDate =	moment(event.startDate.toJSDate());
 	  events.push({ id: event.uid, date: correctedDate, event });
 	}
