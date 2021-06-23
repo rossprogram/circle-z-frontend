@@ -149,7 +149,7 @@
 	    </v-layout>
 
 	    <v-layout wrap>
-	      <v-flex xs6 md3>
+	      <v-flex xs6 md3 v-if="profile.isSuperuser">
 		<v-checkbox
 		  v-model="isStaff"
 		  label="Staff"
@@ -169,6 +169,14 @@
 		<v-checkbox
 		  v-model="isFirstYear"
 		  label="First year"
+		  :readonly="!profile.isStaff"
+		  :disabled="!profile.isStaff"
+		  ></v-checkbox>
+	      </v-flex>
+	      <v-flex xs6 md3>
+		<v-checkbox
+		  v-model="isJuniorCounselor"
+		  label="Junior counselor"
 		  :readonly="!profile.isStaff"
 		  :disabled="!profile.isStaff"
 		  ></v-checkbox>
@@ -316,6 +324,10 @@ export default {
     isFirstYear: {
       get() { return this.person.isFirstYear; },
       set(v) { this.$set(this.updatedPerson, 'isFirstYear', v); },
+    },
+    isJuniorCounselor: {
+      get() { return this.person.isJuniorCounselor; },
+      set(v) { this.$set(this.updatedPerson, 'isJuniorCounselor', v); },
     },
     isSuperuser: {
       get() { return this.person.isSuperuser; },
