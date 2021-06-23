@@ -96,7 +96,7 @@ const routes = [
     component: Assignments,
   },
   {
-    path: '/files/:path(.*.pdf)',
+    path: '/files/:path(.*\\..*)',
     name: 'file',
     component: File,
   },
