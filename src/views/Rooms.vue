@@ -47,6 +47,14 @@
 	  >
 	  Join
 	</v-btn>
+	<v-btn
+	  v-if="profile.isStaff && roomUsers[meetingId] && (roomUsers[meetingId].length > 0)"
+	  text
+	  target="_blank"
+	  @click="copyParticipantsToClipboard(meetingId)"
+	  >
+	  Copy names
+	</v-btn>
       </v-card-actions>
       </v-card>
       </v-col>
@@ -107,6 +115,14 @@ export default {
       'getUsers',
       'getRooms',
     ]),
+
+    copyParticipantsToClipboard(meetingId) {
+      const result = this.roomUsers[meetingId]
+	.map(id => `${this.users[id].firstName } ${ this.users[id].lastName } <${ this.users[id].email }>`)
+      .join('\n');
+
+      navigator.clipboard.writeText(result);
+    },
 
     sortMeetingIds(ids) {
       const result = ids;
