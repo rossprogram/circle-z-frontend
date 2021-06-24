@@ -21,6 +21,7 @@ const store = new Vuex.Store({
     userActivity: {},
     reports: {},
     assignments: {},
+    userAssignments: {},
     homeworks: {},
     rooms: {},
     roomTopics: {},
@@ -101,6 +102,18 @@ const store = new Vuex.Store({
     setHomeworks(state, { data }) {
       for (let i = 0; i < data.length; i += 1) {
         Vue.set(state.homeworks, data[i].id, data[i]);
+
+        if (state.userAssignments[data[i].user] === undefined) {
+          Vue.set(state.userAssignments, data[i].user, {});
+        }
+        if (state.userAssignments[data[i].user][data[i].assignment] === undefined) {
+          Vue.set(state.userAssignments[data[i].user], data[i].assignment, data[i]);
+        } else {
+          const old = state.userAssignments[data[i].user][data[i].assignment];
+          if (Date.parse(old.createdAt) <= Date.parse(data[i].createdAt)) {
+            Vue.set(state.userAssignments[data[i].user], data[i].assignment, data[i]);
+          }
+        }
       }
     },
 

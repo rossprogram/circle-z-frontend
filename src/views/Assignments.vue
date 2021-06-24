@@ -19,13 +19,13 @@
 		     :to="'/assignments/' + assignment.id"
 		     :key="assignment.id">
 	  <v-list-item-icon>
-            <v-icon v-if="alreadyComplete(assignment.id)">mdi-file-check</v-icon>
-              <v-icon v-if="alreadyGraded(assignment.id)">mdi-file-sync</v-icon>
-              <v-icon v-if="alreadySubmitted(assignment.id)">mdi-file-question</v-icon>
+            <v-icon v-if="mostRecentHomework(assignment.id).isComplete">mdi-file-check</v-icon>
+              <v-icon v-if="mostRecentHomework(assignment.id).isRedo">mdi-file-sync</v-icon>
+              <v-icon v-if="mostRecentHomework(assignment.id).assignment">mdi-file-question</v-icon>
               <v-icon v-else>mdi-file-outline</v-icon>
 	    </v-list-item-icon>
 	    <v-list-item-content>
-            <v-list-item-title>
+              <v-list-item-title>
 	      {{ assignment.title }}
 	    </v-list-item-title>
 	    <v-list-item-subtitle>
@@ -89,13 +89,24 @@
     <v-col cols="12" v-if="assignments[id]" :key="id"><v-card>
         <v-card-title>
 	  {{ assignments[id].title }}
+	  <v-tooltip bottom v-if="assignmentExtraCredit">
+	    <template v-slot:activator="{ on, attrs }">
+              <v-icon
+		v-bind="attrs"
+		v-on="on"
+		>
+		mdi-star-circle
+              </v-icon>
+	    </template>
+	    <span>Extra Credit</span>
+	  </v-tooltip>
 	</v-card-title>
 	<v-card-subtitle>
 	  {{ assignments[id].releasedAt | moment('MMMM Do YYYY') }},
 	  {{  assignments[id].releasedAt | moment("from", "now") }}.
 	</v-card-subtitle>
 	<v-card-text>
-	  <v-layout wrap>
+	  <v-layout wrap v-if="profile.isStaff">
 	    <v-flex xs8>
 	      <v-text-field
 		class="mr-4"
@@ -206,7 +217,6 @@
   </v-card>
 </v-col>
 
-
   </v-row>
 </v-container>
 </template>
@@ -216,7 +226,7 @@ import { mapActions, mapState } from 'vuex';
 
 export default {
   computed: {
-    ...mapState(['assignments', 'profile', 'homeworks', 'users']),
+    ...mapState(['assignments', 'profile', 'homeworks', 'users', 'userAssignments']),
 
     sortedAssignments() {
       const result = Object.values(this.assignments);
@@ -292,29 +302,15 @@ export default {
       'getHomeworks',
     ]),
 
+    mostRecentHomework(id) {
+      const a = this.userAssignments[this.profile.id];
+      if (a && a[id]) return a[id];
+
+      return {};
+    },
+
     pdfLink(id) {
       return `${process.env.VUE_APP_API_URL }/homeworks/${ this.homeworks[id].id }/pdf`;
-    },
-
-    alreadySubmitted(id) {
-      if (this.homeworks) {
- return Object.values(this.homeworks).filter(homework => (homework.user === this.profile.id) && (homework.assignment === id)).length > 0;
-}
-      return false;
-    },
-
-    alreadyGraded(id) {
-      if (this.homeworks) {
- return Object.values(this.homeworks).filter(homework => (homework.user === this.profile.id) && (homework.assignment === id) && (homework.isGraded)).length > 0;
-}
-      return false;
-    },
-
-    alreadyComplete(id) {
-      if (this.homeworks) {
- return Object.values(this.homeworks).filter(homework => (homework.user === this.profile.id) && (homework.assignment === id) && (homework.isComplete)).length > 0;
-}
-      return false;
     },
 
     submit() {
