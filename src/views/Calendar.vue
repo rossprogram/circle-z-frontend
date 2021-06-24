@@ -27,7 +27,7 @@
 	</v-card-text>
 	<v-list one-line>
 	  <v-list-item v-if="selectedEvent.event.attendees.length > 0">
-            <v-list-item-icon>
+            <v-list-item-icon class="my-8">
               <v-icon v-if="selectedEvent.event.attendees.length > 1">
 		mdi-account-multiple
               </v-icon>
@@ -37,8 +37,8 @@
             </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title>
-		<span v-for="attendee in selectedEvent.event.attendees" :key="attendee.cn">
-		  <person :userId="emails[attendee.cn]"/>
+		<span v-for="attendee in selectedEvent.event.attendees" :key="attendee.getParameter('cn')">
+		  <person :userId="emails[attendee.getParameter('cn')]"/>
 		</span>
               </v-list-item-title>
             </v-list-item-content>
