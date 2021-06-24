@@ -27,7 +27,7 @@ const store = new Vuex.Store({
     rooms: {},
     roomTopics: {},
     videos: {},
-
+    activity: [],
   },
 
   mutations: {
@@ -53,6 +53,9 @@ const store = new Vuex.Store({
     },
     setFiles(state, { data }) {
       state.files = data;
+    },
+    setActivity(state, data) {
+      state.activity = data;
     },
     setFile(state, { filename, data }) {
       Vue.set(state.fileUrls, filename, data);
@@ -475,6 +478,18 @@ const store = new Vuex.Store({
       );
     },
 
+    getActivity({ dispatch, commit }) {
+      userService.getActivity().then(
+        (response) => {
+          if (response.status === 200) {
+            commit('setActivity', response.data);
+          }
+        },
+        (error) => {
+          dispatch('alertError', error, { root: true });
+        },
+      );
+    },
 
     getAttachments({ dispatch, commit }, id) {
       userService.getAttachments(id).then(

@@ -134,6 +134,10 @@
 	      <v-list-item-icon><v-icon>mdi-account-group</v-icon></v-list-item-icon>
             <v-list-item-title>People</v-list-item-title>
           </v-list-item>
+          <v-list-item to="/activity" v-if="profile.isStaff || profile.isSuperuser">
+	      <v-list-item-icon><v-icon>mdi-chart-pie</v-icon></v-list-item-icon>
+            <v-list-item-title>Recent activity</v-list-item-title>
+          </v-list-item>
           <v-list-item to="/reports/" v-if="profile.isStaff || profile.isSuperuser">
 	      <v-list-item-icon><v-icon>mdi-account-check</v-icon></v-list-item-icon>
             <v-list-item-title>Reports</v-list-item-title>

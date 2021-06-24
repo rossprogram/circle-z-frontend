@@ -80,6 +80,10 @@ export default {
     return axios.post(`/assignments/${assignment}/users/${user}`, formData);
   },
 
+  async getActivity() {
+    return axios.get('/activity');
+  },
+
   async getHomeworks() {
     return axios.get('/homeworks');
   },

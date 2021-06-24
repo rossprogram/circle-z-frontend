@@ -14,6 +14,7 @@ import Videos from '../views/Videos.vue';
 import PlayVideo from '../views/PlayVideo.vue';
 import WatchParty from '../views/WatchParty.vue';
 import WatchPartyConvener from '../views/WatchPartyConvener.vue';
+import RecentEvents from '../views/RecentEvents.vue';
 import PathNotFound from '../views/PathNotFound.vue';
 
 Vue.use(VueRouter);
@@ -38,6 +39,11 @@ const routes = [
     path: '/convene/:id',
     name: 'watch-party-convener',
     component: WatchPartyConvener,
+  },
+  {
+    path: '/activity',
+    name: 'activity',
+    component: RecentEvents,
   },
   {
     path: '/videos/',
