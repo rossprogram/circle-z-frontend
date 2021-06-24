@@ -20,6 +20,7 @@
 	      bordered
 	      >
 	      <v-avatar
+		class="darken-5"
 		color="info"
 		size="36"
 		>
@@ -63,7 +64,8 @@
 	    </v-badge>
   </v-btn>
 </template>
-<span>{{ name }}</span>
+    <span>{{ name }}</span>
+    &nbsp;<v-icon class="white--text" v-if="availableForChat[this.userId] || user.meetingId">mdi-lan-connect</v-icon>
 </v-tooltip>
 </v-lazy>
 </template>
@@ -73,7 +75,7 @@ import { mapState, mapActions } from 'vuex';
 
 export default {
   computed: {
-    ...mapState(['users', 'userImages']),
+    ...mapState(['users', 'userImages', 'availableForChat']),
 
     user() {
       return this.users[this.userId];

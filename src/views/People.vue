@@ -10,6 +10,7 @@
 	clearable
         ></v-text-field>
 
+
       <div v-for="family in sortFamilies(Object.keys(matchingFamilies))" :key="family">
 	<v-subheader v-if="family === 'undefined'">Other People</v-subheader>
 	<v-subheader v-else-if="profile.family === family">Your family, Family {{family}}</v-subheader>
@@ -43,6 +44,22 @@
 	    <v-card-subtitle v-else>Advanced participant</v-card-subtitle>
 
 	    <v-list one-line>
+
+	      <v-list-item v-if="users[id].availableForChat || users[id].meetingId">
+		<v-list-item-icon>
+		  <v-icon>
+		    mdi-lan-connect
+		  </v-icon>
+		</v-list-item-icon>
+
+		<v-list-item-content>
+		  <v-list-item-title>
+		    Online now
+		  </v-list-item-title>
+		</v-list-item-content>
+	      </v-list-item>
+
+
 	      <v-list-item v-if="users[id].meetingId">
 		<v-list-item-icon>
 		  <v-icon>
@@ -59,6 +76,7 @@
 		  </v-list-item-title>
 		</v-list-item-content>
 	      </v-list-item>
+
 	      <v-list-item v-if="!(users[id].meetingId) && (users[id].meetingLeaveTime)">
 		<v-list-item-icon>
 		  <v-icon>

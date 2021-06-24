@@ -19,6 +19,7 @@ const store = new Vuex.Store({
     userImages: {},
     userImageTimestamps: {},
     userActivity: {},
+    availableForChat: {},
     reports: {},
     assignments: {},
     userAssignments: {},
@@ -60,6 +61,7 @@ const store = new Vuex.Store({
       for (let i = 0; i < data.length; i += 1) {
         Vue.set(state.users, data[i].id, data[i]);
         Vue.set(state.emails, data[i].email, data[i].id);
+        if (typeof data[i].availableForChat === 'boolean') Vue.set(state.availableForChat, data[i].id, data[i].availableForChat);
         if (data[i].id === state.profile.id) state.profile = data[i];
         if (data[i].image || data[i].noImage) {
           if (data[i].image) Vue.set(state.userImages, data[i].id, data[i].image);
