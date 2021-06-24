@@ -19,9 +19,9 @@
 		     :to="'/assignments/' + assignment.id"
 		     :key="assignment.id">
 	  <v-list-item-icon>
-            <v-icon v-if="mostRecentHomework(assignment.id).isComplete">mdi-file-check</v-icon>
-              <v-icon v-if="mostRecentHomework(assignment.id).isRedo">mdi-file-sync</v-icon>
-              <v-icon v-if="mostRecentHomework(assignment.id).assignment">mdi-file-question</v-icon>
+            <v-icon class="green--text" v-if="mostRecentHomework(assignment.id).isComplete">mdi-file-check</v-icon>
+              <v-icon class="red--text" v-else-if="mostRecentHomework(assignment.id).isRedo">mdi-file-sync</v-icon>
+              <v-icon class="yellow--text text--darken-3" v-else-if="mostRecentHomework(assignment.id).assignment">mdi-file-question</v-icon>
               <v-icon v-else>mdi-file-outline</v-icon>
 	    </v-list-item-icon>
 	    <v-list-item-content>
@@ -203,8 +203,11 @@
   	      <person :userId="homeworks[i].creator"/>
   </v-list-item-avatar>
   <v-list-item-content>
-  <v-list-item-title>
-  <span v-if="homeworks[i].creator == homeworks[i].user">Homework submitted</span>
+    <v-list-item-title>
+      <span v-if="homeworks[i].creator == homeworks[i].user">Homework submitted</span>
+      <span v-else-if="homeworks[i].isRedo">Redo requested</span>
+      <span v-else-if="homeworks[i].isComplete">Marked complete</span>
+      <span v-else>Left ungraded</span>
 </v-list-item-title>
   <v-list-item-subtitle>
   {{ homeworks[i].createdAt | moment("from", "now") }}, {{ homeworks[i].createdAt | moment('MMMM Do YYYY, h:mma') }}
@@ -235,7 +238,9 @@ export default {
     },
 
     matchingHomeworks() {
-      return Object.keys(this.homeworks).filter(i => this.homeworks[i].assignment === this.id);
+      const result = Object.keys(this.homeworks).filter(i => this.homeworks[i].assignment === this.id);
+      result.sort((a, b) => Date.parse(this.homeworks[b].createdAt) - Date.parse(this.homeworks[a].createdAt));
+      return result;
     },
 
     assignment() {

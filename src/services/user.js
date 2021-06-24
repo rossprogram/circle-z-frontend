@@ -69,9 +69,14 @@ export default {
     return axios.put(`/assignments/${id}`, data);
   },
 
-  async postHomework({ user, assignment, pdf }) {
+  async postHomework({
+ user, assignment, pdf, isComplete, isRedo,
+}) {
     const formData = new FormData();
     formData.append('pdf', pdf);
+    if (isComplete) formData.append('isComplete', true);
+    if (isRedo) formData.append('isRedo', true);
+
     return axios.post(`/assignments/${assignment}/users/${user}`, formData);
   },
 

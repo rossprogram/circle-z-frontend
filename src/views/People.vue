@@ -258,6 +258,9 @@ v-if="profile.isStaff"
 	      <v-icon v-if="event.verb == 'login'">mdi-login</v-icon>
 	      <v-icon v-else-if="event.verb == 'report'">mdi-account-check</v-icon>
 	      <v-icon v-else-if="event.verb == 'download'">mdi-download</v-icon>
+	      <v-icon v-else-if="event.verb == 'submit'">mdi-upload</v-icon>
+	      <v-icon v-else-if="event.verb == 'grade'">mdi-pencil</v-icon>
+	      <v-icon v-else-if="event.verb == 'create'">mdi-folder-plus-outline</v-icon>
 	      <v-icon v-else-if="event.verb == 'watch-party'">mdi-party-popper</v-icon>
 	      <v-icon v-else>mdi-walk</v-icon>
 	    </v-list-item-icon>

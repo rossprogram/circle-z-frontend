@@ -27,15 +27,6 @@ const store = new Vuex.Store({
     roomTopics: {},
     videos: {},
 
-    applications: {},
-    attachments: {},
-    offers: {},
-    recommendations: {},
-    evaluations: {},
-    evaluators: {},
-    evaluationsByEvaluator: {},
-    myEvaluations: [],
-    evaluationsById: {},
   },
 
   mutations: {
@@ -189,6 +180,19 @@ const store = new Vuex.Store({
     logout(state) {
       state.profile = null;
       state.users = {};
+      state.homeworks = {};
+      state.files = {};
+      state.fileUrls = {};
+      state.emails = {};
+      state.userImages = {};
+      state.userImageTimestamps = {};
+      state.userActivity = {};
+      state.reports = {};
+      state.assignments = {};
+      state.userAssignments = {};
+      state.rooms = {};
+      state.roomTopics = {};
+      state.videos = {};
     },
 
     loginFailure(state, error) { // eslint-disable-line no-unused-vars
@@ -439,8 +443,12 @@ const store = new Vuex.Store({
       );
     },
 
-    submitHomework({ dispatch, commit }, { user, assignment, pdf }) {
-      userService.postHomework({ user, assignment, pdf }).then(
+    submitHomework({ dispatch, commit }, {
+ user, assignment, pdf, isComplete, isRedo,
+}) {
+      userService.postHomework({
+ user, assignment, pdf, isComplete, isRedo,
+}).then(
         (response) => {
           if (response.status === 200) {
             commit('setHomeworks', { data: [response.data] });

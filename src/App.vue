@@ -26,7 +26,7 @@
             v-on="on"
 	    v-text="'Homework'"
             >
-            <v-icon>mdi-account</v-icon>
+            <v-icon>account</v-icon>
           </v-btn>
         </template>
 
@@ -157,7 +157,7 @@
         <v-fade-transition mode="out-in">
 	  <router-view />
         </v-fade-transition>
-	<chat></chat>
+	<chat v-if="profile"></chat>
       </v-container>
     </v-main>
     <Snackbar/>
@@ -203,7 +203,10 @@ name: 'App',
 
   methods: {
     logout() {
-      this.$store.dispatch('logout');
+      this.$store.dispatch('logout')
+        .then(() => {
+          this.$router.push('/');
+        });
     },
   },
 
