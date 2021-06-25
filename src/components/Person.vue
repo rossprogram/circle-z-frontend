@@ -65,7 +65,7 @@
   </v-btn>
 </template>
     <span>{{ name }}</span>
-    &nbsp;<v-icon class="white--text" v-if="availableForChat[this.userId] || user.meetingId">mdi-lan-connect</v-icon>
+    &nbsp;<v-icon class="white--text" v-if="availableForChat[this.userId] || (user && user.meetingId)">mdi-lan-connect</v-icon>
 </v-tooltip>
 </v-lazy>
 </template>

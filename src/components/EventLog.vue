@@ -22,7 +22,7 @@
 		    <span v-else>{{ users[event.object.user].firstName }}</span>
 		    {{ users[event.object.user].lastName }}</span>
 		  <span v-else-if="event.object.url">file <a :href="`/files/${event.object.url}`">{{ event.object.url }}</a></span>
-		  <span v-else-if="event.object.meetingId">zoom room <a :href="`https://rossprogram-org.zoom.us/j/${event.object.meetingId}`">{{ rooms[event.object.meetingId].topic }}</a></span>
+		  <span v-else-if="event.object.meetingId">zoom room <a :href="`https://rossprogram-org.zoom.us/j/${event.object.meetingId}`">{{ rooms[event.object.meetingId] ? rooms[event.object.meetingId].topic : 'Unknown meeting'  }}</a></span>
 		  <span v-else-if="event.object.text">&ldquo;{{ event.object.text }}&rdquo;</span>
 		  <span v-else>{{ event.object }}</span>
 		</span>
