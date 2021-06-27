@@ -95,6 +95,18 @@
 	    <v-divider></v-divider>
 
 	    <v-card-text>
+	      <v-layout v-if="profile.isSuperuser" wrap>
+		<v-flex
+		  xs12
+		  >
+		  <v-text-field
+		    label="Email"
+		    v-model="email"
+		    >
+		    <v-icon slot="prepend">mdi-email</v-icon>
+		  </v-text-field>
+		</v-flex>
+	      </v-layout>
 	      <v-layout wrap>
 		<v-flex
 		  xs4
@@ -332,6 +344,10 @@ export default {
     firstName: {
       get() { return this.person.firstName; },
       set(v) { this.$set(this.updatedPerson, 'firstName', v); },
+    },
+    email: {
+      get() { return this.person.email; },
+      set(v) { this.$set(this.updatedPerson, 'email', v); },
     },
     nickname: {
       get() { return this.person.nickname; },
