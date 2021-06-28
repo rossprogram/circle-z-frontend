@@ -9,7 +9,7 @@
   <v-list-item-content>
 
     <v-list-item-title>
-      {{ assignment.title }} {{ homework.isRedo }}
+      {{ assignment.title }}
     </v-list-item-title>
     <v-list-item-subtitle v-if="!homework.isGraded">
         {{ homework.createdAt | moment("from", "now") }}, {{ homework.createdAt | moment('MMMM Do YYYY, h:mma') }}
