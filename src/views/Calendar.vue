@@ -10,7 +10,7 @@
 	      {{ item.event.summary }}
 	    </v-list-item-title>
 	    <v-list-item-subtitle>
-	      {{ item.date | moment('MMMM Do YYYY, h:mma') }}
+	      {{ item.date | moment('MMMM Do YYYY, h:mma Z') }}
 	      {{ item.date | moment("from", "now") }}
 	    </v-list-item-subtitle>
 	  </v-list-item-content>
@@ -20,7 +20,7 @@
 
     <v-col cols="12" v-if="selectedEvent"><v-card>
 	<v-card-title>{{selectedEvent.event.summary}}</v-card-title>
-	<v-card-subtitle>{{ selectedEvent.date | moment("from", "now") }}</v-card-subtitle>
+	<v-card-subtitle>{{ selectedEvent.date | moment('MMMM Do YYYY, h:mma Z') }}</v-card-subtitle>
 	<v-card-text>
 
 
@@ -52,7 +52,7 @@
             </v-list-item-icon>
 
             <v-list-item-content>
-              <v-list-item-title>{{ selectedEvent.date | moment('MMMM Do YYYY, h:mma') }}</v-list-item-title>
+              <v-list-item-title>{{ selectedEvent.date | moment('MMMM Do YYYY, h:mma Z') }}</v-list-item-title>
             </v-list-item-content>
 	  </v-list-item>
 
