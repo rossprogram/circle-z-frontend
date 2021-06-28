@@ -1,89 +1,79 @@
 <template>
-<v-container fluid fill-height>
+<div style="height: 100%;width: 100%" >
 
-    <v-navigation-drawer app permanent>
-	<v-list-item two-line v-for="item in jCalData"
-		     :to="'/calendar/' + item.id"
-		     :key="item.id">
-	  <v-list-item-content>
-            <v-list-item-title>
-	      {{ item.event.summary }}
-	    </v-list-item-title>
-	    <v-list-item-subtitle>
-	      {{ item.date | moment('MMMM Do YYYY, h:mma Z') }}
-	      {{ item.date | moment("from", "now") }}
-	    </v-list-item-subtitle>
-	  </v-list-item-content>
-	</v-list-item>
-    </v-navigation-drawer>
-    <v-row>
+    <v-row style="height: 100%;width: 100%">
 
-    <v-col cols="12" v-if="selectedEvent"><v-card>
-	<v-card-title>{{selectedEvent.event.summary}}</v-card-title>
-	<v-card-subtitle>{{ selectedEvent.date | moment('MMMM Do YYYY, h:mma Z') }}, which is maybe {{ selectedEvent.date | moment("from", "now") }}</v-card-subtitle>
-	<v-card-text>
+      <v-col style="height: calc(100vh - 104px);overflow-y:scroll" :cols="selectedEvent? 9: 12">
+        <v-calendar event-height="40" @click:event="showEvent"  style="height: 100%" short-weekdays type="week" :events="calendarEvents">
+        </v-calendar>
+      </v-col>
+      <v-col style="height: calc(100vh - 104px);position:sticky;top:0" v-if="selectedEvent" cols="3">
+        <v-card>
+          <v-card-title>{{selectedEvent.event.summary}}</v-card-title>
+          <v-card-subtitle>{{ selectedEvent.date | moment('MMMM Do YYYY, h:mma Z') }}, which is maybe {{ selectedEvent.date | moment("from", "now") }}</v-card-subtitle>
+          <v-card-text>
 
 
-	</v-card-text>
-	<v-list one-line>
-	  <v-list-item v-if="selectedEvent.event.attendees.length > 0">
-            <v-list-item-icon class="my-8">
-              <v-icon v-if="selectedEvent.event.attendees.length > 1">
-		mdi-account-multiple
-              </v-icon>
-              <v-icon v-else>
-		mdi-account
-              </v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title>
+          </v-card-text>
+          <v-list one-line>
+            <v-list-item v-if="selectedEvent.event.attendees.length > 0">
+              <v-list-item-icon class="my-8">
+                <v-icon v-if="selectedEvent.event.attendees.length > 1">
+                  mdi-account-multiple
+                </v-icon>
+                <v-icon v-else>
+                  mdi-account
+                </v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title>
 		<span v-for="attendee in selectedEvent.event.attendees" :key="attendee.getParameter('cn')">
 		  <person :userId="emails[attendee.getParameter('cn')]"/>
 		</span>
-              </v-list-item-title>
-            </v-list-item-content>
-	  </v-list-item>
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
 
-	  <v-list-item>
-            <v-list-item-icon>
-              <v-icon>
-		mdi-clock
-              </v-icon>
-            </v-list-item-icon>
+            <v-list-item>
+              <v-list-item-icon>
+                <v-icon>
+                  mdi-clock
+                </v-icon>
+              </v-list-item-icon>
 
-            <v-list-item-content>
-              <v-list-item-title>{{ selectedEvent.date | moment('MMMM Do YYYY, h:mma Z') }}</v-list-item-title>
-            </v-list-item-content>
-	  </v-list-item>
+              <v-list-item-content>
+                <v-list-item-title>{{ selectedEvent.date | moment('MMMM Do YYYY, h:mma Z') }}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
 
-	  <v-list-item v-if="roomTopics[selectedEvent.event.location]">
-            <v-list-item-icon>
-              <v-icon>
-		mdi-map-marker
-              </v-icon>
-            </v-list-item-icon>
+            <v-list-item v-if="roomTopics[selectedEvent.event.location]">
+              <v-list-item-icon>
+                <v-icon>
+                  mdi-map-marker
+                </v-icon>
+              </v-list-item-icon>
 
-            <v-list-item-content>
-              <v-list-item-title>{{normalizeRoom(selectedEvent.event.location)}}</v-list-item-title>
-            </v-list-item-content>
-	  </v-list-item>
-	</v-list>
+              <v-list-item-content>
+                <v-list-item-title>{{normalizeRoom(selectedEvent.event.location)}}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
 
-	  <v-card-actions>
-	    <v-btn
-	      v-if="roomTopics[selectedEvent.event.location]"
-	      text
-	      :href="`https://rossprogram-org.zoom.us/j/${roomTopics[selectedEvent.event.location].meetingId}`"
-	      color="primary"
-	      >
-	      Go To {{normalizeRoom(selectedEvent.event.location)}}
-	    </v-btn>
-	  </v-card-actions>
-    </v-card></v-col>
+          <v-card-actions>
+            <v-btn
+              v-if="roomTopics[selectedEvent.event.location]"
+              text
+              :href="`https://rossprogram-org.zoom.us/j/${roomTopics[selectedEvent.event.location].meetingId}`"
+              color="primary"
+            >
+              Go To {{normalizeRoom(selectedEvent.event.location)}}
+            </v-btn>
+          </v-card-actions>
+        </v-card>
 
-
+      </v-col>
   </v-row>
-</v-container>
+</div>
 </template>
 
 <script>
@@ -144,6 +134,20 @@ export default {
 
       return events;
     },
+    calendarEvents() {
+      const raw = this.jCalData;
+      const events = [];
+
+      for (const ev of raw) {
+        events.push({
+          name: ev.event.summary,
+          start: new Date(ev.date.toDate()),
+          timed: true,
+          id: ev.id,
+        });
+      }
+      return events;
+    },
 
     selectedEvent() {
       const matches = this.jCalData.filter(x => x.id === this.event);
@@ -166,6 +170,10 @@ export default {
       'getCalendar',
       'getRooms',
     ]),
+
+    showEvent({ event }) {
+      this.event = event.id;
+    },
 
     normalizeRoom(s) {
       if (s === 'room0') return 'Room 0';
