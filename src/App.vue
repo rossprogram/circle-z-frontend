@@ -13,9 +13,35 @@
              text
 	     >Log In</v-btn>
 
-      <v-btn text to="/calendar/"  v-if="profile">
-	Calendar
-      </v-btn>
+
+      <v-menu v-if="profile"
+        offset-y transition="slide-y-transition"
+      >
+        <template v-slot:activator="{ on }">
+          <v-btn
+	    text
+            v-on="on"
+	    v-text="'Calendar'"
+            >
+            <v-icon>account</v-icon>
+          </v-btn>
+        </template>
+
+	<v-list>
+        <v-list-item to="/">
+	  <v-list-item-icon><v-icon>mdi-bullhorn</v-icon></v-list-item-icon>
+          <v-list-item-title>Announcements</v-list-item-title>
+        </v-list-item>
+        <v-list-item to="/calendar/">
+	  <v-list-item-icon><v-icon>mdi-calendar</v-icon></v-list-item-icon>
+          <v-list-item-title>Calendar</v-list-item-title>
+        </v-list-item>
+        <v-list-item href="https://calendar.google.com/calendar/ical/qahdd4ntr7vv59k4sp715bqq6k%40group.calendar.google.com/private-dc65e074a46a31d7495a8ecd87636653/basic.ics">
+	  <v-list-item-icon><v-icon>mdi-google</v-icon></v-list-item-icon>
+          <v-list-item-title>Google Calendar</v-list-item-title>
+        </v-list-item>
+	</v-list>
+      </v-menu>
 
       <v-menu v-if="profile"
         offset-y transition="slide-y-transition"
