@@ -73,6 +73,7 @@
 	    <v-btn
 	      v-if="roomTopics[selectedEvent.event.location]"
 	      text
+        target="_blank"
 	      :href="`https://rossprogram-org.zoom.us/j/${roomTopics[selectedEvent.event.location].meetingId}`"
 	      color="primary"
 	      >
