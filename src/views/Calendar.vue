@@ -4,7 +4,8 @@
     <v-row style="height: 100%;width: 100%">
 
       <v-col style="height: calc(100vh - 104px);overflow-y:scroll" :cols="selectedEvent? 9: 12">
-        <v-calendar event-height="40" @click:event="showEvent"  style="height: 100%" short-weekdays type="week" :events="calendarEvents">
+        <v-toolbar></v-toolbar>
+        <v-calendar event-height="40" @click:event="showEvent"  style="height: calc(100% - 48px)" short-weekdays type="week" :events="calendarEvents">
         </v-calendar>
       </v-col>
       <v-col style="height: calc(100vh - 104px);position:sticky;top:0" v-if="selectedEvent" cols="3">
@@ -63,6 +64,7 @@
             <v-btn
               v-if="roomTopics[selectedEvent.event.location]"
               text
+              target="_blank"
               :href="`https://rossprogram-org.zoom.us/j/${roomTopics[selectedEvent.event.location].meetingId}`"
               color="primary"
             >
