@@ -20,7 +20,7 @@
 
     <v-col cols="12" v-if="selectedEvent"><v-card>
 	<v-card-title>{{selectedEvent.event.summary}}</v-card-title>
-	<v-card-subtitle>{{ selectedEvent.date | moment('MMMM Do YYYY, h:mma Z') }}</v-card-subtitle>
+	<v-card-subtitle>{{ selectedEvent.date | moment('MMMM Do YYYY, h:mma Z') }}, which is maybe {{ selectedEvent.date | moment("from", "now") }}</v-card-subtitle>
 	<v-card-text>
 
 
@@ -102,11 +102,13 @@ export default {
       const comp = new ICAL.Component(jcalData);
       const subcomps = comp.getAllSubcomponents('vevent');
 
+      const vtimezone = comp.getFirstSubcomponent('vtimezone');
+
       const nextWeek = ICAL.Time.now();
       nextWeek.addDuration(new ICAL.Duration({ weeks: 3 }));
 
       const aBitAgo = ICAL.Time.now();
-      nextWeek.addDuration(new ICAL.Duration({ hours: -1 }));
+      nextWeek.addDuration(new ICAL.Duration({ hours: -6 }));
 
       const events = [];
       window.events = [];
@@ -124,12 +126,16 @@ export default {
 	    }
 	    if (date.compare(aBitAgo) >= 0) {
 	      const id = `${event.uid }-${ date.toString()}`;
+	      date.zone = new ICAL.Timezone(vtimezone);
+	      date.addDuration(new ICAL.Duration({ hours: 0 }));
 	      const correctedDate = moment(date.toJSDate());
 	      events.push({ id, date: correctedDate, event });
 	    }
 	  }
 	} else if (event.startDate.compare(aBitAgo) >= 0) {
-	  const correctedDate =	moment(event.startDate.toJSDate());
+	  event.startDate.zone = new ICAL.Timezone(vtimezone);
+	  event.startDate.addDuration(new ICAL.Duration({ hours: 0 }));
+	  const correctedDate = moment(event.startDate.toJSDate());
 	  events.push({ id: event.uid, date: correctedDate, event });
 	}
       }
