@@ -52,13 +52,13 @@ export default {
     ]),
 
     handleMessage(message) {
+      if (message.ping) return;
       if (message.video) this.id = message.video;
       if (message.time) {
 	this.$refs.video.currentTime(message.time);
 	if (message.playing) this.$refs.video.play();
 	if (message.pause) this.$refs.video.pause();
       }
-      // console.warn('Received:', message);
     },
   },
 
@@ -70,23 +70,12 @@ export default {
       polyfill: true,
     });
 
-    // Catch any errors (ie. lost connections, etc.)
-    // sseClient.on('error', (e) => {
-      // console.error('lost connection or failed to parse!', e);
-  // });
-
     // Handle messages without a specific event
     sseClient.on('message', this.handleMessage);
 
     sseClient.connect()
       .then(() => {
-        // console.log('We\'re connected!');
       });
-      // .catch((err) => {
-        // When this error is caught, it means the initial connection to the
-        // events server failed.  No automatic attempts to reconnect will be made.
-        // console.error('Failed to connect to server', err);
-    // });
 
     return this.getVideos();
   },

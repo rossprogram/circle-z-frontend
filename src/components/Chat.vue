@@ -83,6 +83,8 @@ export default {
     ]),
 
     handleMessage(message) {
+      if (message.ping) return;
+
       this.messages.push(message);
 
       if (!this.open) {
