@@ -17,6 +17,20 @@
               :style="{ top: nowY }"
             ></div>
           </template>
+          <template v-slot:event="{event, eventSummary}">
+            <v-tooltip top >
+              <span v-html="eventSummary()"></span>
+              <template v-slot:activator="{ on }">
+
+                <v-sheet
+                  color="primary"
+                  class="white--text pa-1" v-on="on"
+                >
+                  <span v-html="eventSummary()"></span>
+                </v-sheet>
+              </template>
+            </v-tooltip>
+          </template>
         </v-calendar>
       </v-col>
       <v-col style="height: calc(100vh - 104px);position:sticky;top:0" v-if="selectedEvent" cols="3">
