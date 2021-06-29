@@ -129,7 +129,7 @@ export default {
       const nextWeek = ICAL.Time.now();
       nextWeek.addDuration(new ICAL.Duration({ weeks: 3 }));
 
-      const aBitAgo = ICAL.Time.now();
+      // const aBitAgo = ICAL.Time.now();
       nextWeek.addDuration(new ICAL.Duration({ hours: -6 }));
 
       const events = [];
@@ -154,7 +154,7 @@ export default {
 	      events.push({ id, date: correctedDate, event });
 	    // }
 	  }
-	} else if (event.startDate.compare(aBitAgo) >= 0) {
+	} else { // if (event.startDate.compare(aBitAgo) >= 0) {
 	  event.startDate.zone = new ICAL.Timezone(vtimezone);
 	  event.startDate.addDuration(new ICAL.Duration({ hours: 0 }));
 	  const correctedDate = moment(event.startDate.toJSDate());
@@ -163,13 +163,18 @@ export default {
       }
 
       events.sort((a, b) => a.date.diff(b.date));
-
+      const localOffset = -((new Date()).getTimezoneOffset());
+      const easternOffset = 240;
+      const netOffset = easternOffset + localOffset;
+      for (const ev of events) {
+        ev.date.add(netOffset, 'minutes');
+      }
       return events;
     },
     calendarEvents() {
       const raw = this.jCalData;
       const events = [];
-
+        // add these many minutes to any time
       for (const ev of raw) {
         events.push({
           name: ev.event.summary,
