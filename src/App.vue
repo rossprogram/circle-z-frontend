@@ -36,7 +36,7 @@
 	  <v-list-item-icon><v-icon>mdi-calendar</v-icon></v-list-item-icon>
           <v-list-item-title>Calendar</v-list-item-title>
         </v-list-item>
-        <v-list-item href="https://calendar.google.com/calendar/ical/qahdd4ntr7vv59k4sp715bqq6k%40group.calendar.google.com/private-dc65e074a46a31d7495a8ecd87636653/basic.ics">
+        <v-list-item target="_blank" href="https://calendar.google.com/calendar/ical/qahdd4ntr7vv59k4sp715bqq6k%40group.calendar.google.com/private-dc65e074a46a31d7495a8ecd87636653/basic.ics">
 	  <v-list-item-icon><v-icon>mdi-google</v-icon></v-list-item-icon>
           <v-list-item-title>Google Calendar</v-list-item-title>
         </v-list-item>
@@ -168,7 +168,7 @@
 	      <v-list-item-icon><v-icon>mdi-account-check</v-icon></v-list-item-icon>
             <v-list-item-title>Reports</v-list-item-title>
           </v-list-item>
-          <v-list-item href="https://store.rossprogram.org/collections/all">
+          <v-list-item target="_blank" href="https://store.rossprogram.org/collections/all">
 	      <v-list-item-icon><v-icon>mdi-tshirt-crew</v-icon></v-list-item-icon>
             <v-list-item-title>Merchandise</v-list-item-title>
           </v-list-item>
