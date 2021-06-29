@@ -137,10 +137,14 @@ export default {
 
       for (const v of subcomps) {
 	const event = new ICAL.Event(v);
+	const localOffset = -((new Date()).getTimezoneOffset());
+  const easternOffset = 240;
+  const netOffset = easternOffset + localOffset;
 	if (event.isRecurring()) {
 	  // next is always an ICAL.Time or null
 	  const i = event.iterator();
 	  let date;
+    event.startDate.zone = new ICAL.Timezone(vtimezone);
 	  for (;;) {
 	    date = i.next();
 	    if ((date === undefined) || (date.compare(nextWeek) > 0)) {
@@ -149,16 +153,12 @@ export default {
 	   // if (date.compare(aBitAgo) >= 0) {
 	      const id = `${event.uid }-${ date.toString()}`;
 	      date.zone = new ICAL.Timezone(vtimezone);
-	      date.addDuration(new ICAL.Duration({ hours: 0 }));
+	      date.addDuration(new ICAL.Duration({ hours: netOffset / 60 }));
 	      const correctedDate = moment(date.toJSDate());
 	      events.push({ id, date: correctedDate, event });
 	    // }
 	  }
 	} else { // if (event.startDate.compare(aBitAgo) >= 0) {
-	  event.startDate.zone = new ICAL.Timezone(vtimezone);
-    const localOffset = -((new Date()).getTimezoneOffset());
-    const easternOffset = 240;
-    const netOffset = easternOffset + localOffset;
 	  event.startDate.addDuration(new ICAL.Duration({ hours: netOffset / 60 }));
 	  const correctedDate = moment(event.startDate.toJSDate());
 	  events.push({ id: event.uid, date: correctedDate, event });
@@ -223,7 +223,6 @@ export default {
       'getRooms',
     ]),
     prev() {
-      console.log(this.$refs.calendar);
       this.$refs.calendar.prev();
       this.$refs.calendar.checkChange();
     },
