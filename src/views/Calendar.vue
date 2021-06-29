@@ -3,7 +3,7 @@
 
     <v-row style="height: 100%;width: 100%">
 
-      <v-col  style="height: calc(100vh - 104px);overflow-y:scroll;padding:0!important" :cols="selectedEvent? 9: 12">
+      <v-col  style="height: calc(100vh - 104px);overflow-y:scroll;padding:0!important" :cols="9">
         <v-toolbar flat>
           <v-btn class="ml-auto" @click="prev" icon><v-icon>mdi-chevron-left</v-icon></v-btn>
           <v-btn class="mx-3" @click="calendarValue=''" outlined text>Today</v-btn>
@@ -33,8 +33,8 @@
           </template>
         </v-calendar>
       </v-col>
-      <v-col style="height: calc(100vh - 104px);position:sticky;top:0" v-if="selectedEvent" cols="3">
-        <v-card>
+      <v-col style="height: calc(100vh - 104px);position:sticky;top:0"  cols="3">
+        <v-card  v-if="selectedEvent">
           <v-card-title>{{selectedEvent.event.summary}}</v-card-title>
           <v-card-subtitle>{{ selectedEvent.date | moment('MMMM Do YYYY, h:mma Z') }}, which is maybe {{ selectedEvent.date | moment("from", "now") }}</v-card-subtitle>
           <v-card-text>
@@ -96,6 +96,11 @@
               Go To {{normalizeRoom(selectedEvent.event.location)}}
             </v-btn>
           </v-card-actions>
+        </v-card>
+        <v-card flat v-else>
+          <v-card-title>
+            Click an event for more information.
+          </v-card-title>
         </v-card>
 
       </v-col>
