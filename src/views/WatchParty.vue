@@ -1,14 +1,7 @@
 <template>
 <v-container fluid fill-height>
-  <video-player v-if="id"
-    :src="`https://d2vkw31bv9q4du.cloudfront.net/${id}.m3u8`"
-    type="application/x-mpegURL" :options="videoOptions"
-    ref="video"
-		/>
-  <v-row v-else>
-    <v-progress-circular indeterminate loading></v-progress-circular>
-    <h1 class="mx-6">Waiting for convener to choose a video&hellip;</h1>
-    </v-row>
+  <video-player :src="`https://d2vkw31bv9q4du.cloudfront.net/${id}.m3u8`" @hook:mounted="setupVideo" type="application/x-mpegURL" :options="videoOptions" ref="video"/>
+  <span v-if="convener">This watch party was convened by <person :userId="convener"/></span>
 </v-container>
 </template>
 
@@ -38,6 +31,7 @@ export default {
   data() {
     return {
       id: undefined,
+      convener: undefined,
       videoOptions: {
         autoplay: true,
         controls: true,
@@ -51,32 +45,48 @@ export default {
       'getVideos',
     ]),
 
+    setupVideo() {
+      sseClient = this.$sse.create({
+	url: `${process.env.VUE_APP_API_URL }/watch-party`,
+	format: 'json',
+	withCredentials: true,
+	polyfill: true,
+      });
+
+      // Handle messages without a specific event
+      sseClient.on('message', this.handleMessage);
+
+      sseClient.connect()
+	.then(() => {
+	});
+    },
+
     handleMessage(message) {
-      if (message.ping) return;
-      if (message.video) this.id = message.video;
-      if (message.time) {
-	this.$refs.video.currentTime(message.time);
-	if (message.playing) this.$refs.video.play();
-	if (message.pause) this.$refs.video.pause();
+      console.log(message);
+      if (message) {
+	if (message.convener) this.convener = message.convener;
+
+	if (message.ping) return;
+
+	if (message.video) {
+	  this.id = message.video;
+
+	  this.$refs.video.player.ready(() => {
+	    if (message.time) {
+	      if (this.$refs.video) {
+		this.$refs.video.currentTime(message.time);
+		if (message.playing) this.$refs.video.play();
+		if (message.pause) this.$refs.video.player.pause();
+		if (message.playbackRate) this.$refs.video.player.playbackRate(message.playbackRate);
+	      }
+	    }
+	  });
+	}
       }
     },
   },
 
   mounted() {
-    sseClient = this.$sse.create({
-      url: `${process.env.VUE_APP_API_URL }/watch-party`,
-      format: 'json',
-      withCredentials: true,
-      polyfill: true,
-    });
-
-    // Handle messages without a specific event
-    sseClient.on('message', this.handleMessage);
-
-    sseClient.connect()
-      .then(() => {
-      });
-
     return this.getVideos();
   },
 

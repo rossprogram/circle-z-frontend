@@ -84,10 +84,10 @@ export default {
 	    .map(id => this.users[id].meetingId)
 	    .filter(id => (id !== undefined) && (id !== 'undefined'));
 
-
 	const result = [...new Set(matchingRooms.concat(matchingPeople))];
 	return result;
       }
+
       return Object.keys(this.rooms);
     },
 

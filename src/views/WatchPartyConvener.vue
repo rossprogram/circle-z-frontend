@@ -3,7 +3,7 @@
   <video-player
     :src="`https://d2vkw31bv9q4du.cloudfront.net/${id}.m3u8`"
     type="application/x-mpegURL" :options="videoOptions"
-    @playing="playing" @pause="pause" ref="video"
+    @playing="playing" @pause="pause" @ratechange="ratechange" ref="video"
     />
 </v-container>
 </template>
@@ -21,7 +21,7 @@ axios.defaults.baseURL = process.env.VUE_APP_API_URL || '';
 
 export default {
   computed: {
-    ...mapState(['videos']),
+    ...mapState(['profile', 'videos']),
 
     video() {
       for (const folder of this.videos) {
@@ -52,11 +52,21 @@ export default {
     ]),
 
     playing(time) {
-      axios.put('/watch-party', { video: this.id, time, playing: true });
+      axios.put('/watch-party', {
+	convener: this.profile.id, video: this.id, time, playing: true,
+      });
+    },
+
+    ratechange(time, playbackRate) {
+      axios.put('/watch-party', {
+	convener: this.profile.id, video: this.id, time, playbackRate,
+      });
     },
 
     pause(time) {
-      axios.put('/watch-party', { video: this.id, time, pause: true });
+      axios.put('/watch-party', {
+	convener: this.profile.id, video: this.id, time, pause: true,
+      });
     },
   },
 
@@ -65,7 +75,7 @@ export default {
     next((vm) => {
       if (to.params.id) {
 	vm.id = to.params.id;
-	axios.put('/watch-party', { video: vm.id });
+	axios.put('/watch-party', { video: vm.id, convener: vm.profile.id });
       } else vm.id = undefined;
     });
   },
@@ -73,7 +83,7 @@ export default {
   beforeRouteUpdate(to, from, next) {
     if (to.params.id) {
       this.id = to.params.id;
-      axios.put('/watch-party', { video: this.id });
+      axios.put('/watch-party', { video: this.id, convener: this.profile.id });
     } else this.id = undefined;
 
     next();
@@ -86,7 +96,7 @@ export default {
       this.id = undefined;
     }
 
-    axios.put('/watch-party', { video: this.id });
+    axios.put('/watch-party', { video: this.id, convener: this.profile.id });
 
     return this.getVideos();
   },
