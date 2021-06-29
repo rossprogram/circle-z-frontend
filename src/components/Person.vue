@@ -6,7 +6,7 @@
     v-bind="attrs"
           v-on="on"
             icon
-	    :to="`/users/${user.id}`"
+	    :to="`/users/${userId}`"
 	    x-large
             >
 	    <v-badge
@@ -78,7 +78,8 @@ export default {
     ...mapState(['users', 'userImages', 'availableForChat']),
 
     user() {
-      return this.users[this.userId];
+      if (this.users[this.userId]) return this.users[this.userId];
+      return {};
     },
 
     userImage() {

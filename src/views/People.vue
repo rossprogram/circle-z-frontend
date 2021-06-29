@@ -45,7 +45,7 @@
 
 	    <v-list one-line>
 
-	      <v-list-item v-if="users[id].availableForChat || users[id].meetingId">
+	      <v-list-item v-if="users[id].availableForChat || (users[id].meetingId && rooms[users[id].meetingId].isActive)">
 		<v-list-item-icon>
 		  <v-icon>
 		    mdi-lan-connect
@@ -67,9 +67,18 @@
 		  </v-icon>
 		</v-list-item-icon>
 
-		<v-list-item-content>
+		<v-list-item-content v-if="rooms[users[id].meetingId].isActive">
 		  <v-list-item-title>
 		    {{ users[id].meetingJoinTime | moment("from", "now") }} entered
+		    <a :href="`https://rossprogram-org.zoom.us/j/${users[id].meetingId}`">
+		      {{ rooms[users[id].meetingId].topic }}
+		    </a>
+		  </v-list-item-title>
+		</v-list-item-content>
+
+		<v-list-item-content v-else>
+		  <v-list-item-title>
+		    {{ users[id].meetingJoinTime | moment("from", "now") }} had been in
 		    <a :href="`https://rossprogram-org.zoom.us/j/${users[id].meetingId}`">
 		      {{ rooms[users[id].meetingId].topic }}
 		    </a>

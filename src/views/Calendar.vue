@@ -150,18 +150,44 @@ export default {
 	    if ((date === undefined) || (date.compare(nextWeek) > 0)) {
 	      break;
 	    }
-	   // if (date.compare(aBitAgo) >= 0) {
-	      const id = `${event.uid }-${ date.toString()}`;
+	    const id = `${event.uid }-${ date.toString()}`;
+
+	    if (date.zone === 'floating') {
 	      date.zone = new ICAL.Timezone(vtimezone);
 	      date.addDuration(new ICAL.Duration({ hours: netOffset / 60 }));
-	      const correctedDate = moment(date.toJSDate());
-	      events.push({ id, date: correctedDate, event });
-	    // }
+	    }
+
+	    const correctedDate = moment(date.toJSDate());
+	    // const correctedEndDate = moment(date.addDuration(event.duration).toJSDate());
+	    date.addDuration(event.duration);
+	    const correctedEndDate = moment(date.toJSDate());
+
+	    events.push({
+	      id,
+	      date: correctedDate,
+	      endDate: correctedEndDate,
+	      event,
+	    });
 	  }
-	} else { // if (event.startDate.compare(aBitAgo) >= 0) {
-	  event.startDate.addDuration(new ICAL.Duration({ hours: netOffset / 60 }));
+	} else if (event.startDate.compare(aBitAgo) >= 0) {
+	  if (event.startDate.zone === 'floating') {
+	    event.startDate.zone = new ICAL.Timezone(vtimezone);
+	    event.startDate.addDuration(new ICAL.Duration({ hours: netOffset / 60 }));
+	  }
 	  const correctedDate = moment(event.startDate.toJSDate());
-	  events.push({ id: event.uid, date: correctedDate, event });
+
+	  if (event.endDate.zone === 'floating') {
+	    event.endDate.zone = new ICAL.Timezone(vtimezone);
+	    event.endDate.addDuration(new ICAL.Duration({ hours: netOffset / 60 }));
+	  }
+	  const correctedEndDate = moment(event.endDate.toJSDate());
+
+	  events.push({
+	    id: event.uid,
+	    date: correctedDate,
+	    endDate: correctedEndDate,
+	    event,
+	  });
 	}
       }
 
@@ -174,11 +200,10 @@ export default {
       const events = [];
         // add these many minutes to any time
       for (const ev of raw) {
-        const evDateClone = ev.date.clone();
         events.push({
           name: ev.event.summary,
           start: new Date(ev.date.toDate()),
-          end: new Date(evDateClone.add(1, 'hours').toDate()), // because every class runs about an hour ¯\_(ツ)_/¯
+          end: new Date(ev.endDate.toDate()),
           timed: true,
           id: ev.id,
         });

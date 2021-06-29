@@ -1,5 +1,5 @@
 <template>
-<video disablepictureinpicture ref="videoPlayer" class="video-js"
+<video disablepictureinpicture autoplay ref="videoPlayer" class="video-js"
        ></video>
 </template>
 
@@ -73,6 +73,7 @@ export default {
     // , this.player.currentTime())
     this.player.on('playing', () => this.$emit('playing', this.player.currentTime()));
     this.player.on('pause', () => this.$emit('pause', this.player.currentTime()));
+    this.player.on('ratechange', () => this.$emit('ratechange', this.player.currentTime(), this.player.playbackRate()));
   },
   beforeDestroy() {
     if (this.player) {

@@ -16,10 +16,11 @@
 	</v-card-title>
 	<v-card-subtitle v-if="!rooms[meetingId].isActive">Meeting ended {{ rooms[meetingId].endTime | moment('from', 'now') }}.</v-card-subtitle>
 	<v-card-subtitle v-if="rooms[meetingId].isActive">Meeting started {{ rooms[meetingId].startTime | moment('from', 'now') }}.</v-card-subtitle>
-	<v-card-text v-if="roomUsers[meetingId] && (roomUsers[meetingId].length == 1)">{{ roomUsers[meetingId].length }} person in the room.</v-card-text>
-	<v-card-text v-else-if="roomUsers[meetingId] && (roomUsers[meetingId].length >= 0)">{{ roomUsers[meetingId].length }} people in the room.</v-card-text>
+
+	<v-card-text v-if="rooms[meetingId].isActive && roomUsers[meetingId] && (roomUsers[meetingId].length == 1)">{{ roomUsers[meetingId].length }} person in the room.</v-card-text>
+	<v-card-text v-else-if="rooms[meetingId].isActive && roomUsers[meetingId] && (roomUsers[meetingId].length >= 0)">{{ roomUsers[meetingId].length }} people in the room.</v-card-text>
 	<v-card-text v-else>Room is empty.</v-card-text>
-	<v-list-item two-line v-for="id in (roomUsers[meetingId] ? (showMore[meetingId] ? roomUsers[meetingId] : roomUsers[meetingId].slice(0,10)) : [])"
+	<v-list-item two-line v-for="id in (rooms[meetingId].isActive ? (roomUsers[meetingId] ? (showMore[meetingId] ? roomUsers[meetingId] : roomUsers[meetingId].slice(0,10)) : []) : [])"
 		     :to="'/users/' + id"
 		     :key="id">
 	  <v-list-item-content>
@@ -83,10 +84,10 @@ export default {
 	    .map(id => this.users[id].meetingId)
 	    .filter(id => (id !== undefined) && (id !== 'undefined'));
 
-
 	const result = [...new Set(matchingRooms.concat(matchingPeople))];
 	return result;
       }
+
       return Object.keys(this.rooms);
     },
 
