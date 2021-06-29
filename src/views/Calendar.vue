@@ -219,7 +219,6 @@ export default {
       'getRooms',
     ]),
     prev() {
-      console.log(this.$refs.calendar);
       this.$refs.calendar.prev();
       this.$refs.calendar.checkChange();
     },
