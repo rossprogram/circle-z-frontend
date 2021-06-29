@@ -4,8 +4,12 @@
     <v-row style="height: 100%;width: 100%">
 
       <v-col style="height: calc(100vh - 104px);overflow-y:scroll" :cols="selectedEvent? 9: 12">
-        <v-toolbar></v-toolbar>
-        <v-calendar event-height="40" @click:event="showEvent"  style="height: calc(100% - 48px)" short-weekdays type="week" :events="calendarEvents">
+        <v-toolbar flat>
+          <v-btn class="ml-auto" @click="prev" icon><v-icon>mdi-chevron-left</v-icon></v-btn>
+          <v-btn outlined text>Today</v-btn>
+          <v-btn class="mr-auto" @click="next" icon><v-icon>mdi-chevron-right</v-icon></v-btn>
+        </v-toolbar>
+        <v-calendar v-model="calendarValue" ref="calendar" :first-interval="earliestTimePadded" @click:event="showEvent"  style="height: calc(100% - 48px)" short-weekdays type="week" :events="calendarEvents">
         </v-calendar>
       </v-col>
       <v-col style="height: calc(100vh - 104px);position:sticky;top:0" v-if="selectedEvent" cols="3">
@@ -144,13 +148,21 @@ export default {
         events.push({
           name: ev.event.summary,
           start: new Date(ev.date.toDate()),
+          end: new Date(ev.date.add(1, 'hours').toDate()), // because every class runs about an hour ¯\_(ツ)_/¯
           timed: true,
           id: ev.id,
         });
       }
       return events;
     },
-
+    earliestTimePadded() {
+      let earliest = 12;
+      for (const event of this.calendarEvents) {
+        const hour = event.start.getHours();
+        earliest = Math.min(earliest, hour);
+      }
+      return earliest - 1; // subtract one for padding
+    },
     selectedEvent() {
       const matches = this.jCalData.filter(x => x.id === this.event);
 
@@ -164,6 +176,7 @@ export default {
     return {
       event: '',
       key: 1,
+      calendarValue: '',
     };
   },
 
@@ -172,7 +185,14 @@ export default {
       'getCalendar',
       'getRooms',
     ]),
-
+    prev() {
+      console.log(this.$refs.calendar);
+      this.$refs.calendar.prev();
+      this.$refs.calendar.checkChange();
+    },
+    next() {
+      this.$refs.calendar.next();
+    },
     showEvent({ event }) {
       this.event = event.id;
     },
