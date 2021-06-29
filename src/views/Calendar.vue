@@ -3,13 +3,20 @@
 
     <v-row style="height: 100%;width: 100%">
 
-      <v-col style="height: calc(100vh - 104px);overflow-y:scroll" :cols="selectedEvent? 9: 12">
+      <v-col  style="height: calc(100vh - 104px);overflow-y:scroll;padding:0!important" :cols="selectedEvent? 9: 12">
         <v-toolbar flat>
           <v-btn class="ml-auto" @click="prev" icon><v-icon>mdi-chevron-left</v-icon></v-btn>
           <v-btn @click="calendarValue=''" outlined text>Today</v-btn>
           <v-btn class="mr-auto" @click="next" icon><v-icon>mdi-chevron-right</v-icon></v-btn>
         </v-toolbar>
-        <v-calendar v-model="calendarValue" ref="calendar" :first-interval="earliestTimePadded" @click:event="showEvent"  style="height: calc(100% - 48px)" short-weekdays type="week" :events="calendarEvents">
+        <v-calendar  color="primary" v-model="calendarValue" ref="calendar" :first-interval="earliestTimePadded" @click:event="showEvent"  style="height: calc(100% - 64px);overflow-y: hidden" short-weekdays type="week" :events="calendarEvents">
+          <template v-slot:day-body="{ date, week }">
+            <div
+              class="v-current-time"
+              :class="{ first: date === week[0].date }"
+              :style="{ top: nowY }"
+            ></div>
+          </template>
         </v-calendar>
       </v-col>
       <v-col style="height: calc(100vh - 104px);position:sticky;top:0" v-if="selectedEvent" cols="3">
@@ -170,6 +177,12 @@ export default {
 
       return undefined;
     },
+    cal() {
+      return this.ready ? this.$refs.calendar : null;
+    },
+    nowY() {
+      return this.cal ? `${this.cal.timeToY(this.cal.times.now) }px` : '-10px';
+    },
   },
 
   data() {
@@ -177,6 +190,7 @@ export default {
       event: '',
       key: 1,
       calendarValue: '',
+      ready: false,
     };
   },
 
@@ -195,6 +209,19 @@ export default {
     },
     showEvent({ event }) {
       this.event = event.id;
+    },
+    getCurrentTime() {
+      return this.cal ? this.cal.times.now.hour * 60 + this.cal.times.now.minute : 0;
+    },
+    scrollToTime() {
+      const time = this.getCurrentTime();
+      const first = Math.max(0, time - (time % 30) - 30);
+
+      this.cal.scrollToTime(first);
+    },
+    updateTime() {
+      // update the bar every second
+      setInterval(() => this.cal.updateTimes(), 60 * 1000);
     },
 
     normalizeRoom(s) {
@@ -236,8 +263,31 @@ export default {
     }
 
     this.getRooms();
+    this.ready = true;
+    this.scrollToTime();
+    this.updateTime();
     return this.getCalendar();
   },
 
 };
 </script>
+<style>
+.v-current-time {
+  height: 2px;
+  background-color: #ea4335;
+  position: absolute;
+  left: -1px;
+  right: 0;
+  pointer-events: none;
+}
+.v-current-time.first::before {
+  content: '';
+  position: absolute;
+  background-color: #ea4335;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-top: -5px;
+  margin-left: -6.5px;
+}
+</style>
