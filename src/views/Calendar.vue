@@ -1,90 +1,111 @@
 <template>
-<v-container fluid fill-height>
+<div style="height: 100%;width: 100%" >
 
-    <v-navigation-drawer app permanent>
-	<v-list-item two-line v-for="item in jCalData"
-		     :to="'/calendar/' + item.id"
-		     :key="item.id">
-	  <v-list-item-content>
-            <v-list-item-title>
-	      {{ item.event.summary }}
-	    </v-list-item-title>
-	    <v-list-item-subtitle>
-	      {{ item.date | moment('MMMM Do YYYY, h:mma Z') }}
-	      {{ item.date | moment("from", "now") }}
-	    </v-list-item-subtitle>
-	  </v-list-item-content>
-	</v-list-item>
-    </v-navigation-drawer>
-    <v-row>
+    <v-row style="height: 100%;width: 100%">
 
-    <v-col cols="12" v-if="selectedEvent"><v-card>
-	<v-card-title>{{selectedEvent.event.summary}}</v-card-title>
-	<v-card-subtitle>{{ selectedEvent.date | moment('MMMM Do YYYY, h:mma Z') }}, which is maybe {{ selectedEvent.date | moment("from", "now") }}</v-card-subtitle>
-	<v-card-text>
+      <v-col  style="height: calc(100vh - 104px);overflow-y:scroll;padding:0!important" :cols="9">
+        <v-toolbar flat>
+          <v-btn class="ml-auto" @click="prev" icon><v-icon>mdi-chevron-left</v-icon></v-btn>
+          <v-btn class="mx-3" @click="calendarValue=''" outlined text>Today</v-btn>
+          <v-btn class="mr-auto" @click="next" icon><v-icon>mdi-chevron-right</v-icon></v-btn>
+        </v-toolbar>
+        <v-calendar  color="primary" v-model="calendarValue" ref="calendar" :first-interval="earliestTimePadded" @click:event="showEvent"  style="height: calc(100% - 64px);overflow-y: hidden" short-weekdays type="week" :events="calendarEvents">
+          <template v-slot:day-body="{ date, week }">
+            <div
+              class="v-current-time"
+              :class="{ first: date === week[0].date }"
+              :style="{ top: nowY }"
+            ></div>
+          </template>
+          <template v-slot:event="{event, eventSummary}">
+            <v-tooltip top >
+              <span v-html="eventSummary()"></span>
+              <template v-slot:activator="{ on }">
+
+                <v-sheet
+                  color="primary"
+                  class="white--text pa-1" v-on="on"
+                >
+                  <span v-html="eventSummary()"></span>
+                </v-sheet>
+              </template>
+            </v-tooltip>
+          </template>
+        </v-calendar>
+      </v-col>
+      <v-col style="height: calc(100vh - 104px);position:sticky;top:0"  cols="3">
+        <v-card  v-if="selectedEvent">
+          <v-card-title>{{selectedEvent.event.summary}}</v-card-title>
+          <v-card-subtitle>{{ selectedEvent.date | moment('MMMM Do YYYY, h:mma Z') }}, which is maybe {{ selectedEvent.date | moment("from", "now") }}</v-card-subtitle>
+          <v-card-text>
 
 
-	</v-card-text>
-	<v-list one-line>
-	  <v-list-item v-if="selectedEvent.event.attendees.length > 0">
-            <v-list-item-icon class="my-8">
-              <v-icon v-if="selectedEvent.event.attendees.length > 1">
-		mdi-account-multiple
-              </v-icon>
-              <v-icon v-else>
-		mdi-account
-              </v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title>
+          </v-card-text>
+          <v-list one-line>
+            <v-list-item v-if="selectedEvent.event.attendees.length > 0">
+              <v-list-item-icon class="my-8">
+                <v-icon v-if="selectedEvent.event.attendees.length > 1">
+                  mdi-account-multiple
+                </v-icon>
+                <v-icon v-else>
+                  mdi-account
+                </v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title>
 		<span v-for="attendee in selectedEvent.event.attendees" :key="attendee.getParameter('cn')">
 		  <person :userId="emails[attendee.getParameter('cn')]"/>
 		</span>
-              </v-list-item-title>
-            </v-list-item-content>
-	  </v-list-item>
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
 
-	  <v-list-item>
-            <v-list-item-icon>
-              <v-icon>
-		mdi-clock
-              </v-icon>
-            </v-list-item-icon>
+            <v-list-item>
+              <v-list-item-icon>
+                <v-icon>
+                  mdi-clock
+                </v-icon>
+              </v-list-item-icon>
 
-            <v-list-item-content>
-              <v-list-item-title>{{ selectedEvent.date | moment('MMMM Do YYYY, h:mma Z') }}</v-list-item-title>
-            </v-list-item-content>
-	  </v-list-item>
+              <v-list-item-content>
+                <v-list-item-title>{{ selectedEvent.date | moment('MMMM Do YYYY, h:mma Z') }}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
 
-	  <v-list-item v-if="roomTopics[selectedEvent.event.location]">
-            <v-list-item-icon>
-              <v-icon>
-		mdi-map-marker
-              </v-icon>
-            </v-list-item-icon>
+            <v-list-item v-if="roomTopics[selectedEvent.event.location]">
+              <v-list-item-icon>
+                <v-icon>
+                  mdi-map-marker
+                </v-icon>
+              </v-list-item-icon>
 
-            <v-list-item-content>
-              <v-list-item-title>{{normalizeRoom(selectedEvent.event.location)}}</v-list-item-title>
-            </v-list-item-content>
-	  </v-list-item>
-	</v-list>
+              <v-list-item-content>
+                <v-list-item-title>{{normalizeRoom(selectedEvent.event.location)}}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
 
-	  <v-card-actions>
-	    <v-btn
-	      v-if="roomTopics[selectedEvent.event.location]"
-	      text
-        target="_blank"
-	      :href="`https://rossprogram-org.zoom.us/j/${roomTopics[selectedEvent.event.location].meetingId}`"
-	      color="primary"
-	      >
-	      Go To {{normalizeRoom(selectedEvent.event.location)}}
-	    </v-btn>
-	  </v-card-actions>
-    </v-card></v-col>
+          <v-card-actions>
+            <v-btn
+              v-if="roomTopics[selectedEvent.event.location]"
+              text
+              target="_blank"
+              :href="`https://rossprogram-org.zoom.us/j/${roomTopics[selectedEvent.event.location].meetingId}`"
+              color="primary"
+            >
+              Go To {{normalizeRoom(selectedEvent.event.location)}}
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+        <v-card flat v-else>
+          <v-card-title>
+            Click an event for more information.
+          </v-card-title>
+        </v-card>
 
-
+      </v-col>
   </v-row>
-</v-container>
+</div>
 </template>
 
 <script>
@@ -125,13 +146,13 @@ export default {
 	    if ((date === undefined) || (date.compare(nextWeek) > 0)) {
 	      break;
 	    }
-	    if (date.compare(aBitAgo) >= 0) {
+	   // if (date.compare(aBitAgo) >= 0) {
 	      const id = `${event.uid }-${ date.toString()}`;
 	      date.zone = new ICAL.Timezone(vtimezone);
 	      date.addDuration(new ICAL.Duration({ hours: 0 }));
 	      const correctedDate = moment(date.toJSDate());
 	      events.push({ id, date: correctedDate, event });
-	    }
+	    // }
 	  }
 	} else if (event.startDate.compare(aBitAgo) >= 0) {
 	  event.startDate.zone = new ICAL.Timezone(vtimezone);
@@ -145,7 +166,29 @@ export default {
 
       return events;
     },
+    calendarEvents() {
+      const raw = this.jCalData;
+      const events = [];
 
+      for (const ev of raw) {
+        events.push({
+          name: ev.event.summary,
+          start: new Date(ev.date.toDate()),
+          end: new Date(ev.date.add(1, 'hours').toDate()), // because every class runs about an hour ¯\_(ツ)_/¯
+          timed: true,
+          id: ev.id,
+        });
+      }
+      return events;
+    },
+    earliestTimePadded() {
+      let earliest = 12;
+      for (const event of this.calendarEvents) {
+        const hour = event.start.getHours();
+        earliest = Math.min(earliest, hour);
+      }
+      return earliest - 1; // subtract one for padding
+    },
     selectedEvent() {
       const matches = this.jCalData.filter(x => x.id === this.event);
 
@@ -153,12 +196,20 @@ export default {
 
       return undefined;
     },
+    cal() {
+      return this.ready ? this.$refs.calendar : null;
+    },
+    nowY() {
+      return this.cal ? `${this.cal.timeToY(this.cal.times.now) }px` : '-10px';
+    },
   },
 
   data() {
     return {
       event: '',
       key: 1,
+      calendarValue: '',
+      ready: false,
     };
   },
 
@@ -167,6 +218,30 @@ export default {
       'getCalendar',
       'getRooms',
     ]),
+    prev() {
+      console.log(this.$refs.calendar);
+      this.$refs.calendar.prev();
+      this.$refs.calendar.checkChange();
+    },
+    next() {
+      this.$refs.calendar.next();
+    },
+    showEvent({ event }) {
+      this.event = event.id;
+    },
+    getCurrentTime() {
+      return this.cal ? this.cal.times.now.hour * 60 + this.cal.times.now.minute : 0;
+    },
+    scrollToTime() {
+      const time = this.getCurrentTime();
+      const first = Math.max(0, time - (time % 30) - 30);
+
+      this.cal.scrollToTime(first);
+    },
+    updateTime() {
+      // update the bar every second
+      setInterval(() => this.cal.updateTimes(), 60 * 1000);
+    },
 
     normalizeRoom(s) {
       if (s === 'room0') return 'Room 0';
@@ -207,8 +282,31 @@ export default {
     }
 
     this.getRooms();
+    this.ready = true;
+    this.scrollToTime();
+    this.updateTime();
     return this.getCalendar();
   },
 
 };
 </script>
+<style>
+.v-current-time {
+  height: 2px;
+  background-color: #ea4335;
+  position: absolute;
+  left: -1px;
+  right: 0;
+  pointer-events: none;
+}
+.v-current-time.first::before {
+  content: '';
+  position: absolute;
+  background-color: #ea4335;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-top: -5px;
+  margin-left: -6.5px;
+}
+</style>
