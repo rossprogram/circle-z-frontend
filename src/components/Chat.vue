@@ -102,7 +102,13 @@ export default {
   },
 
   mounted() {
-   sseClient = this.$sse.create({
+    setInterval(() => {
+      axios.put('/ping', { date: Date.now() });
+    }, 60 * 1000);
+
+    axios.put('/ping', { date: Date.now() });
+
+    sseClient = this.$sse.create({
       url: `${process.env.VUE_APP_API_URL }/chat`,
       format: 'json',
       withCredentials: true,
