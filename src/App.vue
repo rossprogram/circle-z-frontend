@@ -124,6 +124,13 @@
 	    <v-list-item-icon><v-icon>mdi-bank</v-icon></v-list-item-icon>
             <v-list-item-title>Auditorium</v-list-item-title>
           </v-list-item>
+          <v-list-item
+	    v-if="profile.isStaff"
+	    target="_blank"
+	    href="https://rossprogram-org.zoom.us/j/94283884786">
+	    <v-list-item-icon><v-icon>mdi-pencil</v-icon></v-list-item-icon>
+            <v-list-item-title>Counselor Grading Room</v-list-item-title>
+          </v-list-item>
 	  <v-list-item >
             <v-list-item-title>Room
 	    <v-btn v-for="(id, index) in roomIds"
@@ -131,7 +138,7 @@
 		   target="_blank"
 		   :href="`https://rossprogram-org.zoom.us/j/${id}`"
 		   icon>
-	      <v-icon>mdi-numeric-{{ index + 1}}-box</v-icon>
+	      <v-icon>mdi-numeric-{{ index + 2}}-box</v-icon>
 	    </v-btn>
 	    </v-list-item-title>
 	  </v-list-item>
@@ -217,7 +224,6 @@ name: 'App',
     return {
       roomIds:
       [
-	'94283884786',
 	'96986251680',
 	'97595923102',
 	'95661678187',
