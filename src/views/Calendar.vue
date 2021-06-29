@@ -174,7 +174,7 @@ export default {
         events.push({
           name: ev.event.summary,
           start: new Date(ev.date.toDate()),
-          end: new Date(ev.date.add(1, 'hours').toDate()), // because every class runs about an hour ¯\_(ツ)_/¯
+          end: new Date(ev.date.clone().add(1, 'hours').toDate()), // because every class runs about an hour ¯\_(ツ)_/¯
           timed: true,
           id: ev.id,
         });
