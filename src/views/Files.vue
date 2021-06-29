@@ -28,6 +28,7 @@
 
 	<v-list-item two-line v-for="filename in matchedFiles"
 		     :key="filename"
+          target="_blank"
 		     :href="download(filename)">
 	  <v-list-item-icon><v-icon>mdi-file</v-icon></v-list-item-icon>
 	  <v-list-item-content>
