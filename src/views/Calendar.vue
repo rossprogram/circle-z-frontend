@@ -146,13 +146,13 @@ export default {
 	    if ((date === undefined) || (date.compare(nextWeek) > 0)) {
 	      break;
 	    }
-	    if (date.compare(aBitAgo) >= 0) {
+	   // if (date.compare(aBitAgo) >= 0) {
 	      const id = `${event.uid }-${ date.toString()}`;
 	      date.zone = new ICAL.Timezone(vtimezone);
 	      date.addDuration(new ICAL.Duration({ hours: 0 }));
 	      const correctedDate = moment(date.toJSDate());
 	      events.push({ id, date: correctedDate, event });
-	    }
+	    // }
 	  }
 	} else if (event.startDate.compare(aBitAgo) >= 0) {
 	  event.startDate.zone = new ICAL.Timezone(vtimezone);
