@@ -6,7 +6,7 @@
       <v-col  style="height: calc(100vh - 104px);overflow-y:scroll;padding:0!important" :cols="selectedEvent? 9: 12">
         <v-toolbar flat>
           <v-btn class="ml-auto" @click="prev" icon><v-icon>mdi-chevron-left</v-icon></v-btn>
-          <v-btn @click="calendarValue=''" outlined text>Today</v-btn>
+          <v-btn class="mx-3" @click="calendarValue=''" outlined text>Today</v-btn>
           <v-btn class="mr-auto" @click="next" icon><v-icon>mdi-chevron-right</v-icon></v-btn>
         </v-toolbar>
         <v-calendar  color="primary" v-model="calendarValue" ref="calendar" :first-interval="earliestTimePadded" @click:event="showEvent"  style="height: calc(100% - 64px);overflow-y: hidden" short-weekdays type="week" :events="calendarEvents">
