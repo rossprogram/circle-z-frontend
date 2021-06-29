@@ -156,19 +156,17 @@ export default {
 	  }
 	} else { // if (event.startDate.compare(aBitAgo) >= 0) {
 	  event.startDate.zone = new ICAL.Timezone(vtimezone);
-	  event.startDate.addDuration(new ICAL.Duration({ hours: 0 }));
+    const localOffset = -((new Date()).getTimezoneOffset());
+    const easternOffset = 240;
+    const netOffset = easternOffset + localOffset;
+	  event.startDate.addDuration(new ICAL.Duration({ hours: netOffset / 60 }));
 	  const correctedDate = moment(event.startDate.toJSDate());
 	  events.push({ id: event.uid, date: correctedDate, event });
 	}
       }
 
       events.sort((a, b) => a.date.diff(b.date));
-      const localOffset = -((new Date()).getTimezoneOffset());
-      const easternOffset = 240;
-      const netOffset = easternOffset + localOffset;
-      for (const ev of events) {
-        ev.date.add(netOffset, 'minutes');
-      }
+
       return events;
     },
     calendarEvents() {
@@ -176,10 +174,11 @@ export default {
       const events = [];
         // add these many minutes to any time
       for (const ev of raw) {
+        const evDateClone = ev.date.clone();
         events.push({
           name: ev.event.summary,
           start: new Date(ev.date.toDate()),
-          end: new Date(ev.date.add(1, 'hours').toDate()), // because every class runs about an hour ¯\_(ツ)_/¯
+          end: new Date(evDateClone.add(1, 'hours').toDate()), // because every class runs about an hour ¯\_(ツ)_/¯
           timed: true,
           id: ev.id,
         });
