@@ -147,7 +147,6 @@ export default {
 	    }
 	    const id = `${event.uid}-${ date.toString()}`;
 
-	    console.log(date);
 	    if (date.zone.tzid === 'floating') {
 	      date.zone = new ICAL.Timezone(vtimezone);
 	    }
