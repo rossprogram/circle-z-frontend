@@ -120,6 +120,9 @@ export default {
     jCalData() {
       if (this.calendar.length === 0) return [];
 
+      const localOffset = ((new Date()).getTimezoneOffset()); // UTC
+      const easternOffset = 240; // UTC, also Ross runs in summer always so no Daylight Savings
+      const netOffset = easternOffset - localOffset; // not UTC-specific
       const jcalData = ICAL.parse(this.calendar);
       const comp = new ICAL.Component(jcalData);
       const subcomps = comp.getAllSubcomponents('vevent');
@@ -136,10 +139,7 @@ export default {
       window.events = [];
 
       for (const v of subcomps) {
-	const event = new ICAL.Event(v);
-	const localOffset = -((new Date()).getTimezoneOffset());
-  const easternOffset = 240;
-  const netOffset = easternOffset + localOffset;
+	const event = new ICAL.Event(v);// this is correct
 	if (event.isRecurring()) {
 	  // next is always an ICAL.Time or null
 	  const i = event.iterator();
@@ -154,14 +154,15 @@ export default {
 
 	    if (date.zone === 'floating') {
 	      date.zone = new ICAL.Timezone(vtimezone);
-	      date.addDuration(new ICAL.Duration({ hours: netOffset / 60 }));
+	      date.addDuration(new ICAL.Duration({ hours: 0 }));
 	    }
 
 	    const correctedDate = moment(date.toJSDate());
 	    // const correctedEndDate = moment(date.addDuration(event.duration).toJSDate());
 	    date.addDuration(event.duration);
 	    const correctedEndDate = moment(date.toJSDate());
-
+      correctedDate.add(netOffset, 'minutes');
+      correctedEndDate.add(netOffset, 'minutes');
 	    events.push({
 	      id,
 	      date: correctedDate,
@@ -169,25 +170,27 @@ export default {
 	      event,
 	    });
 	  }
-	} else if (event.startDate.compare(aBitAgo) >= 0) {
-	  if (event.startDate.zone === 'floating') {
-	    event.startDate.zone = new ICAL.Timezone(vtimezone);
-	    event.startDate.addDuration(new ICAL.Duration({ hours: netOffset / 60 }));
-	  }
+	} else { // } if (event.startDate.compare(aBitAgo) >= 0) {
+	    if (event.startDate.zone === 'floating') {
+	      event.startDate.zone = new ICAL.Timezone(vtimezone);
+	      console.log(netOffset / 60);
+	      event.startDate.addDuration(new ICAL.Duration({ hours: 0 }));
+	   }
 	  const correctedDate = moment(event.startDate.toJSDate());
-
 	  if (event.endDate.zone === 'floating') {
 	    event.endDate.zone = new ICAL.Timezone(vtimezone);
-	    event.endDate.addDuration(new ICAL.Duration({ hours: netOffset / 60 }));
+	    event.endDate.addDuration(new ICAL.Duration({ hours: 0 }));
 	  }
 	  const correctedEndDate = moment(event.endDate.toJSDate());
-
+    correctedDate.add(netOffset, 'hours');
+    correctedEndDate.add(netOffset, 'hours');
 	  events.push({
 	    id: event.uid,
 	    date: correctedDate,
 	    endDate: correctedEndDate,
 	    event,
 	  });
+    console.log(event.summary, correctedDate);
 	}
       }
 
