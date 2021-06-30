@@ -181,8 +181,8 @@ export default {
 	    event.endDate.addDuration(new ICAL.Duration({ hours: 0 }));
 	  }
 	  const correctedEndDate = moment(event.endDate.toJSDate());
-    correctedDate.add(netOffset, 'hours');
-    correctedEndDate.add(netOffset, 'hours');
+    correctedDate.add(netOffset, 'minutes');
+    correctedEndDate.add(netOffset, 'minutes');
 	  events.push({
 	    id: event.uid,
 	    date: correctedDate,
