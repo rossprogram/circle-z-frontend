@@ -128,8 +128,20 @@
 	    v-if="profile.isStaff"
 	    target="_blank"
 	    href="https://rossprogram-org.zoom.us/j/94283884786">
-	    <v-list-item-icon><v-icon>mdi-pencil</v-icon></v-list-item-icon>
+	    <v-list-item-icon><v-icon>mdi-numeric-1-box</v-icon></v-list-item-icon>
             <v-list-item-title>Counselor Grading Room</v-list-item-title>
+          </v-list-item>
+          <v-list-item
+	    target="_blank"
+	    href="https://rossprogram-org.zoom.us/j/96986251680">
+	    <v-list-item-icon><v-icon>mdi-numeric-2-box</v-icon></v-list-item-icon>
+            <v-list-item-title>Camper Collaboration</v-list-item-title>
+          </v-list-item>
+          <v-list-item
+	    target="_blank"
+	    href="https://rossprogram-org.zoom.us/j/97595923102">
+	    <v-list-item-icon><v-icon>mdi-numeric-3-box</v-icon></v-list-item-icon>
+            <v-list-item-title>JC Room</v-list-item-title>
           </v-list-item>
 	  <v-list-item >
             <v-list-item-title>Room
@@ -138,7 +150,7 @@
 		   target="_blank"
 		   :href="`https://rossprogram-org.zoom.us/j/${id}`"
 		   icon>
-	      <v-icon>mdi-numeric-{{ index + 2}}-box</v-icon>
+	      <v-icon>mdi-numeric-{{ index + 4}}-box</v-icon>
 	    </v-btn>
 	    </v-list-item-title>
 	  </v-list-item>
@@ -224,8 +236,6 @@ name: 'App',
     return {
       roomIds:
       [
-	'96986251680',
-	'97595923102',
 	'95661678187',
 	'95145772227',
 	'95005886358',
