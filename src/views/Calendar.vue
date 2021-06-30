@@ -147,12 +147,16 @@ export default {
 	    }
 	    const id = `${event.uid}-${ date.toString()}`;
 
-	    if (date.zone === 'floating') {
+	    console.log(date);
+	    if (date.zone.tzid === 'floating') {
 	      date.zone = new ICAL.Timezone(vtimezone);
 	    }
+	    date.addDuration(new ICAL.Duration({ hours: 0 }));
 
 	    const correctedDate = moment(date.toJSDate());
+
 	    date.addDuration(event.duration);
+
 	    const correctedEndDate = moment(date.toJSDate());
 
 	    events.push({
@@ -163,15 +167,16 @@ export default {
 	    });
 	  }
 	} else {
-	  if (event.startDate.zone === 'floating') {
+	  if (event.startDate.zone.tzid === 'floating') {
 	    event.startDate.zone = new ICAL.Timezone(vtimezone);
 	  }
-
+	  event.startDate.addDuration(new ICAL.Duration({ hours: 0 }));
 	  const correctedDate = moment(event.startDate.toJSDate());
-	  if (event.endDate.zone === 'floating') {
+
+	  if (event.endDate.zone.tzid === 'floating') {
 	    event.endDate.zone = new ICAL.Timezone(vtimezone);
 	  }
-
+	  event.endDate.addDuration(new ICAL.Duration({ hours: 0 }));
 	  const correctedEndDate = moment(event.endDate.toJSDate());
 
 	  events.push({
