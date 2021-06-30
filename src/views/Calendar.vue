@@ -130,9 +130,8 @@ export default {
       const vtimezone = comp.getFirstSubcomponent('vtimezone');
 
       const nextWeek = ICAL.Time.now();
-      nextWeek.addDuration(new ICAL.Duration({ weeks: 3 }));
+      nextWeek.addDuration(new ICAL.Duration({ weeks: 6 }));
 
-      // const aBitAgo = ICAL.Time.now();
       nextWeek.addDuration(new ICAL.Duration({ hours: -6 }));
 
       const events = [];
@@ -144,13 +143,13 @@ export default {
 	  // next is always an ICAL.Time or null
 	  const i = event.iterator();
 	  let date;
-    event.startDate.zone = new ICAL.Timezone(vtimezone);
+	  event.startDate.zone = new ICAL.Timezone(vtimezone);
 	  for (;;) {
 	    date = i.next();
 	    if ((date === undefined) || (date.compare(nextWeek) > 0)) {
 	      break;
 	    }
-	    const id = `${event.uid }-${ date.toString()}`;
+	    const id = `${event.uid}-${ date.toString()}`;
 
 	    if (date.zone === 'floating') {
 	      date.zone = new ICAL.Timezone(vtimezone);
@@ -158,11 +157,10 @@ export default {
 	    }
 
 	    const correctedDate = moment(date.toJSDate());
-	    // const correctedEndDate = moment(date.addDuration(event.duration).toJSDate());
 	    date.addDuration(event.duration);
 	    const correctedEndDate = moment(date.toJSDate());
-      correctedDate.add(netOffset, 'minutes');
-      correctedEndDate.add(netOffset, 'minutes');
+	    correctedDate.add(netOffset, 'minutes');
+	    correctedEndDate.add(netOffset, 'minutes');
 	    events.push({
 	      id,
 	      date: correctedDate,
@@ -170,7 +168,7 @@ export default {
 	      event,
 	    });
 	  }
-	} else { // } if (event.startDate.compare(aBitAgo) >= 0) {
+	} else {
 	    if (event.startDate.zone === 'floating') {
 	      event.startDate.zone = new ICAL.Timezone(vtimezone);
 	      event.startDate.addDuration(new ICAL.Duration({ hours: 0 }));
@@ -181,8 +179,8 @@ export default {
 	    event.endDate.addDuration(new ICAL.Duration({ hours: 0 }));
 	  }
 	  const correctedEndDate = moment(event.endDate.toJSDate());
-    correctedDate.add(netOffset, 'minutes');
-    correctedEndDate.add(netOffset, 'minutes');
+	  correctedDate.add(netOffset, 'minutes');
+	  correctedEndDate.add(netOffset, 'minutes');
 	  events.push({
 	    id: event.uid,
 	    date: correctedDate,
