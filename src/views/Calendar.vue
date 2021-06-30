@@ -173,7 +173,6 @@ export default {
 	} else { // } if (event.startDate.compare(aBitAgo) >= 0) {
 	    if (event.startDate.zone === 'floating') {
 	      event.startDate.zone = new ICAL.Timezone(vtimezone);
-	      console.log(netOffset / 60);
 	      event.startDate.addDuration(new ICAL.Duration({ hours: 0 }));
 	   }
 	  const correctedDate = moment(event.startDate.toJSDate());
@@ -190,7 +189,6 @@ export default {
 	    endDate: correctedEndDate,
 	    event,
 	  });
-    console.log(event.summary, correctedDate);
 	}
       }
 
