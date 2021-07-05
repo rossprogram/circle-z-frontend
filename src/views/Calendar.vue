@@ -1,3 +1,4 @@
+
 <template>
 <div style="height: 100%;width: 100%" >
 
@@ -38,8 +39,8 @@
           <v-card-title>{{selectedEvent.event.summary}}</v-card-title>
           <v-card-subtitle>{{ selectedEvent.date | moment('MMMM Do YYYY, h:mma Z') }}, which is maybe {{ selectedEvent.date | moment("from", "now") }}</v-card-subtitle>
           <v-card-text>
-          <div :v-html="selectedEvent.event.description">
-          </div>
+	    <div v-html="selectedEvent.event.description">
+	    </div>
           </v-card-text>
           <v-list one-line>
             <v-list-item v-if="selectedEvent.event.attendees.length > 0">
