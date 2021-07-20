@@ -37,7 +37,7 @@
       <v-col style="height: calc(100vh - 104px);position:sticky;top:0"  cols="3">
         <v-card  v-if="selectedEvent">
           <v-card-title>{{selectedEvent.event.summary}}</v-card-title>
-          <v-card-subtitle>{{ selectedEvent.date | moment('MMMM Do YYYY, h:mma Z') }}, which is maybe {{ selectedEvent.date | moment("from", "now") }}</v-card-subtitle>
+          <v-card-subtitle>{{ selectedEvent.date | correctTense }} {{selectedEvent.date | moment("from", "now") }} (time zone: {{selectedEvent.date | moment('[UTC]Z')}})</v-card-subtitle>
           <v-card-text>
 	    <div v-html="selectedEvent.event.description">
 	    </div>
@@ -69,7 +69,7 @@
               </v-list-item-icon>
 
               <v-list-item-content>
-                <v-list-item-title>{{ selectedEvent.date | moment('MMMM Do YYYY, h:mma Z') }}</v-list-item-title>
+                <v-list-item-title>{{ selectedEvent.date | moment('MMMM Do YYYY, h:mma') }}</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
 
@@ -237,6 +237,12 @@ export default {
       calendarValue: '',
       ready: false,
     };
+  },
+
+  filters: {
+    correctTense(value) {
+        return moment(value).isBefore(moment()) ? 'Happened' : 'Happening';
+    },
   },
 
   methods: {
