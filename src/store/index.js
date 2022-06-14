@@ -90,6 +90,12 @@ const store = new Vuex.Store({
       }
     },
 
+    setCheckins(state, { data }) {
+      for (let i = 0; i < data.length; i += 1) {
+        Vue.set(state.checkins, data[i].id, data[i]);
+      }
+    },
+
     setAssignments(state, { data }) {
       for (let i = 0; i < data.length; i += 1) {
         Vue.set(state.assignments, data[i].id, data[i]);
@@ -193,6 +199,7 @@ const store = new Vuex.Store({
       state.userImageTimestamps = {};
       state.userActivity = {};
       state.reports = {};
+      state.checkins = {};
       state.assignments = {};
       state.userAssignments = {};
       state.rooms = {};
@@ -401,6 +408,32 @@ const store = new Vuex.Store({
         (response) => {
           if (response.status === 200) {
             commit('setReports', { data: [response.data] });
+          }
+        },
+        (error) => {
+          dispatch('alertError', error, { root: true });
+        },
+      );
+    },
+
+    getCheckins({ dispatch, commit }) {
+      userService.getCheckins().then(
+        (response) => {
+          if (response.status === 200) {
+            commit('setCheckins', { data: response.data });
+          }
+        },
+        (error) => {
+          dispatch('alertError', error, { root: true });
+        },
+      );
+    },
+
+    submitCheckin({ dispatch, commit }, data) {
+      userService.postCheckin(data).then(
+        (response) => {
+          if (response.status === 200) {
+            commit('setCheckins', { data: [response.data] });
           }
         },
         (error) => {

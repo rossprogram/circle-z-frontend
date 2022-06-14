@@ -6,6 +6,8 @@ import People from '../views/People.vue';
 import Calendar from '../views/Calendar.vue';
 import Files from '../views/Files.vue';
 import Reports from '../views/Reports.vue';
+import Checkins from '../views/Checkins.vue';
+import SubmitCheckin from '../views/SubmitCheckin.vue';
 import Assignments from '../views/Assignments.vue';
 import SubmitReport from '../views/SubmitReport.vue';
 import Queue from '../views/Queue.vue';
@@ -79,6 +81,16 @@ const routes = [
     path: '/reports/:user',
     name: 'submit-report',
     component: SubmitReport,
+  },
+  {
+    path: '/checkins/',
+    name: 'checkins',
+    component: Checkins,
+  },
+  {
+    path: '/checkins/:user',
+    name: 'submit-checkin',
+    component: SubmitCheckin,
   },
   {
     path: '/calendar/:event',

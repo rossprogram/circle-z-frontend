@@ -3,7 +3,7 @@
     <v-app-bar
       app
       >
-	<v-toolbar-title><a href="/">ℤ</a></v-toolbar-title>
+	<v-toolbar-title><a href="/">ℝ</a></v-toolbar-title>
 
       <v-spacer></v-spacer>
 
@@ -36,7 +36,7 @@
 	  <v-list-item-icon><v-icon>mdi-calendar</v-icon></v-list-item-icon>
           <v-list-item-title>Calendar</v-list-item-title>
         </v-list-item>
-        <v-list-item target="_blank" href="https://calendar.google.com/calendar/ical/qahdd4ntr7vv59k4sp715bqq6k%40group.calendar.google.com/private-dc65e074a46a31d7495a8ecd87636653/basic.ics">
+        <v-list-item target="_blank" href="https://calendar.google.com/calendar/ical/u963ku10mpsi607amcbepera4s%40group.calendar.google.com/public/basic.ics">
 	  <v-list-item-icon><v-icon>mdi-google</v-icon></v-list-item-icon>
           <v-list-item-title>Google Calendar</v-list-item-title>
         </v-list-item>
@@ -72,95 +72,6 @@
 	</v-list>
       </v-menu>
 
-
-      <v-menu v-if="profile"
-        offset-y transition="slide-y-transition"
-      >
-        <template v-slot:activator="{ on }">
-          <v-btn
-	    text
-            v-on="on"
-	    v-text="'Video'"
-            >
-            <v-icon>account</v-icon>
-          </v-btn>
-        </template>
-
-        <v-list>
-          <v-list-item :to="`/watch-party/`">
-	      <v-list-item-icon><v-icon>mdi-party-popper</v-icon></v-list-item-icon>
-            <v-list-item-title>Watch Together</v-list-item-title>
-          </v-list-item>
-          <v-list-item :to="`/videos/`">
-	      <v-list-item-icon><v-icon>mdi-filmstrip</v-icon></v-list-item-icon>
-            <v-list-item-title>Previous recordings</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
-
-
-      <v-menu v-if="profile"
-        offset-y transition="slide-y-transition"
-      >
-        <template v-slot:activator="{ on }">
-          <v-btn
-	    text
-            v-on="on"
-	    v-text="'Zoom'"
-            >
-            <v-icon>account</v-icon>
-          </v-btn>
-        </template>
-
-        <v-list>
-          <v-list-item :href="saml">
-	      <v-list-item-icon><v-icon>mdi-video</v-icon></v-list-item-icon>
-            <v-list-item-title>Log into Zoom</v-list-item-title>
-          </v-list-item>
-          <v-divider></v-divider>
-          <v-list-item
-	    target="_blank"
-	    href="https://rossprogram-org.zoom.us/j/97492237273">
-	    <v-list-item-icon><v-icon>mdi-bank</v-icon></v-list-item-icon>
-            <v-list-item-title>Auditorium</v-list-item-title>
-          </v-list-item>
-          <v-list-item
-	    v-if="profile.isStaff"
-	    target="_blank"
-	    href="https://rossprogram-org.zoom.us/j/94283884786">
-	    <v-list-item-icon><v-icon>mdi-numeric-1-box</v-icon></v-list-item-icon>
-            <v-list-item-title>Counselor Grading Room</v-list-item-title>
-          </v-list-item>
-          <v-list-item
-	    target="_blank"
-	    href="https://rossprogram-org.zoom.us/j/96986251680">
-	    <v-list-item-icon><v-icon>mdi-numeric-2-box</v-icon></v-list-item-icon>
-            <v-list-item-title>Camper Collaboration</v-list-item-title>
-          </v-list-item>
-          <v-list-item
-	    target="_blank"
-	    href="https://rossprogram-org.zoom.us/j/97595923102">
-	    <v-list-item-icon><v-icon>mdi-numeric-3-box</v-icon></v-list-item-icon>
-            <v-list-item-title>JC Room</v-list-item-title>
-          </v-list-item>
-	  <v-list-item >
-            <v-list-item-title>Room
-	    <v-btn v-for="(id, index) in roomIds"
-		   :key="index"
-		   target="_blank"
-		   :href="`https://rossprogram-org.zoom.us/j/${id}`"
-		   icon>
-	      <v-icon>mdi-numeric-{{ index + 4}}-box</v-icon>
-	    </v-btn>
-	    </v-list-item-title>
-	  </v-list-item>
-          <v-list-item :to="`/rooms/`">
-	      <v-list-item-icon><v-icon>mdi-home-city</v-icon></v-list-item-icon>
-            <v-list-item-title>All Rooms</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
-
       <v-menu v-if="profile"
         offset-y transition="slide-y-transition"
       >
@@ -184,8 +95,12 @@
             <v-list-item-title>Recent activity</v-list-item-title>
           </v-list-item>
           <v-list-item to="/reports/" v-if="profile.isStaff || profile.isSuperuser">
-	      <v-list-item-icon><v-icon>mdi-account-check</v-icon></v-list-item-icon>
+	      <v-list-item-icon><v-icon>mdi-message</v-icon></v-list-item-icon>
             <v-list-item-title>Reports</v-list-item-title>
+          </v-list-item>
+          <v-list-item to="/checkins/" v-if="profile.isStaff || profile.isSuperuser">
+	      <v-list-item-icon><v-icon>mdi-account-check</v-icon></v-list-item-icon>
+            <v-list-item-title>Check in</v-list-item-title>
           </v-list-item>
           <v-list-item target="_blank" href="https://store.rossprogram.org/collections/all">
 	      <v-list-item-icon><v-icon>mdi-tshirt-crew</v-icon></v-list-item-icon>

@@ -176,6 +176,31 @@
 		</v-flex>
 	      </v-layout>
 
+	      <v-layout wrap>
+		<v-flex
+		  xs6
+		  >
+		  <v-text-field
+		    class="mr-6"
+		    label="Room"
+		    v-model="room"
+		    :readonly="!canEdit"
+		    >
+		    <v-icon slot="prepend">mdi-home</v-icon>
+		  </v-text-field>
+		</v-flex>
+
+		<v-flex xs6>
+		  <v-select
+		    v-model="site"
+		    :disabled="true"
+		    :items="['Ohio','Indiana']"
+		    label="Site"
+		    prepend-icon="mdi-earth"
+		    ></v-select>
+		</v-flex>
+	      </v-layout>
+
 	    <v-layout wrap>
 		<v-flex xs12>
 		  <v-combobox
@@ -269,6 +294,14 @@ v-if="canEdit"
 	      >
   Save changes
 </v-btn>
+  <v-btn
+v-if="profile.isStaff"
+	      text
+	      :to="`/checkins/${id}`"
+	      color="secondary"
+	      >
+	      Check in
+  </v-btn>
   <v-btn
 v-if="profile.isStaff"
 	      text
@@ -397,6 +430,14 @@ export default {
     family: {
       get() { return this.person.family; },
       set(v) { this.$set(this.updatedPerson, 'family', v); },
+    },
+    site: {
+      get() { return this.person.site; },
+      set(v) { this.$set(this.updatedPerson, 'site', v); },
+    },
+    room: {
+      get() { return this.person.room; },
+      set(v) { this.$set(this.updatedPerson, 'room', v); },
     },
     image: {
       get() {

@@ -57,6 +57,14 @@ export default {
     return axios.post('/reports', data);
   },
 
+  async getCheckins() {
+    return axios.get('/checkins');
+  },
+
+  async postCheckin(data) {
+    return axios.post('/checkins', data);
+  },
+
   async getAssignments() {
     return axios.get('/assignments');
   },

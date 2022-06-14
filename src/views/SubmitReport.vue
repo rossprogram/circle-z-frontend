@@ -24,7 +24,23 @@
 		    ></v-select>
 		</v-flex>
 	    </v-layout>
+	    <v-layout wrap>
+	      <v-flex xs12>
+		<p>
+	    Please respond to these items.
+	    <ol>
+	    <li>What NT problem sets have they completed?
+	    What sets are they working on now?</li>
 
+	    <li>Does this student attend Ross Collaboration activities in our Zoom rooms?</li>
+
+	    <li>Is this student attending any advance courses at Ross?  If so, which ones?</li>
+
+	    <li>Is this student taking classes, or working on other academic activities, outside of Ross?</li>
+	    </ol>
+	    </p>
+	                  </v-flex>
+	      </v-layout>
 	    <v-layout wrap>
 	      <v-flex xs12>
 		<v-textarea
